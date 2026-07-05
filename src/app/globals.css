@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens — ported from intent-link-website-rebuild/project/Landing.dc.html
+   Light-only for now (dark was an unadopted exploration).
+--------------------------------------------------------------------------- */
+:root {
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --ink: #000000;
+  --ink-2: #334155;
+  --ink-3: #64748b;
+  --line: rgba(0, 0, 0, 0.14);
+  --line-soft: rgba(0, 0, 0, 0.07);
+  --grid: rgba(0, 102, 255, 0.14);
+  --accent: #0066ff;
+  --accent-ink: #ffffff;
+  --term-bg: #0b1220;
+  --term-ink: #e8edf6;
+  --term-dim: #7d8aa0;
+  --sidebar: #fafaf9;
+}
+
+/* Expose tokens + fonts as Tailwind v4 theme values (utilities like bg-accent). */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-grid: var(--grid);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-term-bg: var(--term-bg);
+  --color-term-ink: var(--term-ink);
+  --color-term-dim: var(--term-dim);
+  --color-sidebar: var(--sidebar);
+
+  --font-sans: var(--font-schibsted), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------------------------
+   Shared keyframes (toast, skeleton shimmer, spinner, fade-in)
+--------------------------------------------------------------------------- */
+@keyframes il-toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes il-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+@keyframes il-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes il-fadein {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}

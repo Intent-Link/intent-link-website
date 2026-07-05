@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# test coverage
+/coverage/
+
+# tokensave (local code-graph db)
+/.tokensave/
+
+# claude code local settings
+.claude/settings.local.json

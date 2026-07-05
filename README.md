@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# intent-link website
 
-## Getting Started
+Marketing + docs site for [`intent-link`](https://www.npmjs.com/package/intent-link) — a user-target prediction library for React & Next.js.
 
-First, run the development server:
+**Stack:** Next.js 16 (App Router) · React 19 · Tailwind CSS v4 · TypeScript · Vitest.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install      # first time only
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Command          | What it does                          |
+| ---------------- | ------------------------------------- |
+| `npm run dev`    | Start the dev server                  |
+| `npm run build`  | Production build (full typecheck)     |
+| `npm run start`  | Serve the production build            |
+| `npm run lint`   | ESLint                                |
+| `npm test`       | Run unit tests (Vitest)               |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Structure
 
-## Learn More
+```
+src/
+├─ app/            Routes only — one root layout (fonts, providers, nav, footer).
+│                  Landing sections in _sections/; docs in docs/[slug]; llms.txt route.
+├─ components/     Shared UI — ui/ (primitives), layout/ (nav, footer, shell), docs/ (docs shell).
+├─ hooks/          Reusable client hooks (use-copy, use-media-query, demo state).
+├─ i18n/           Custom localization — locale detection + per-namespace messages/queries.
+├─ lib/            Cross-cutting helpers (cn).
+├─ utils/          Pure functions (format, math, syntax-highlight, docs mapping) — unit-tested.
+├─ constants/      Static data (site, nav, routes, package managers, test ids).
+└─ types/          Shared types.
+tests/             Vitest setup, factories, helpers, mocks (shared via @tests/*).
+```
 
-To learn more about Next.js, take a look at the following resources:
+Import aliases: `@/*` → `src/*`, `@tests/*` → `tests/*`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Conventions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Container / presentation.** Pages (Server Components) resolve data — active locale,
+  section copy, doc lookups — and pass each child a typed `text` prop. Components only
+  present; they don't fetch or compute. Pure logic lives in `utils/`, never in a section.
+- **No magic strings.** Routes (`constants/routes.ts`), section anchor ids
+  (`constants/section-ids.ts`), and `data-testid`s (`constants/test-ids.ts`) come from
+  central registries.
+- **Localization is library-free.** Each namespace in `i18n/messages/` owns its dictionary,
+  its type, and a server query (`get*Text`); client mirrors are `use*Text` hooks.
+- **Uses the real `intent-link` package** — the prediction engine is never reimplemented;
+  `IntentProvider` mounts once in `components/providers.tsx`.
