@@ -1,27 +1,69 @@
 import { Section } from "@/components/ui/section";
+import { glyphVariant } from "@/components/ui/glyph-background";
+import { CopyButton } from "@/components/ui/copy-button";
+import { GithubIcon } from "@/components/ui/github-icon";
+import { PrefetchLink } from "@/components/ui/prefetch-link";
+import { buttonClassName } from "@/components/ui/button";
 import { sectionIds } from "@/constants/section-ids";
 import { testIds } from "@/constants/test-ids";
+import { externalUrls, localePath } from "@/constants/routes";
+import { docsEntryPath } from "@/constants/docs-nav";
+import { installCommands } from "@/constants/package-managers";
 import type { SectionsText } from "@/i18n/messages/sections";
+import type { Locale } from "@/i18n/locales";
 
 interface CtaBandProps {
   text: SectionsText["ctaBand"];
+  locale: Locale;
 }
 
-/**
- * Closing CTA band — "Ship navigation that feels instant."
- * Grid + glyph background, inline install command + copy, Get started / GitHub.
- * TODO: port via CopyButton + Button.
- */
-const CtaBand = ({ text }: CtaBandProps) => {
+/** Closing CTA band — install pill + copy, Get started / GitHub, over the grid. */
+const CtaBand = ({ text, locale }: CtaBandProps) => {
   return (
     <Section
       id={sectionIds.ctaBand}
       testId={testIds.section.ctaBand}
       ariaLabel={text.ariaLabel}
       decor={["grid", "glyph"]}
+      glyphVariant={glyphVariant.cta}
       className="border-t border-line-soft"
     >
-      {/* TODO: closing CTA */}
+      <div className="mx-auto max-w-[760px] px-8 py-24 text-center">
+        <h2 className="text-[clamp(30px,4vw,44px)] font-extrabold leading-[1.05] tracking-[-0.04em] text-balance">
+          {text.heading}
+        </h2>
+        <p className="mt-3 text-[16.5px] leading-[1.55] text-ink-2">{text.body}</p>
+
+        <div className="mt-8 inline-flex items-center gap-3 rounded-[10px] border border-black/25 bg-term-bg py-2.5 pl-4 pr-3 shadow-[0_16px_34px_-18px_rgba(0,0,0,.4)]">
+          <span className="font-mono text-[14px] text-term-ink">
+            <span className="text-term-dim">$ </span>
+            {installCommands.npm}
+          </span>
+          <CopyButton
+            value={installCommands.npm}
+            className="rounded-[7px] border border-white/20 px-3 py-1.5 text-[11.5px] text-term-dim hover:text-term-ink"
+            copiedClassName="border-accent/40 bg-accent/25 text-[#82aaff]"
+          />
+        </div>
+
+        <div className="mt-[26px] flex flex-wrap justify-center gap-3">
+          <PrefetchLink href={localePath(locale, docsEntryPath)} className={buttonClassName("primary", "group text-sm")}>
+            {text.getStarted}
+            <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-1">
+              →
+            </span>
+          </PrefetchLink>
+          <a
+            href={externalUrls.github}
+            target="_blank"
+            rel="noreferrer"
+            className={buttonClassName("outline", "gap-2 px-[22px] text-sm")}
+          >
+            <GithubIcon size={15} />
+            {text.github}
+          </a>
+        </div>
+      </div>
     </Section>
   );
 };

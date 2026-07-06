@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import { testIds } from "@/constants/test-ids";
+import { cn } from "@/utils/class-names";
 
 interface ToastProps {
   children: ReactNode;
@@ -11,9 +10,8 @@ interface ToastProps {
 const Toast = ({ children, className }: ToastProps) => (
   <div
     role="status"
-    data-testid={testIds.toast.root}
     className={cn(
-      "animate-[il-toast-in_.2s_ease] rounded-md border border-line bg-surface px-3 py-2 text-sm",
+      "animate-[il-toast-in_.24s_cubic-bezier(0.34,1.56,0.5,1)] rounded-md border border-line bg-surface px-3 py-2 text-sm",
       className,
     )}
   >

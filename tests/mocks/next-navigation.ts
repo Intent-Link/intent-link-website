@@ -36,14 +36,6 @@ const setPathname = (pathname: string) => {
   _pathname = pathname;
 };
 
-const setSearchParams = (init: string | Record<string, string>) => {
-  _searchParams = new URLSearchParams(init);
-};
-
-const setParams = (params: Record<string, string | string[]>) => {
-  _params = params;
-};
-
 const resetRouterMock = () => {
   _pathname = "/";
   _searchParams = new URLSearchParams();
@@ -55,7 +47,6 @@ const resetRouterMock = () => {
 };
 
 export {
-  routerSpies,
   redirect,
   notFound,
   permanentRedirect,
@@ -66,7 +57,5 @@ export {
   useSelectedLayoutSegment,
   useSelectedLayoutSegments,
   setPathname,
-  setSearchParams,
-  setParams,
   resetRouterMock,
 };

@@ -27,7 +27,9 @@ const useScrollReveal = <T extends HTMLElement = HTMLDivElement>(): UseScrollRev
           observer.disconnect();
         }
       },
-      { threshold: 0.2 },
+      // threshold 0: reveal as soon as any part peeks into the viewport — a tall
+      // section partially visible on load must not sit hidden until scroll.
+      { threshold: 0 },
     );
     observer.observe(element);
     return () => observer.disconnect();

@@ -1,7 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { testIds } from "@/constants/test-ids";
+import { cn } from "@/utils/class-names";
 import { useCommonText } from "@/hooks/use-common-text";
 
 interface SpinnerProps {
@@ -18,7 +17,6 @@ const Spinner = ({ label, className }: SpinnerProps) => {
     <span
       role="status"
       aria-label={ariaLabel}
-      data-testid={testIds.spinner.root}
       className={cn(
         "inline-block h-4 w-4 animate-[il-spin_.7s_linear_infinite] rounded-full border-2 border-line border-t-accent",
         className,

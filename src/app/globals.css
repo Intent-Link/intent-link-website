@@ -42,8 +42,30 @@
   --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
+/* Smooth in-page anchor scrolling (hero "Live demo" → demo section); skipped
+   for reduced-motion users. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
 body {
-  background: var(--paper);
+  /* Page-wide blueprint grid (64×64) behind the whole site — the prototype's
+     signature backdrop. Sections that need a solid backdrop paint their own. */
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+    var(--paper);
+  background-size:
+    64px 64px,
+    64px 64px,
+    auto;
   color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -53,8 +75,8 @@ body {
    Shared keyframes (toast, skeleton shimmer, spinner, fade-in)
 --------------------------------------------------------------------------- */
 @keyframes il-toast-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes il-shimmer {
   from { background-position: -200% 0; }
@@ -66,4 +88,9 @@ body {
 @keyframes il-fadein {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
+}
+/* Hard step blink for the terminal cursor (prototype `il-blink`). */
+@keyframes il-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }

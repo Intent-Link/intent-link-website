@@ -1,4 +1,5 @@
 import { defaultLocale, isLocale, locales, localeNames } from "@/i18n/locales";
+import { createTextQuery } from "@/i18n/create-text-query";
 import { getCommonText } from "@/i18n/messages/common";
 import { getMetadataText } from "@/i18n/messages/metadata";
 import { getSectionsText } from "@/i18n/messages/sections";
@@ -18,11 +19,26 @@ describe("i18n foundation", () => {
     expect(isLocale(undefined)).toBe(false);
   });
 
-  it("falls back to the en dictionary for a locale with no messages", () => {
-    // `ru` has no dictionary yet, so every query returns the en source of truth.
-    expect(getCommonText("ru")).toBe(getCommonText("en"));
-    expect(getMetadataText("ru")).toBe(getMetadataText("en"));
-    expect(getSectionsText("ru")).toBe(getSectionsText("en"));
+  it("returns a distinct translated dictionary for a supported locale", () => {
+    expect(getCommonText("ru")).not.toBe(getCommonText("en"));
+    expect(getMetadataText("es")).not.toBe(getMetadataText("en"));
+    expect(getSectionsText("ja")).not.toBe(getSectionsText("en"));
+  });
+
+  it("falls back to the en dictionary for an unregistered locale", () => {
+    const { getText } = createTextQuery({ hello: "hi" });
+    // No override supplied for `ru`, so it resolves to the en source of truth.
+    expect(getText("ru")).toBe(getText("en"));
+  });
+
+  it("fills untranslated keys from en, key by key (deep merge)", () => {
+    const { getText } = createTextQuery(
+      { greeting: "hi", nested: { translated: "yes", untranslated: "no" } },
+      { ru: { nested: { translated: "да" } } },
+    );
+    expect(getText("ru").nested.translated).toBe("да");
+    expect(getText("ru").nested.untranslated).toBe("no");
+    expect(getText("ru").greeting).toBe("hi");
   });
 
   it("resolves doc titles by slug and group id", () => {
@@ -36,6 +52,6 @@ describe("i18n foundation", () => {
   });
 
   it("exposes interpolated copy as functions", () => {
-    expect(getCommonText().footer.copyright("intent-link")).toBe("© intent-link");
+    expect(getCommonText().footer.copyright("intent-link")).toBe("© 2026 intent-link · MIT");
   });
 });

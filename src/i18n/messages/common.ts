@@ -1,4 +1,5 @@
 import { createTextQuery } from "@/i18n/create-text-query";
+import { pickNamespace } from "@/i18n/translations";
 
 /**
  * Shared chrome copy (nav, footer, actions, accessibility labels). `en` is the
@@ -11,6 +12,7 @@ const en = {
     github: "GitHub",
   },
   footer: {
+    tagline: "Predict the target before the click. MIT-licensed. Motion stays on the device.",
     groupTitles: {
       docs: "Docs",
       resources: "Resources",
@@ -19,18 +21,34 @@ const en = {
     links: {
       quickstart: "Quickstart",
       installation: "Installation",
+      api: "API Reference",
+      guides: "Guides",
       github: "GitHub",
       npm: "npm",
+      changelog: "Changelog",
+      license: "License (MIT)",
       llmsText: "llms.txt",
+      llmsFullText: "llms-full.txt",
     },
-    copyright: (name: string) => `© ${name}`,
+    copyForLlm: "Copy for LLM",
+    builtLine: "Built with predictive prefetch. The docs feel it too.",
+    copyright: (name: string) => `© 2026 ${name} · MIT`,
   },
   actions: {
-    copy: "Copy",
+    copy: "copy",
     copied: "✓ copied",
+    getStarted: "Get started",
+  },
+  docs: {
+    copyForLlm: "Copy for LLM",
+    viewMarkdown: "View as Markdown",
+    close: "close",
+  },
+  notFound: {
+    title: "Page not found",
+    backHome: "Back to the homepage",
   },
   language: {
-    label: "Language",
     ariaLabel: "Select language",
   },
   aria: {
@@ -44,8 +62,8 @@ const en = {
 
 type CommonText = typeof en;
 
-/** Shared chrome registry + server query. Falls back to the `en` dictionary. */
-const { messages: commonMessages, getText: getCommonText } = createTextQuery(en);
+/** Shared chrome query. Falls back to the `en` dictionary. */
+const { getText: getCommonText } = createTextQuery(en, pickNamespace("common"));
 
-export { commonMessages, getCommonText };
+export { getCommonText };
 export type { CommonText };

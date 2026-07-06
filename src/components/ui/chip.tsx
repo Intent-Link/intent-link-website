@@ -1,21 +1,22 @@
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import { testIds } from "@/constants/test-ids";
+import { cn } from "@/utils/class-names";
 
 interface ChipProps {
   children: ReactNode;
+  /** Show the leading accent status dot. Defaults to true. */
+  dot?: boolean;
   className?: string;
 }
 
-/** Eyebrow / pill chip (dot + label). TODO: style. */
-const Chip = ({ children, className }: ChipProps) => (
+/** Eyebrow / pill chip: a blue status dot + an accent mono label on a tinted pill. */
+const Chip = ({ children, dot = true, className }: ChipProps) => (
   <span
-    data-testid={testIds.chip.root}
     className={cn(
-      "inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-xs",
+      "inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/[0.06] px-3 py-[5px] font-mono text-xs text-accent",
       className,
     )}
   >
+    {dot && <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
     {children}
   </span>
 );

@@ -1,28 +1,36 @@
 "use client";
 
-import { testIds } from "@/constants/test-ids";
 import { useCommonText } from "@/hooks/use-common-text";
-
-interface TocItem {
-  id: string;
-  text: string;
-  level: number;
-}
+import { useScrollSpy } from "@/hooks/use-scroll-spy";
+import { cn } from "@/utils/class-names";
+import type { TocItem } from "@/content/docs/toc";
 
 interface TocProps {
   items: TocItem[];
 }
 
-/** Right-hand table of contents with scroll-spy. TODO: wire IntersectionObserver. */
+/** Right-hand table of contents with IntersectionObserver scroll-spy. */
 const Toc = ({ items }: TocProps) => {
   const commonText = useCommonText();
+  const activeId = useScrollSpy(items.map((item) => item.id));
+
+  if (items.length === 0) return null;
 
   return (
-    <nav aria-label={commonText.aria.pageNav} data-testid={testIds.toc.root} className="text-sm">
-      <ul className="space-y-1">
+    <nav aria-label={commonText.aria.pageNav} className="sticky top-[76px]">
+      <p className="mb-2.5 font-mono text-[10.5px] uppercase tracking-[0.05em] text-ink-3">
+        {commonText.aria.pageNav}
+      </p>
+      <ul>
         {items.map((item) => (
-          <li key={item.id} style={{ paddingLeft: (item.level - 1) * 12 }}>
-            <a href={`#${item.id}`} data-testid={testIds.toc.link} className="text-ink-3">
+          <li key={item.id}>
+            <a
+              href={`#${item.id}`}
+              className={cn(
+                "block py-1 text-[12.5px] leading-[1.35] transition-colors hover:text-ink",
+                item.id === activeId ? "font-medium text-accent" : "text-ink-2",
+              )}
+            >
               {item.text}
             </a>
           </li>
@@ -33,4 +41,3 @@ const Toc = ({ items }: TocProps) => {
 };
 
 export { Toc };
-export type { TocItem };

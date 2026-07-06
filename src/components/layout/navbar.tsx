@@ -1,43 +1,54 @@
 import Link from "next/link";
 import { MobileMenu } from "./mobile-menu";
+import { NavBrand } from "./nav-brand";
+import { GithubIcon } from "@/components/ui/github-icon";
 import { LanguageDropdown } from "@/components/ui/language-dropdown";
-import { navLinks, site } from "@/constants/site";
-import { appRoutes } from "@/constants/routes";
-import { testIds } from "@/constants/test-ids";
-import { getLocale } from "@/i18n/get-locale";
+import { PrefetchLink } from "@/components/ui/prefetch-link";
+import { navLinks } from "@/constants/site";
+import { externalUrls, localePath } from "@/constants/routes";
+import type { Locale } from "@/i18n/locales";
 import { getCommonText } from "@/i18n/messages/common";
+
+interface NavbarProps {
+  locale: Locale;
+}
 
 /**
  * Sticky, blur-backed nav shared by every page. Server component; the
  * interactive bits (mobile drawer, language picker) are client children.
- * TODO: port markup + sticky/blur styling from Landing.dc.html.
+ * GitHub is special-cased to a bordered icon pill, so it is dropped from the
+ * text nav loop.
  */
-const Navbar = async () => {
-  const text = getCommonText(await getLocale());
+const Navbar = ({ locale }: NavbarProps) => {
+  const text = getCommonText(locale);
+  const textLinks = navLinks.filter((navLink) => navLink.id !== "github");
 
   return (
     <header
-      data-testid={testIds.navbar.root}
-      className="sticky top-0 z-50 border-b border-line-soft bg-paper/80 backdrop-blur"
+      className="sticky top-0 z-50 border-b border-line-soft bg-[rgba(255,255,255,.85)] backdrop-blur-[12px]"
     >
       <nav
         aria-label={text.aria.primaryNav}
-        className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4"
+        className="flex items-center justify-between px-7 py-2.5"
       >
-        <Link href={appRoutes.home} className="font-mono text-sm font-semibold">
-          {site.name}
-        </Link>
-        <div className="hidden items-center gap-6 md:flex">
-          {navLinks.map((navLink) => (
-            <Link
+        <NavBrand />
+        <div className="hidden items-center gap-2 md:flex">
+          {textLinks.map((navLink) => (
+            <PrefetchLink
               key={navLink.id}
-              data-testid={testIds.navbar.link}
-              href={navLink.href}
-              className="text-sm text-ink-2"
+              href={localePath(locale, navLink.href)}
+              className="rounded-[7px] px-3 py-[7px] text-[13.5px] font-medium text-ink-2 transition-colors hover:text-ink"
             >
               {text.nav[navLink.id]}
-            </Link>
+            </PrefetchLink>
           ))}
+          <Link
+            href={externalUrls.github}
+            aria-label={text.nav.github}
+            className="flex items-center gap-1.5 rounded-[7px] border border-line p-[7px_11px] text-ink-2 transition-colors hover:border-ink/30"
+          >
+            <GithubIcon />
+          </Link>
           <LanguageDropdown />
         </div>
         <MobileMenu />

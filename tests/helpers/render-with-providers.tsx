@@ -23,14 +23,4 @@ const renderWithProviders = (
   return render(ui, { wrapper: AppProviders, ...options });
 };
 
-/** Wrapper for renderHook({ wrapper }) when a hook needs the providers. */
-const createHookWrapper = () => {
-  const Wrapper = ({ children }: { children: ReactNode }) => {
-    return <AppProviders>{children}</AppProviders>;
-  };
-  return Wrapper;
-};
-
-// Re-export navigation setters so tests import render + route control from one place.
-export { setPathname, setSearchParams, setParams } from "@tests/mocks/next-navigation";
-export { AppProviders, renderWithProviders, createHookWrapper };
+export { renderWithProviders };

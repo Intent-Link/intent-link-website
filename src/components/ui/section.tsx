@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/class-names";
 import { testIds } from "@/constants/test-ids";
 import type { SectionId } from "@/constants/section-ids";
 import { GridBackground } from "@/components/ui/grid-background";
-import { GlyphBackground } from "@/components/ui/glyph-background";
+import { GlyphBackground, type GlyphVariant } from "@/components/ui/glyph-background";
 
 const sectionDecor = {
   none: "none",
@@ -20,6 +20,8 @@ interface SectionProps {
   testId: SectionTestId;
   /** One or more decorative backdrops layered behind the content. */
   decor?: SectionDecor | SectionDecor[];
+  /** Which glyph set to scatter when `decor` includes "glyph". */
+  glyphVariant?: GlyphVariant;
   className?: string;
   children?: ReactNode;
 }
@@ -35,6 +37,7 @@ const Section = ({
   ariaLabel,
   testId,
   decor = sectionDecor.none,
+  glyphVariant,
   className,
   children,
 }: SectionProps) => {
@@ -45,14 +48,13 @@ const Section = ({
       id={id}
       aria-label={ariaLabel}
       data-testid={testId}
-      className={cn("relative isolate", className)}
+      className={cn("relative isolate scroll-mt-16", className)}
     >
       {decorLayers.includes(sectionDecor.grid) && <GridBackground />}
-      {decorLayers.includes(sectionDecor.glyph) && <GlyphBackground />}
+      {decorLayers.includes(sectionDecor.glyph) && <GlyphBackground variant={glyphVariant} />}
       <div className="relative">{children}</div>
     </section>
   );
 };
 
-export { Section, sectionDecor };
-export type { SectionDecor };
+export { Section };

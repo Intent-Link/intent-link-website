@@ -3,10 +3,31 @@
  * its ordered page slugs (→ i18n page titles). Slugs are the canonical route
  * params; titles are resolved through the docs text query.
  */
+import { appRoutes } from "./routes";
+
+/** Every doc slug, as a tuple so the union is exhaustively typed. */
+const docSlugTuple = [
+  "quickstart",
+  "installation",
+  "how-it-works",
+  "importance-and-cost",
+  "intent-provider",
+  "intent-link",
+  "intent-context",
+  "predictive-prefetch",
+  "custom-components",
+  "beyond-prefetch",
+  "mobile-behavior",
+  "typescript",
+  "troubleshooting",
+  "changelog",
+] as const;
+
+type DocSlug = (typeof docSlugTuple)[number];
 
 interface DocGroup {
   id: string;
-  slugs: string[];
+  slugs: DocSlug[];
 }
 
 const docsNav: DocGroup[] = [
@@ -21,7 +42,18 @@ const docsNav: DocGroup[] = [
 ];
 
 /** Flat, ordered list of every doc slug — derived once. */
-const docSlugs: string[] = docsNav.flatMap((group) => group.slugs);
+const docSlugs: DocSlug[] = [...docSlugTuple];
 
-export { docsNav, docSlugs };
-export type { DocGroup };
+const docSlugSet: ReadonlySet<string> = new Set(docSlugTuple);
+
+/** Route-param guard: narrows an arbitrary string to a known doc slug. */
+const isDocSlug = (slug: string): slug is DocSlug => docSlugSet.has(slug);
+
+/**
+ * Canonical path of the first doc page. "Docs" links target it directly so a
+ * click lands in one navigation instead of hopping through the /docs redirect.
+ */
+const docsEntryPath = appRoutes.docsSlug(docSlugs[0]);
+
+export { docsNav, docSlugs, isDocSlug, docsEntryPath };
+export type { DocSlug };

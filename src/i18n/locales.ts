@@ -23,12 +23,18 @@ const localeNames: Record<Locale, string> = {
   ar: "العربية",
 };
 
-/** Cookie key that persists the reader's chosen locale across requests. */
-const localeCookieName = "locale";
+/** Locales that render right-to-left. */
+const rtlLocales: readonly Locale[] = ["ar"];
+
+type TextDirection = "ltr" | "rtl";
+
+/** Writing direction for a locale — drives the `<html dir>` attribute. */
+const getTextDirection = (locale: Locale): TextDirection =>
+  rtlLocales.includes(locale) ? "rtl" : "ltr";
 
 const isLocale = (value: unknown): value is Locale => {
   return typeof value === "string" && (locales as readonly string[]).includes(value);
 };
 
-export { locales, defaultLocale, localeNames, localeCookieName, isLocale };
+export { locales, defaultLocale, localeNames, getTextDirection, isLocale };
 export type { Locale };

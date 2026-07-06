@@ -7,18 +7,18 @@ import type { Locale } from "@/i18n/locales";
 
 interface ProvidersProps {
   children: ReactNode;
-  initialLocale?: Locale;
+  locale?: Locale;
 }
 
 /**
  * Client boundary that mounts the shared app providers once, near the root:
- * the locale context (seeded from the server-resolved locale) and the real
+ * the locale context (seeded from the `[locale]` route segment) and the real
  * `intent-link` prediction engine. Kept in its own file so the root layout can
  * stay a Server Component.
  */
-const Providers = ({ children, initialLocale }: ProvidersProps) => {
+const Providers = ({ children, locale }: ProvidersProps) => {
   return (
-    <LocaleProvider initialLocale={initialLocale}>
+    <LocaleProvider locale={locale}>
       <IntentProvider>{children}</IntentProvider>
     </LocaleProvider>
   );

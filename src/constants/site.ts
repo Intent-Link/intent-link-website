@@ -1,10 +1,16 @@
 import { appRoutes, externalUrls } from "./routes";
+import { docsEntryPath } from "./docs-nav";
 import type { CommonText } from "@/i18n/messages/common";
 
 /** Site identity. Non-localized brand data; user-facing copy lives in i18n. */
 const site = {
   name: "intent-link",
+  version: "1.0.8",
+  tagline: "Target prediction for React / Next.js",
 } as const;
+
+/** Clipboard payload for the footer "Copy for LLM" button. */
+const llmCopyText = `${site.name}: ${site.tagline}. Full reference: ${appRoutes.llmsFullText}. Install: npm install ${site.name}`;
 
 interface NavLink {
   id: keyof CommonText["nav"];
@@ -13,7 +19,7 @@ interface NavLink {
 
 /** Primary nav destinations. Labels are resolved by id from the common text. */
 const navLinks: NavLink[] = [
-  { id: "docs", href: appRoutes.docs },
+  { id: "docs", href: docsEntryPath },
   { id: "github", href: externalUrls.github },
 ];
 
@@ -33,7 +39,8 @@ const footerGroups: FooterGroup[] = [
     id: "docs",
     links: [
       { id: "quickstart", href: appRoutes.docsSlug("quickstart") },
-      { id: "installation", href: appRoutes.docsSlug("installation") },
+      { id: "api", href: docsEntryPath },
+      { id: "guides", href: docsEntryPath },
     ],
   },
   {
@@ -41,13 +48,17 @@ const footerGroups: FooterGroup[] = [
     links: [
       { id: "github", href: externalUrls.github },
       { id: "npm", href: externalUrls.npm },
+      { id: "changelog", href: appRoutes.docsSlug("changelog") },
+      { id: "license", href: externalUrls.github },
     ],
   },
   {
     id: "forAi",
-    links: [{ id: "llmsText", href: appRoutes.llmsText }],
+    links: [
+      { id: "llmsText", href: appRoutes.llmsText },
+      { id: "llmsFullText", href: appRoutes.llmsFullText },
+    ],
   },
 ];
 
-export { site, navLinks, footerGroups };
-export type { NavLink, FooterLink, FooterGroup };
+export { site, llmCopyText, navLinks, footerGroups };
