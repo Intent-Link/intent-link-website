@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TerminalCard } from "./terminal-card";
 import { CodeBlock } from "./code-block";
 import { CopyButton } from "./copy-button";
 import { cn } from "@/utils/class-names";
 import { codeLanguage } from "@/utils/syntax-highlight";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import {
   packageManager,
   packageManagers,
@@ -20,6 +21,48 @@ interface HeroInstallProps {
   snippet: string;
 }
 
+/** ~40wpm-ish typing cadence for the command line, in milliseconds per character. */
+const typeIntervalMs = 38;
+
+/** Longest install command, used to reserve width so retyping never reflows the row. */
+const longestInstallCommand = Object.values(installCommands).reduce((longest, current) =>
+  current.length > longest.length ? current : longest,
+);
+
+/** "$ " prompt + longest command, in `ch` units — the fixed width of the command row. */
+const commandRowWidthCh = `${longestInstallCommand.length + 2}ch`;
+
+/** Pure: the command text visible after `charCount` characters have been typed. */
+const typedSlice = (command: string, charCount: number): string => command.slice(0, charCount);
+
+/**
+ * Types `command` out one character at a time. Restarts whenever `command`
+ * changes (e.g. switching package-manager tabs cancels the in-flight type and
+ * retypes the new command). Renders the full string immediately when the
+ * user prefers reduced motion.
+ */
+const useTypewriter = (command: string, enabled: boolean): string => {
+  const [charCount, setCharCount] = useState(0);
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    let count = 0;
+    const interval = setInterval(() => {
+      count += 1;
+      setCharCount(count);
+      if (count >= command.length) clearInterval(interval);
+    }, typeIntervalMs);
+
+    return () => {
+      clearInterval(interval);
+      setCharCount(0);
+    };
+  }, [command, enabled]);
+
+  return enabled ? typedSlice(command, charCount) : command;
+};
+
 /**
  * Bespoke hero install card: folder-style npm/pnpm/yarn/bun tabs that swap the
  * command, a blinking-cursor command line with a copy pill, and a drop-in
@@ -28,6 +71,8 @@ interface HeroInstallProps {
 const HeroInstall = ({ title, snippet }: HeroInstallProps) => {
   const [selected, setSelected] = useState<PackageManager>(packageManager.npm);
   const command = installCommands[selected];
+  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const typed = useTypewriter(command, !reducedMotion);
 
   return (
     <TerminalCard title={title ? `${title} — ${selected}` : undefined}>
@@ -51,9 +96,10 @@ const HeroInstall = ({ title, snippet }: HeroInstallProps) => {
       </div>
 
       <div className="flex items-center justify-between gap-3 border-t border-white/[0.08] pt-4">
-        <span className="min-w-0 truncate">
+        {/* min-width reserves space for the longest install command so switching tabs never reflows the row. */}
+        <span className="truncate" style={{ minWidth: commandRowWidthCh }}>
           <span className="text-term-dim">$ </span>
-          <span className="text-term-ink">{command}</span>
+          <span className="text-term-ink">{typed}</span>
           <span
             aria-hidden
             className="ml-[3px] inline-block h-[15px] w-2 bg-accent align-[-2px] animate-[il-blink_1.1s_step-end_infinite]"
