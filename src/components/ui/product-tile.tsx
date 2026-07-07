@@ -27,8 +27,6 @@ interface ProductTileProps {
   tint?: string;
   /** Live probability (0..1). Falls back to the engine's own value if omitted. */
   probability?: number;
-  /** Live decision utility, shown in the hover chip. */
-  utility?: number;
   /** Whether this tile has fired `onIntent` (prefetched). */
   armed?: boolean;
   /** Localized state labels + placeholder copy, from `SectionsText["predictionFieldDemo"]`. */
@@ -62,7 +60,6 @@ const ProductTileView = memo(({
   label,
   tint,
   liveProbability,
-  utility,
   armed = false,
   text,
   registerLink,
@@ -123,7 +120,7 @@ const ProductTileView = memo(({
             {text.tileStates[state]}
           </span>
           <span className="font-mono text-[11px] tabular-nums text-[#e8edf6]">
-            {percent}% · u {(utility ?? 0).toFixed(2)}
+            {percent}%
           </span>
         </div>
       </div>

@@ -70,71 +70,6 @@ const PredictionFieldDemo = () => {
         />
 
         <div className="mt-8 flex flex-col gap-5">
-          {/* Storefront */}
-          <div
-            className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_1px_3px_rgba(0,0,0,.05)]"
-          >
-            <div className="flex items-center gap-2 border-b border-line-soft bg-sidebar px-[14px] py-[11px]">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-              <div className="ml-2 flex flex-1 items-center gap-[7px] rounded-md border border-line bg-white px-[11px] py-[5px] font-mono text-[11.5px] text-ink-3">
-                <svg
-                  width="11"
-                  height="11"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  aria-hidden
-                >
-                  <rect x="4" y="10" width="16" height="11" rx="2" />
-                  <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-                </svg>
-                <span>
-                  {addressHost}
-                  <span className="text-ink">{addressPath}</span>
-                </span>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-4 p-[18px] [touch-action:pan-y] sm:grid-cols-3">
-              {tiles.map((tile) => (
-                <ProductTile
-                  key={tile.id}
-                  id={tile.id}
-                  label={text.tiles[tile.id]}
-                  tint={tile.tint}
-                  probability={panel.probabilities[tile.id]}
-                  utility={panel.utilities[tile.id]}
-                  armed={panel.armed[tile.id]}
-                  text={{
-                    tileStates: text.tileStates,
-                    tileImageLabel: text.tileImageLabel,
-                    tileBadge: text.tileBadge,
-                  }}
-                />
-              ))}
-            </div>
-            <div
-              className="flex min-h-[46px] items-center justify-between gap-3 border-t border-line-soft bg-sidebar px-4 py-2.5"
-            >
-              {panel.toast ? (
-                <Toast className="inline-flex items-center gap-[9px] rounded-lg border border-white/[0.14] bg-term-bg px-3 py-[7px] font-mono text-xs text-term-ink shadow-[0_8px_20px_-8px_rgba(11,18,32,.45)]">
-                  <span className="h-[7px] w-[7px] rounded-full bg-[#28c840] shadow-[0_0_8px_#28c840]" />
-                  <span>
-                    <span className="text-term-dim">onIntent → </span>
-                    <span className="text-[#82aaff]">router.prefetch(</span>
-                    <span className="text-[#c3e88d]">&apos;{panel.toast.path}&apos;</span>
-                    <span className="text-[#82aaff]">)</span>
-                  </span>
-                </Toast>
-              ) : (
-                <span className="font-mono text-xs text-ink-3">{text.storefrontIdle}</span>
-              )}
-              <span className="font-mono text-[11px] text-ink-3">{text.categories(tiles.length)}</span>
-            </div>
-          </div>
-
           {/* Console */}
           <div
             className="flex flex-col overflow-hidden rounded-2xl border border-black/25 bg-term-bg text-term-ink shadow-[0_30px_60px_-30px_rgba(11,18,32,0.55)]"
@@ -238,6 +173,70 @@ const PredictionFieldDemo = () => {
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Storefront */}
+          <div
+            className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_1px_3px_rgba(0,0,0,.05)]"
+          >
+            <div className="flex items-center gap-2 border-b border-line-soft bg-sidebar px-[14px] py-[11px]">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+              <div className="ml-2 flex flex-1 items-center gap-[7px] rounded-md border border-line bg-white px-[11px] py-[5px] font-mono text-[11.5px] text-ink-3">
+                <svg
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden
+                >
+                  <rect x="4" y="10" width="16" height="11" rx="2" />
+                  <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                </svg>
+                <span>
+                  {addressHost}
+                  <span className="text-ink">{addressPath}</span>
+                </span>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-4 p-[18px] [touch-action:pan-y] sm:grid-cols-3">
+              {tiles.map((tile) => (
+                <ProductTile
+                  key={tile.id}
+                  id={tile.id}
+                  label={text.tiles[tile.id]}
+                  tint={tile.tint}
+                  probability={panel.probabilities[tile.id]}
+                  armed={panel.armed[tile.id]}
+                  text={{
+                    tileStates: text.tileStates,
+                    tileImageLabel: text.tileImageLabel,
+                    tileBadge: text.tileBadge,
+                  }}
+                />
+              ))}
+            </div>
+            <div
+              className="flex min-h-[46px] items-center justify-between gap-3 border-t border-line-soft bg-sidebar px-4 py-2.5"
+            >
+              {panel.toast ? (
+                <Toast className="inline-flex items-center gap-[9px] rounded-lg border border-white/[0.14] bg-term-bg px-3 py-[7px] font-mono text-xs text-term-ink shadow-[0_8px_20px_-8px_rgba(11,18,32,.45)]">
+                  <span className="h-[7px] w-[7px] rounded-full bg-[#28c840] shadow-[0_0_8px_#28c840]" />
+                  <span>
+                    <span className="text-term-dim">onIntent → </span>
+                    <span className="text-[#82aaff]">router.prefetch(</span>
+                    <span className="text-[#c3e88d]">&apos;{panel.toast.path}&apos;</span>
+                    <span className="text-[#82aaff]">)</span>
+                  </span>
+                </Toast>
+              ) : (
+                <span className="font-mono text-xs text-ink-3">{text.storefrontIdle}</span>
+              )}
+              <span className="font-mono text-[11px] text-ink-3">{text.categories(tiles.length)}</span>
             </div>
           </div>
         </div>
