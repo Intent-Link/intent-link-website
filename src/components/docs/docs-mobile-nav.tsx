@@ -44,14 +44,14 @@ const DocsMobileNav = () => {
         aria-hidden="true"
         onClick={close}
         className={cn(
-          "fixed inset-0 z-30 bg-black/20 transition-opacity duration-[250ms]",
+          "fixed inset-0 z-[60] bg-black/20 transition-opacity duration-[250ms]",
           open ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       />
       <aside
         inert={!open}
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-[280px] overflow-y-auto border-r border-line-soft bg-sidebar px-4 pt-6 pb-[60px] shadow-[0_0_40px_rgba(0,0,0,0.2)] transition-transform duration-[250ms]",
+          "fixed inset-y-0 left-0 z-[70] w-[280px] overflow-y-auto border-r border-line-soft bg-sidebar px-4 pt-6 pb-[60px] shadow-[0_0_40px_rgba(0,0,0,0.2)] transition-transform duration-[250ms]",
           open ? "translate-x-0" : "-translate-x-full",
         )}
       >

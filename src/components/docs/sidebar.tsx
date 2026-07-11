@@ -18,7 +18,7 @@ const Sidebar = () => {
   return (
     <nav
       aria-label={commonText.aria.docsNav}
-      className="sticky top-[76px] space-y-5"
+      className="space-y-5 min-[780px]:sticky min-[780px]:top-[76px]"
     >
       {docsNav.map((group) => (
         <div key={group.id}>
