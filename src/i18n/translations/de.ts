@@ -75,7 +75,6 @@ const de: TranslationBundle = {
         "intent-link liest die Bewegung — Cursor oder Scrollen — und sagt mit ~98 % Genauigkeit voraus, auf welches Element der Nutzer zusteuert. Lade eine Route vor, wärme eine Vorschau vor, protokolliere die Absicht, passe die Oberfläche an. Ein Signal, viele Anwendungen.",
       getStarted: "Loslegen",
       liveDemo: "Live-Demo",
-      quickstartLabel: "schnellstart",
     },
     predictionFieldDemo: {
       eyebrow: "01 / live-demo",
@@ -161,6 +160,7 @@ const de: TranslationBundle = {
       copyForLlm: "Für LLM kopieren",
       fullApiLead: "Vollständige API in den ",
       fullApiLink: "Docs →",
+      quickstartLabel: "schnellstart",
     },
     whyDifferent: {
       eyebrow: "05 / anders",

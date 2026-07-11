@@ -75,7 +75,6 @@ const zh: TranslationBundle = {
         "intent-link 读取移动——光标或滚动——并以约 98 % 的精度预测用户正在前往的元素。预取路由、预热预览、记录意图、适配界面。一个信号，多种用途。",
       getStarted: "开始使用",
       liveDemo: "在线演示",
-      quickstartLabel: "快速上手",
     },
     predictionFieldDemo: {
       eyebrow: "01 / 在线演示",
@@ -161,6 +160,7 @@ const zh: TranslationBundle = {
       copyForLlm: "复制给 LLM",
       fullApiLead: "完整 API 请见",
       fullApiLink: "文档 →",
+      quickstartLabel: "快速上手",
     },
     whyDifferent: {
       eyebrow: "05 / 与众不同",

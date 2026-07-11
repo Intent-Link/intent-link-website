@@ -75,7 +75,6 @@ const ru: TranslationBundle = {
         "intent-link читает движение — курсор или прокрутку — и предсказывает элемент, к которому направляется пользователь, с точностью ~98 %. Предзагружает маршрут, прогревает предпросмотр, фиксирует намерение, адаптирует интерфейс. Один сигнал, множество применений.",
       getStarted: "Начать",
       liveDemo: "Живое демо",
-      quickstartLabel: "быстрый старт",
     },
     predictionFieldDemo: {
       eyebrow: "01 / живое демо",
@@ -161,6 +160,7 @@ const ru: TranslationBundle = {
       copyForLlm: "Копировать для LLM",
       fullApiLead: "Полный API в ",
       fullApiLink: "документации →",
+      quickstartLabel: "быстрый старт",
     },
     whyDifferent: {
       eyebrow: "05 / отличие",

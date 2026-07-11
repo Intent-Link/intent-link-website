@@ -167,7 +167,7 @@ const PredictionFieldDemo = () => {
                         <span className="text-[#4d5768]">{entry.time}</span>
                         <span className="text-[#82aaff]">→ prefetch</span>
                         <span className="min-w-0 flex-1 truncate">{entry.path}</span>
-                        <span className="shrink-0 text-term-dim">u={entry.utility}</span>
+                        <span className="shrink-0 text-term-dim">p={entry.probability}%</span>
                       </div>
                     ))
                   )}
@@ -203,7 +203,7 @@ const PredictionFieldDemo = () => {
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-4 p-[18px] [touch-action:pan-y] sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 p-[18px] [touch-action:pan-y] sm:grid-cols-3 lg:grid-cols-6">
               {tiles.map((tile) => (
                 <ProductTile
                   key={tile.id}

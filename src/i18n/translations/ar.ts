@@ -75,7 +75,6 @@ const ar: TranslationBundle = {
         "يقرأ intent-link الحركة —المؤشر أو التمرير— ويتنبأ بالعنصر الذي يتجه إليه المستخدم بدقة تبلغ ~98 %. يُحمّل مساراً مسبقاً، يُسخّن معاينة، يسجّل النية، يكيّف الواجهة. إشارة واحدة، استخدامات عديدة.",
       getStarted: "ابدأ الآن",
       liveDemo: "عرض حي",
-      quickstartLabel: "البدء السريع",
     },
     predictionFieldDemo: {
       eyebrow: "01 / عرض حي",
@@ -161,6 +160,7 @@ const ar: TranslationBundle = {
       copyForLlm: "نسخ لنموذج لغوي",
       fullApiLead: "واجهة برمجية كاملة في ",
       fullApiLink: "الوثائق →",
+      quickstartLabel: "البدء السريع",
     },
     whyDifferent: {
       eyebrow: "05 / مختلف",

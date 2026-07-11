@@ -14,6 +14,8 @@ import {
 interface TileFire {
   id: string;
   utility: number;
+  /** Probability at the moment of firing — what a casual visitor actually understands. */
+  probability: number;
 }
 
 interface TileEvaluation {
@@ -48,7 +50,7 @@ const evaluateTiles = (
 
     if (value > fireThreshold && !wasArmed) {
       armed[id] = true;
-      fired.push({ id, utility: value });
+      fired.push({ id, utility: value, probability });
     } else if (probability < rearmProbability && wasArmed) {
       armed[id] = false;
     } else {

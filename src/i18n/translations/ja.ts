@@ -75,7 +75,6 @@ const ja: TranslationBundle = {
         "intent-link は動き（カーソルやスクロール）を読み取り、ユーザーが向かっている要素を約 98 % の精度で予測します。ルートをプリフェッチし、プレビューを温め、意図を記録し、UI を適応させる。ひとつのシグナルで、多くの用途に。",
       getStarted: "はじめる",
       liveDemo: "ライブデモ",
-      quickstartLabel: "クイックスタート",
     },
     predictionFieldDemo: {
       eyebrow: "01 / ライブデモ",
@@ -161,6 +160,7 @@ const ja: TranslationBundle = {
       copyForLlm: "LLM 用にコピー",
       fullApiLead: "完全な API は",
       fullApiLink: "ドキュメントで →",
+      quickstartLabel: "クイックスタート",
     },
     whyDifferent: {
       eyebrow: "05 / 何が違うか",

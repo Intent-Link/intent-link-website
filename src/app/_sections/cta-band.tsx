@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/section";
 import { glyphVariant } from "@/components/ui/glyph-background";
-import { CopyButton } from "@/components/ui/copy-button";
+import { InstallCommand } from "@/components/ui/install-command";
 import { GithubIcon } from "@/components/ui/github-icon";
 import { PrefetchLink } from "@/components/ui/prefetch-link";
 import { buttonClassName } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { sectionIds } from "@/constants/section-ids";
 import { testIds } from "@/constants/test-ids";
 import { externalUrls, localePath } from "@/constants/routes";
 import { docsEntryPath } from "@/constants/docs-nav";
-import { installCommands } from "@/constants/package-managers";
 import type { SectionsText } from "@/i18n/messages/sections";
 import type { Locale } from "@/i18n/locales";
 
@@ -34,17 +33,7 @@ const CtaBand = ({ text, locale }: CtaBandProps) => {
         </h2>
         <p className="mt-3 text-[16.5px] leading-[1.55] text-ink-2">{text.body}</p>
 
-        <div className="mt-8 inline-flex items-center gap-3 rounded-[10px] border border-black/25 bg-term-bg py-2.5 pl-4 pr-3 shadow-[0_16px_34px_-18px_rgba(0,0,0,.4)]">
-          <span className="font-mono text-[14px] text-term-ink">
-            <span className="text-term-dim">$ </span>
-            {installCommands.npm}
-          </span>
-          <CopyButton
-            value={installCommands.npm}
-            className="rounded-[7px] border border-white/20 px-3 py-1.5 text-[11.5px] text-term-dim hover:text-term-ink"
-            copiedClassName="border-accent/40 bg-accent/25 text-[#82aaff]"
-          />
-        </div>
+        <InstallCommand className="mt-8" />
 
         <div className="mt-[26px] flex flex-wrap justify-center gap-3">
           <PrefetchLink href={localePath(locale, docsEntryPath)} className={buttonClassName("primary", "group text-sm")}>

@@ -14,7 +14,8 @@ interface StreamEntry {
   key: number;
   time: string;
   path: string;
-  utility: string;
+  /** Probability (0..100, whole percent) at the moment `onIntent` fired. */
+  probability: number;
 }
 
 interface ToastState {
@@ -98,7 +99,7 @@ const usePredictionConsole = (tileIds: readonly string[]): UsePredictionConsoleI
           key: logId.current,
           time: stamp,
           path: `/${fire.id}`,
-          utility: fire.utility.toFixed(2),
+          probability: Math.round(fire.probability * 100),
         };
       })
       .reverse();

@@ -6,6 +6,7 @@ import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { CodeBlock } from "@/components/ui/code-block";
 import { CopyButton } from "@/components/ui/copy-button";
+import { HeroInstall } from "@/components/ui/hero-install";
 import { cn } from "@/utils/class-names";
 import { sectionIds } from "@/constants/section-ids";
 import { testIds } from "@/constants/test-ids";
@@ -61,6 +62,15 @@ function PredictiveButton({ onIntent, children }) {
   return <button ref={ref}>{children}</button>
 }`,
 } as const;
+
+/** The two-line common case, shown beside the install command in the quickstart card. */
+const dropInSnippet = `// then, in your link
+import { IntentLink } from 'intent-link'
+<IntentLink href="/pricing"
+  onIntent={() => router.prefetch('/pricing')}>
+  Pricing
+</IntentLink>
+// fires once, before the click lands`;
 
 const tabKeys = ["simple", "custom"] as const;
 const trafficLights = ["#ff5f57", "#febc2e", "#28c840"] as const;
@@ -124,59 +134,63 @@ const CodeExample = ({ text, locale }: CodeExampleProps) => {
           className="mb-[30px] max-w-[52ch]"
         />
 
-        <div className="overflow-hidden rounded-2xl border border-black/[0.25] bg-term-bg shadow-[0_30px_60px_-30px_rgba(11,18,32,.5)]">
-          <div className="flex items-center justify-between gap-2.5 border-b border-white/[0.08] px-[14px] py-[10px]">
-            <div className="flex items-center gap-3">
-              <span className="flex gap-[7px]">
-                {trafficLights.map((color) => (
-                  <span
-                    key={color}
-                    className="block h-[11px] w-[11px] rounded-full"
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
-              </span>
-              <div className="flex gap-1">
-                {tabKeys.map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    onClick={() => setTab(value)}
-                    className={cn(
-                      "rounded-md px-3.5 py-1.5 font-mono text-xs font-semibold transition-colors",
-                      tab === value
-                        ? "bg-white/[0.12] text-[#e8edf6]"
-                        : "text-[#7d8aa0] hover:bg-white/[0.06] hover:text-[#c7d0e0]",
-                    )}
-                  >
-                    {text.tabs[value]}
-                  </button>
-                ))}
+        <div className="grid items-start gap-6 lg:grid-cols-[1.12fr_0.88fr]">
+          <div className="overflow-hidden rounded-2xl border border-black/[0.25] bg-term-bg shadow-[0_30px_60px_-30px_rgba(11,18,32,.5)]">
+            <div className="flex items-center justify-between gap-2.5 border-b border-white/[0.08] px-[14px] py-[10px]">
+              <div className="flex items-center gap-3">
+                <span className="flex gap-[7px]">
+                  {trafficLights.map((color) => (
+                    <span
+                      key={color}
+                      className="block h-[11px] w-[11px] rounded-full"
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </span>
+                <div className="flex gap-1">
+                  {tabKeys.map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setTab(value)}
+                      className={cn(
+                        "rounded-md px-3.5 py-1.5 font-mono text-xs font-semibold transition-colors",
+                        tab === value
+                          ? "bg-white/[0.12] text-[#e8edf6]"
+                          : "text-[#7d8aa0] hover:bg-white/[0.06] hover:text-[#c7d0e0]",
+                      )}
+                    >
+                      {text.tabs[value]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex shrink-0 gap-1.5">
+                <CopyButton
+                  value={code}
+                  icon={clipboardIcon}
+                  labelClassName="hidden sm:inline"
+                  className={pillClass}
+                />
+                <CopyButton
+                  value={forLlm(code)}
+                  label={text.copyForLlm}
+                  icon={sparkleIcon}
+                  labelClassName="hidden sm:inline"
+                  className={pillClass}
+                />
               </div>
             </div>
-            <div className="flex shrink-0 gap-1.5">
-              <CopyButton
-                value={code}
-                icon={clipboardIcon}
-                labelClassName="hidden sm:inline"
-                className={pillClass}
-              />
-              <CopyButton
-                value={forLlm(code)}
-                label={text.copyForLlm}
-                icon={sparkleIcon}
-                labelClassName="hidden sm:inline"
-                className={pillClass}
-              />
-            </div>
+
+            <CodeBlock
+              code={code}
+              language={codeLanguage.tsx}
+              showCopy={false}
+              className="rounded-none border-0 bg-transparent"
+            />
           </div>
 
-          <CodeBlock
-            code={code}
-            language={codeLanguage.tsx}
-            showCopy={false}
-            className="rounded-none border-0 bg-transparent"
-          />
+          <HeroInstall title={text.quickstartLabel} snippet={dropInSnippet} />
         </div>
 
         <Link

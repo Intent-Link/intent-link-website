@@ -75,7 +75,6 @@ const fr: TranslationBundle = {
         "intent-link lit le mouvement — curseur ou défilement — et prédit l'élément vers lequel l'utilisateur se dirige avec ~98 % de précision. Précharge une route, prépare un aperçu, enregistre l'intention, adapte l'interface. Un signal, de multiples usages.",
       getStarted: "Commencer",
       liveDemo: "Démo en direct",
-      quickstartLabel: "démarrage rapide",
     },
     predictionFieldDemo: {
       eyebrow: "01 / démo en direct",
@@ -161,6 +160,7 @@ const fr: TranslationBundle = {
       copyForLlm: "Copier pour LLM",
       fullApiLead: "API complète dans les ",
       fullApiLink: "docs →",
+      quickstartLabel: "démarrage rapide",
     },
     whyDifferent: {
       eyebrow: "05 / différent",

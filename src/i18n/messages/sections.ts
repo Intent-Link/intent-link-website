@@ -12,7 +12,6 @@ const en = {
       "intent-link reads cursor or scroll motion and predicts the element a user is heading toward with ~98% accuracy. Prefetch a route, warm a preview, log intent, adapt the UI. One signal, many uses.",
     getStarted: "Get started",
     liveDemo: "Live demo",
-    quickstartLabel: "quickstart",
   },
   predictionFieldDemo: {
     eyebrow: "01 / live demo",
@@ -101,6 +100,7 @@ const en = {
     copyForLlm: "Copy for LLM",
     fullApiLead: "Full API in the ",
     fullApiLink: "docs →",
+    quickstartLabel: "quickstart",
   },
   whyDifferent: {
     eyebrow: "05 / why it's different",

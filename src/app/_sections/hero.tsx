@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Section } from "@/components/ui/section";
 import { Chip } from "@/components/ui/chip";
 import { Badge } from "@/components/ui/badge";
-import { HeroInstall } from "@/components/ui/hero-install";
+import { GravityWell } from "@/components/ui/gravity-well";
+import { InstallCommand } from "@/components/ui/install-command";
 import { PrefetchLink } from "@/components/ui/prefetch-link";
 import { buttonClassName } from "@/components/ui/button";
 import { sectionIds } from "@/constants/section-ids";
@@ -18,14 +19,6 @@ interface HeroProps {
   locale: Locale;
 }
 
-const heroSnippet = `// then, in your link
-import { IntentLink } from 'intent-link'
-<IntentLink href="/pricing"
-  onIntent={() => router.prefetch('/pricing')}>
-  Pricing
-</IntentLink>
-// fires once, before the click lands`;
-
 const heroBadges: { label: string; value: string; color: string; valueTextColor?: string }[] = [
   { label: "npm", value: `v${site.version}`, color: "var(--accent)" },
   { label: "license", value: "MIT", color: "#28a745" },
@@ -35,7 +28,7 @@ const heroBadges: { label: string; value: string; color: string; valueTextColor?
 
 /**
  * Hero — "Know the target before the click." Eyebrow pill · H1 · subcopy · CTAs ·
- * shields badge row · install terminal card with a drop-in snippet.
+ * shields badge row · the interactive Gravity Well field as the marquee visual.
  */
 const Hero = ({ text, locale }: HeroProps) => {
   return (
@@ -66,7 +59,8 @@ const Hero = ({ text, locale }: HeroProps) => {
               {text.liveDemo}
             </Link>
           </div>
-          <div className="mt-[30px] flex flex-wrap gap-2">
+          <InstallCommand className="mt-6" />
+          <div className="mt-[26px] flex flex-wrap gap-2">
             {heroBadges.map((badge) => (
               <Badge
                 key={badge.label}
@@ -79,7 +73,7 @@ const Hero = ({ text, locale }: HeroProps) => {
           </div>
         </div>
 
-        <HeroInstall title={text.quickstartLabel} snippet={heroSnippet} />
+        <GravityWell className="lg:h-[520px]" />
       </div>
     </Section>
   );
