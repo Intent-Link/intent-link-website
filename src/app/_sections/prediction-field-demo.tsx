@@ -10,7 +10,12 @@ import { usePredictionConsole } from "@/hooks/use-prediction-console";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSectionsText } from "@/hooks/use-sections-text";
-import { intentLevel, type IntentLevel } from "@/utils/intent-link-internals";
+import {
+  intentLevel,
+  importanceWeight,
+  costWeight,
+  type IntentLevel,
+} from "@/utils/intent-link-internals";
 import { sectionIds } from "@/constants/section-ids";
 import { testIds } from "@/constants/test-ids";
 import { tileCategory } from "@/constants/tile-categories";
@@ -21,6 +26,12 @@ const tiles = [
   { id: tileCategory.kids, tint: "#f1eff2" },
   { id: tileCategory.shoes, tint: "#f0f0ec" },
   { id: tileCategory.bags, tint: "#edf0f3" },
+  { id: tileCategory.accessories, tint: "#f2f0ea" },
+  { id: tileCategory.sport, tint: "#ecf1f0" },
+  { id: tileCategory.denim, tint: "#edeff4" },
+  { id: tileCategory.outerwear, tint: "#f0efec" },
+  { id: tileCategory.beauty, tint: "#f3eef1" },
+  { id: tileCategory.home, tint: "#eff1ed" },
   { id: tileCategory.sale, tint: "#f2eeed" },
 ] as const;
 
@@ -204,7 +215,7 @@ const PredictionFieldDemo = () => {
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 p-[18px] [touch-action:pan-y] sm:grid-cols-3 lg:grid-cols-6">
+            <div className="grid grid-cols-3 gap-3 p-[18px] [touch-action:pan-y] sm:grid-cols-4 lg:grid-cols-6">
               {tiles.map((tile) => (
                 <ProductTile
                   key={tile.id}
@@ -213,6 +224,7 @@ const PredictionFieldDemo = () => {
                   tint={tile.tint}
                   probability={panel.probabilities[tile.id]}
                   armed={panel.armed[tile.id]}
+                  fireAt={costWeight(panel.cost) / importanceWeight(panel.importance)}
                   text={{
                     tileStates: text.tileStates,
                     tileImageLabel: text.tileImageLabel,

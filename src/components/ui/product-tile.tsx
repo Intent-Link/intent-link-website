@@ -31,6 +31,15 @@ interface ProductTileProps {
   probability?: number;
   /** Whether this tile has fired `onIntent` (prefetched). */
   armed?: boolean;
+  /**
+   * Probability at which the engine's utility crosses zero for the current
+   * importance/cost knobs (`costWeight / importanceWeight`). "Arming" is shown
+   * once probability climbs past 60% of this real fire point, so the state
+   * ladder tracks the package's actual decision math instead of a magic
+   * number. Defaults to the paper-validated medium-importance / low-cost
+   * configuration (0.1 / 0.5 = 0.2).
+   */
+  fireAt?: number;
   /** Localized state labels + placeholder copy, from `SectionsText["predictionFieldDemo"]`. */
   text: {
     tileStates: Record<TileState, string>;
@@ -39,9 +48,9 @@ interface ProductTileProps {
   };
 }
 
-const resolveState = (armed: boolean, probability: number): TileState => {
+const resolveState = (armed: boolean, probability: number, fireAt: number): TileState => {
   if (armed) return tileState.prefetched;
-  if (probability > 0.12) return tileState.arming;
+  if (probability >= fireAt * 0.6) return tileState.arming;
   return tileState.watching;
 };
 
@@ -63,6 +72,7 @@ const ProductTileView = memo(({
   tint,
   liveProbability,
   armed = false,
+  fireAt = 0.2,
   text,
   registerLink,
   unregisterLink,
@@ -75,7 +85,7 @@ const ProductTileView = memo(({
     registerLink(id, element);
     return () => unregisterLink(id);
   }, [id, registerLink, unregisterLink]);
-  const state = resolveState(armed, liveProbability);
+  const state = resolveState(armed, liveProbability, fireAt);
   const percent = Math.round(liveProbability * 100);
   const Icon = tileIcons[id];
 
@@ -85,28 +95,28 @@ const ProductTileView = memo(({
       data-card={id}
       style={{ backgroundColor: tint }}
       className={cn(
-        "group/tile relative block aspect-[4/5] overflow-hidden rounded-[14px] border-2 transition-all [touch-action:pan-y]",
+        "group/tile relative block h-[92px] overflow-hidden rounded-xl border-2 transition-all [touch-action:pan-y]",
         armed
           ? "border-accent scale-[1.015] shadow-[0_10px_28px_-12px_rgba(0,102,255,.5)]"
-          : liveProbability > 0.15
+          : liveProbability >= fireAt * 0.6
             ? "border-[rgba(0,102,255,.4)] shadow-[0_1px_3px_rgba(0,0,0,.05)]"
             : "border-[rgba(0,0,0,.1)] shadow-[0_1px_3px_rgba(0,0,0,.05)]",
       )}
     >
-      <div className="absolute inset-0 flex items-center justify-center text-black/[0.26]">
-        <Icon className="h-8 w-8" />
+      <div className="absolute left-[13px] top-[13px] text-black/[0.26]">
+        <Icon className="h-6 w-6" />
         <span className="sr-only">{text.tileImageLabel}</span>
       </div>
 
       {armed && (
         <span
-          className="absolute left-[14px] top-[14px] z-[3] rounded-full bg-accent px-2 py-[3px] font-mono text-[9.5px] font-semibold text-white"
+          className="absolute left-[13px] bottom-[34px] z-[3] rounded-full bg-accent px-2 py-[3px] font-mono text-[9px] font-semibold text-white"
         >
           {text.tileBadge}
         </span>
       )}
 
-      <div className="absolute right-[11px] top-[11px] z-[3]">
+      <div className="absolute right-[9px] top-[9px] z-[3]">
         <div
           className="transition-opacity duration-200"
           style={{ opacity: liveProbability > 0.02 ? 1 : 0.5 }}
@@ -129,8 +139,8 @@ const ProductTileView = memo(({
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 z-[2] bg-[linear-gradient(transparent,rgba(0,0,0,.5))] px-[15px] pb-[13px] pt-4">
-        <span className="text-[17px] font-semibold tracking-[-0.01em] text-white">{label}</span>
+      <div className="absolute inset-x-0 bottom-0 z-[2] px-[13px] pb-[10px]">
+        <span className="text-[13.5px] font-semibold tracking-[-0.01em] text-ink">{label}</span>
       </div>
     </div>
   );

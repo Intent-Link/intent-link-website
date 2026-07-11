@@ -5,6 +5,12 @@ import { MenIcon } from "./men-icon";
 import { KidsIcon } from "./kids-icon";
 import { ShoesIcon } from "./shoes-icon";
 import { BagsIcon } from "./bags-icon";
+import { AccessoriesIcon } from "./accessories-icon";
+import { SportIcon } from "./sport-icon";
+import { DenimIcon } from "./denim-icon";
+import { OuterwearIcon } from "./outerwear-icon";
+import { BeautyIcon } from "./beauty-icon";
+import { HomeIcon } from "./home-icon";
 import { SaleIcon } from "./sale-icon";
 
 /** Registry mapping each `TileCategory` to its icon component — keyed off the
@@ -16,6 +22,12 @@ const tileIcons: Record<TileCategory, (props: TileIconProps) => React.JSX.Elemen
   [tileCategory.kids]: KidsIcon,
   [tileCategory.shoes]: ShoesIcon,
   [tileCategory.bags]: BagsIcon,
+  [tileCategory.accessories]: AccessoriesIcon,
+  [tileCategory.sport]: SportIcon,
+  [tileCategory.denim]: DenimIcon,
+  [tileCategory.outerwear]: OuterwearIcon,
+  [tileCategory.beauty]: BeautyIcon,
+  [tileCategory.home]: HomeIcon,
   [tileCategory.sale]: SaleIcon,
 };
 
