@@ -95,7 +95,7 @@ const ProductTileView = memo(({
       data-card={id}
       style={{ backgroundColor: tint }}
       className={cn(
-        "group/tile relative block h-[92px] overflow-hidden rounded-xl border-2 transition-all [touch-action:pan-y]",
+        "group/tile relative block aspect-[4/5] overflow-hidden rounded-xl border-2 transition-all [touch-action:pan-y] sm:aspect-auto sm:h-[92px]",
         armed
           ? "border-accent scale-[1.015] shadow-[0_10px_28px_-12px_rgba(0,102,255,.5)]"
           : liveProbability >= fireAt * 0.6

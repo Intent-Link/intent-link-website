@@ -37,6 +37,9 @@ const tiles = [
 
 const tileIds = tiles.map((tile) => tile.id);
 
+/** On mobile the storefront collapses to a 2×2 grid of taller (4/5) tiles. */
+const mobileTileCount = 4;
+
 /**
  * Prediction Field demo (01) — a storefront grid whose tiles register with the
  * real intent-link engine, beside the dark console that shows the same motion
@@ -47,6 +50,9 @@ const PredictionFieldDemo = () => {
   const panel = usePredictionConsole(tileIds);
   const { ref, revealed } = useScrollReveal<HTMLDivElement>();
   const isTouch = useMediaQuery("(pointer: coarse)");
+  const isMobile = useMediaQuery("(max-width: 639px)");
+
+  const visibleTiles = isMobile ? tiles.slice(0, mobileTileCount) : tiles;
 
   const levelSegments = [
     { value: intentLevel.low, label: text.levels.low },
@@ -215,8 +221,8 @@ const PredictionFieldDemo = () => {
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-3 p-[18px] [touch-action:pan-y] sm:grid-cols-4 lg:grid-cols-6">
-              {tiles.map((tile) => (
+            <div className="grid grid-cols-2 gap-3 p-[18px] [touch-action:pan-y] sm:grid-cols-4 lg:grid-cols-6">
+              {visibleTiles.map((tile) => (
                 <ProductTile
                   key={tile.id}
                   id={tile.id}
@@ -249,7 +255,7 @@ const PredictionFieldDemo = () => {
               ) : (
                 <span className="font-mono text-xs text-ink-3">{text.storefrontIdle}</span>
               )}
-              <span className="font-mono text-[11px] text-ink-3">{text.categories(tiles.length)}</span>
+              <span className="font-mono text-[11px] text-ink-3">{text.categories(visibleTiles.length)}</span>
             </div>
           </div>
         </div>
