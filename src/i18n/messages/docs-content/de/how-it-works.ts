@@ -1,18 +1,18 @@
 import type { DocText } from "@/content/docs/types";
 
 const howItWorks: DocText = {
-  "toc.the-estimate": "Die Schätzung",
-  "toc.scoring": "Ziel bewerten",
+  "toc.the-estimate": "Deine Bewegung lesen",
+  "toc.scoring": "Dein Ziel hat Anziehungskraft",
   "toc.probability": "Wahrscheinlichkeit",
-  "intro": "intent-link modelliert die Zeigerbewegung als physikalisches System. `IntentProvider` betreibt eine `requestAnimationFrame`-Schleife, die in jedem Frame deine Bewegung schätzt und jedes registrierte Ziel bewertet — das Ergebnis ist eine Live-Wahrscheinlichkeit pro Ziel.",
-  "estimateHeading": "Die Schätzung",
-  "estimateBody": "Rohe Zeiger-Abtastwerte sind verrauscht. Ein **Kalman-Filter** (2D für den Cursor, 1D für das Scrollen bei Touch) verwandelt sie in eine geglättete **Geschwindigkeit** und, entscheidend, eine **Unsicherheit** (σ) — wie sehr dieser Schätzung gerade zu trauen ist. Eine schnelle, gerade Bewegung liefert rasch eine sichere Schätzung; eine langsame, schweifende bleibt unsicher.",
-  "scoringHeading": "Ein Ziel bewerten",
-  "scoringBody": "Das `weight` jedes Ziels kombiniert drei exponentielle Terme — zwei kinetische (aus der Bewegung) und einen potenziellen (aus der Geometrie):",
-  "scoringNote": "Ein Ziel, das groß ist (großes `w`), nah (kleines `d`) und mit einer sicheren Bewegung ausgerichtet ist, erzielt einen hohen Wert. Ein winziges, weit entferntes oder abseits der Bahn liegendes Ziel erzielt einen Wert nahe null.",
+  "intro": "intent-link modelliert die Zeigerbewegung als physikalisches System. `IntentProvider` betreibt eine Schleife, die in jedem Frame liest, wie du dich bewegst, und jedes registrierte Ziel bewertet. Das Ergebnis ist eine Live-Wahrscheinlichkeit pro Ziel.",
+  "estimateHeading": "Deine Bewegung lesen",
+  "estimateBody": "Rohe Zeigereingaben sind ruckelig, daher glättet intent-link sie zu einem ruhigen Bild deiner Bewegung — sowohl wie schnell du unterwegs bist als auch wie sicher es sich dieses Bildes gerade sein kann. Eine schnelle, zielstrebige Bewegung liest sich klar; eine langsame, schweifende bleibt mehrdeutig.",
+  "scoringHeading": "Dein Ziel hat Anziehungskraft",
+  "scoringBody": "Stell dir vor, jedes Ziel hätte seine eigene Anziehungskraft. Ein Ziel zieht umso stärker, je entschlossener deine Bewegung darauf zusteuert und je näher es dort liegt, wohin du unterwegs bist. In jedem Frame verwandelt intent-link diese Anziehung in ein einzelnes `weight` pro Ziel.",
+  "scoringNote": "Ein Ziel, das mit einer sicheren Bewegung ausgerichtet ist, erzielt einen hohen Wert. Eines, das abseits liegt — oder auf das deine Bewegung nicht wirklich zusteuert — verblasst gegen null.",
   "probabilityHeading": "Wahrscheinlichkeit & die Null-Option",
-  "probabilityBody": "Gewichte werden mit einem Softmax-artigen Nenner, der eine Konstante `1` enthält, zu Wahrscheinlichkeiten normalisiert:",
-  "nullOption": "Diese führende `1` ist eine **„geht nirgendwohin“-Option** — die Wahrscheinlichkeiten summieren sich über deine Links nie zu 1, sodass die Engine unsicher bleiben und einfach nicht auslösen kann. Der Live-[PhysicsState](intent-context#physicsstate) jedes Ziels (Wahrscheinlichkeit, Gewicht und die drei Terme) wird über `IntentContext` bereitgestellt.",
+  "probabilityBody": "Gewichte werden zu Wahrscheinlichkeiten, indem jedes Ziel gegen seine Nachbarn abgewogen wird, plus einer Konstante `1` im Nenner:",
+  "nullOption": "Diese führende `1` ist eine **„nirgendwohin unterwegs“-Option**: Wahrscheinlichkeiten summieren sich über deine Links nie zu 1, sodass die Engine unsicher bleiben und einfach nicht auslösen kann. Der Live-[PhysicsState](intent-context#physicsstate) jedes Ziels wird über `IntentContext` bereitgestellt.",
   "touch": "Auf Touch-Geräten gibt es keinen Cursor, daher verfolgt die Engine stattdessen die [Scrollgeschwindigkeit](mobile-behavior) und bewertet Ziele nach vertikaler Nähe.",
 };
 

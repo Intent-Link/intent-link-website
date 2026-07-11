@@ -14,7 +14,7 @@ const docSlugTuple = [
   "intent-provider",
   "intent-link",
   "intent-context",
-  "predictive-prefetch",
+  "applications",
   "custom-components",
   "beyond-prefetch",
   "mobile-behavior",
@@ -36,7 +36,7 @@ const docsNav: DocGroup[] = [
   { id: "apiReference", slugs: ["intent-provider", "intent-link", "intent-context"] },
   {
     id: "guides",
-    slugs: ["predictive-prefetch", "custom-components", "beyond-prefetch", "mobile-behavior"],
+    slugs: ["applications", "custom-components", "beyond-prefetch", "mobile-behavior"],
   },
   { id: "more", slugs: ["typescript", "troubleshooting", "changelog"] },
 ];

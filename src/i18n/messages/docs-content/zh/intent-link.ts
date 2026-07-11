@@ -17,7 +17,7 @@ const intentLink: DocText = {
   "prop.rest": "任意 next/link 或锚点属性（className、style、ref…）。",
   "prefetchNote": "注意：`IntentLink` 会在底层的 `next/link` 上设置 `prefetch={false}`——预取被视为该信号的一个消费者，绝不强制。",
   "onIntentHeading": "onIntent",
-  "onIntentBody": "在首次满足 `(probability × importanceWeight) − costWeight > 0` 时触发。当概率跌破 `0.05` 时锁会重置，因此它可以再次触发。回调接收：",
+  "onIntentBody": "在目标的效用首次越过零时触发一次。回调接收：",
   "exampleHeading": "示例",
 };
 

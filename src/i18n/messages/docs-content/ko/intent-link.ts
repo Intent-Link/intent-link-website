@@ -17,7 +17,7 @@ const intentLink: DocText = {
   "prop.rest": "모든 next/link 또는 앵커 prop (className, style, ref…).",
   "prefetchNote": "참고: `IntentLink`는 내부 `next/link`에 `prefetch={false}`를 설정합니다 — 미리 가져오기는 신호의 한 소비자로 취급될 뿐, 강제되지 않습니다.",
   "onIntentHeading": "onIntent",
-  "onIntentBody": "처음으로 `(probability × importanceWeight) − costWeight > 0`이 되는 순간 한 번 실행됩니다. 확률이 `0.05` 아래로 떨어지면 잠금이 초기화되어 다시 실행될 수 있습니다. 콜백은 다음을 받습니다:",
+  "onIntentBody": "대상의 유틸리티가 처음으로 0을 넘는 순간 한 번 실행됩니다. 콜백은 다음을 받습니다:",
   "exampleHeading": "예제",
 };
 

@@ -1,7 +1,7 @@
 import type { DocText } from "@/content/docs/types";
 
 const beyondPrefetch: DocText = {
-  "toc.previews": "الكشف التدريجي",
+  "toc.previews": "المعاينات",
   "toc.analytics": "التحليلات",
   "toc.adaptive": "الواجهة المتكيفة",
   "intro": "إشارة `onIntent` نفسها تقود ما هو أكثر بكثير من التنقل.",

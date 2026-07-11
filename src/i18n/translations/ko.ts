@@ -242,7 +242,7 @@ const ko: TranslationBundle = {
       "intent-provider": "IntentProvider",
       "intent-link": "IntentLink",
       "intent-context": "IntentContext",
-      "predictive-prefetch": "예측형 미리 가져오기",
+      "applications": "활용 사례",
       "custom-components": "커스텀 컴포넌트",
       "beyond-prefetch": "미리 가져오기를 넘어",
       "mobile-behavior": "모바일 동작",

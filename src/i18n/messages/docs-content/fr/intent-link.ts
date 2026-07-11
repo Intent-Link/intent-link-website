@@ -15,9 +15,9 @@ const intentLink: DocText = {
   "prop.cost": "Pénalité pour un faux déclenchement.",
   "prop.onIntent": "Appelé une fois lorsque l'utilité franchit zéro.",
   "prop.rest": "Toute prop de next/link ou d'ancre (className, style, ref…).",
-  "prefetchNote": "Note : `IntentLink` définit `prefetch={false}` sur le `next/link` sous-jacent — le préchargement est traité comme un consommateur du signal parmi d'autres, jamais imposé.",
+  "prefetchNote": "Note : `IntentLink` définit `prefetch={false}` sur le `next/link` sous-jacent. Le préchargement est traité comme un consommateur du signal parmi d'autres, jamais imposé.",
   "onIntentHeading": "onIntent",
-  "onIntentBody": "Se déclenche une fois, la première fois que `(probability × importanceWeight) − costWeight > 0`. Le verrou se réinitialise lorsque la probabilité tombe sous `0.05`, de sorte qu'il peut se déclencher à nouveau. Le rappel reçoit :",
+  "onIntentBody": "Se déclenche une fois, la première fois que l'utilité de la cible passe au-dessus de zéro. Le rappel reçoit :",
   "exampleHeading": "Exemple",
 };
 

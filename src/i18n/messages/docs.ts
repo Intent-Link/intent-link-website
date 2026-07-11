@@ -19,7 +19,7 @@ const en = {
     "intent-provider": "IntentProvider",
     "intent-link": "IntentLink",
     "intent-context": "IntentContext",
-    "predictive-prefetch": "Predictive prefetch",
+    "applications": "Applications",
     "custom-components": "Custom components",
     "beyond-prefetch": "Beyond prefetch",
     "mobile-behavior": "Mobile behavior",
@@ -37,9 +37,9 @@ const en = {
     quickstart:
       "Install intent-link, mount IntentProvider, and swap in IntentLink to get predictive prefetch working in a few minutes.",
     installation:
-      "Install intent-link with npm, pnpm, or yarn, and mount IntentProvider in the App Router or Pages Router.",
+      "Install intent-link with npm, pnpm, or yarn, and mount IntentProvider in your App Router layout.",
     "how-it-works":
-      "How intent-link models pointer motion with a Kalman filter and scores every registered target into a live probability.",
+      "How intent-link models pointer motion as a physical system and scores every registered target into a live probability.",
     "importance-and-cost":
       "Tune the importance and cost props to control how early and how confidently onIntent fires for each target.",
     "intent-provider":
@@ -48,8 +48,8 @@ const en = {
       "IntentLink API reference: a prediction-aware drop-in replacement for next/link with importance, cost, and onIntent props.",
     "intent-context":
       "IntentContext API reference: read the raw probability stream and register custom elements for target prediction.",
-    "predictive-prefetch":
-      "Use intent-link's onIntent signal to prefetch routes and warm data before a user clicks, not after.",
+    "applications":
+      "Use intent-link's onIntent signal to prefetch routes, warm data, and preload assets before a user clicks, not after.",
     "custom-components":
       "Register buttons, cards, or any non-link element with IntentContext to add target prediction beyond links.",
     "beyond-prefetch":
@@ -58,7 +58,7 @@ const en = {
       "How intent-link predicts intent on touch devices using scroll velocity instead of cursor trajectory.",
     typescript: "intent-link is fully typed. Reference for IntentLinkProps, PhysicsState, and IntentContextType.",
     troubleshooting:
-      "Fixes for common intent-link issues: onIntent not firing, SSR / \"use client\" errors, and touch device behavior.",
+      "Fixes for common intent-link issues: onIntent not firing and SSR / \"use client\" errors.",
     changelog: "Release notes and version history for the intent-link package.",
   },
 } as const;

@@ -10,7 +10,7 @@ const GET = async () => {
   const body = [
     `# ${site.name}`,
     "",
-    `> ${site.tagline}. Reads pointer/scroll motion, estimates where it's heading with a Kalman filter (velocity + confidence), and fires \`onIntent\` once a target is the likely destination, before the click.`,
+    `> ${site.tagline}. Reads pointer and scroll motion and fires \`onIntent\` once a target is the likely destination, before the click.`,
     "",
     `Version ${site.version} · MIT · react >= 18, react-dom >= 18, next >= 13.`,
     "",
@@ -20,7 +20,7 @@ const GET = async () => {
     "",
     "## Exports",
     "",
-    "- IntentProvider: runs the prediction engine; mount once near the root.",
+    "- IntentProvider: runs the prediction engine; mount once in your app/layout.jsx (ships its own \"use client\").",
     "- IntentLink: drop-in for next/link with importance/cost props and onIntent.",
     "- IntentContext: raw probability stream + registerLink/unregisterLink.",
     "- Types: IntentLinkProps, PhysicsState, IntentContextType.",

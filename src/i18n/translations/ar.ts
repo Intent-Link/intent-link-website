@@ -242,7 +242,7 @@ const ar: TranslationBundle = {
       "intent-provider": "IntentProvider",
       "intent-link": "IntentLink",
       "intent-context": "IntentContext",
-      "predictive-prefetch": "التحميل المسبق التنبؤي",
+      "applications": "التطبيقات",
       "custom-components": "مكوّنات مخصّصة",
       "beyond-prefetch": "ما وراء التحميل المسبق",
       "mobile-behavior": "سلوك الأجهزة المحمولة",

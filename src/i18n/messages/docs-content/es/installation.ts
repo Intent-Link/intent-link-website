@@ -2,13 +2,13 @@ import type { DocText } from "@/content/docs/types";
 
 const installation: DocText = {
   "toc.requirements": "Requisitos",
-  "toc.app-router": "App vs Pages Router",
+  "toc.app-router": "Montaje",
   "intro": "intent-link se distribuye como ESM + CJS con tipos de TypeScript. Instálalo con el gestor de paquetes que prefieras.",
   "requirementsHeading": "Requisitos",
   "col.peer": "Dependencia peer",
   "col.version": "Versión",
-  "appRouterHeading": "App Router vs Pages Router",
-  "appRouterBody": "Cada export es un componente de cliente (llevan `\"use client\"`). En el **App Router**, monta `IntentProvider` en un límite de cliente — ya sea un layout `\"use client\"` o un pequeño envoltorio de cliente que rendericen desde un layout de servidor. En el **Pages Router**, envuelve tu app en `pages/_app.jsx`.",
+  "appRouterHeading": "Montaje",
+  "appRouterBody": "Cada export incluye su propia directiva `\"use client\"`, así que nunca añades una tú mismo. Monta `IntentProvider` una sola vez en tu `app/layout.jsx` — funciona directamente dentro del layout de servidor. Consulta la [guía de inicio rápido](quickstart) para ver el fragmento completo.",
 };
 
 export { installation };

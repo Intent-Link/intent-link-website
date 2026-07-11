@@ -242,7 +242,7 @@ const zh: TranslationBundle = {
       "intent-provider": "IntentProvider",
       "intent-link": "IntentLink",
       "intent-context": "IntentContext",
-      "predictive-prefetch": "预测式预取",
+      "applications": "应用场景",
       "custom-components": "自定义组件",
       "beyond-prefetch": "超越预取",
       "mobile-behavior": "移动端行为",

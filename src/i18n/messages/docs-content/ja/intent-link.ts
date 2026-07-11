@@ -17,7 +17,7 @@ const intentLink: DocText = {
   "prop.rest": "任意の next/link またはアンカーの prop（className、style、ref…）。",
   "prefetchNote": "注意: `IntentLink` は基盤となる `next/link` に `prefetch={false}` を設定します — プリフェッチはシグナルの消費者の1つとして扱われ、強制されることはありません。",
   "onIntentHeading": "onIntent",
-  "onIntentBody": "初めて `(probability × importanceWeight) − costWeight > 0` となったときに一度だけ発火します。ロックは確率が `0.05` を下回るとリセットされ、再び発火できます。コールバックは次を受け取ります:",
+  "onIntentBody": "遷移先の効用が初めてゼロを越えたときに一度だけ発火します。コールバックは次を受け取ります:",
   "exampleHeading": "例",
 };
 

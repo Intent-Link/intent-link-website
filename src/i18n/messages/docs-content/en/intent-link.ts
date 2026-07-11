@@ -17,7 +17,7 @@ const intentLink: DocText = {
   "prop.rest": "Any next/link or anchor prop (className, style, ref…).",
   "prefetchNote": "Note: `IntentLink` sets `prefetch={false}` on the underlying `next/link`. Prefetching is treated as one consumer of the signal, never forced.",
   "onIntentHeading": "onIntent",
-  "onIntentBody": "Fires once, the first time `(probability × importanceWeight) − costWeight > 0`. The lock resets when probability drops below `0.05`, so it can fire again. The callback receives:",
+  "onIntentBody": "Fires once, the first time the target's utility crosses above zero. The callback receives:",
   "exampleHeading": "Example",
 };
 

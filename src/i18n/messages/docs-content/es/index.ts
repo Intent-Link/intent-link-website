@@ -6,7 +6,7 @@ import { importanceAndCost } from "./importance-and-cost";
 import { intentProvider } from "./intent-provider";
 import { intentLink } from "./intent-link";
 import { intentContext } from "./intent-context";
-import { predictivePrefetch } from "./predictive-prefetch";
+import { applications } from "./applications";
 import { customComponents } from "./custom-components";
 import { beyondPrefetch } from "./beyond-prefetch";
 import { mobileBehavior } from "./mobile-behavior";
@@ -23,7 +23,7 @@ const es: DocsContentText = {
   "intent-provider": intentProvider,
   "intent-link": intentLink,
   "intent-context": intentContext,
-  "predictive-prefetch": predictivePrefetch,
+  "applications": applications,
   "custom-components": customComponents,
   "beyond-prefetch": beyondPrefetch,
   "mobile-behavior": mobileBehavior,

@@ -17,7 +17,7 @@ const intentLink: DocText = {
   "prop.rest": "Jede next/link- oder Anker-Prop (className, style, ref…).",
   "prefetchNote": "Hinweis: `IntentLink` setzt `prefetch={false}` am zugrunde liegenden `next/link` — die Vorladung wird als ein Konsument des Signals behandelt, nie erzwungen.",
   "onIntentHeading": "onIntent",
-  "onIntentBody": "Löst einmal aus, sobald erstmals `(probability × importanceWeight) − costWeight > 0`. Die Sperre setzt sich zurück, wenn die Wahrscheinlichkeit unter `0.05` fällt, sodass es wieder auslösen kann. Der Callback erhält:",
+  "onIntentBody": "Löst einmal aus, sobald der Nutzen des Ziels erstmals über null steigt. Der Callback erhält:",
   "exampleHeading": "Beispiel",
 };
 

@@ -12,7 +12,7 @@ const intentProvider: DocContent = {
     { kind: blockKind.code, language: codeLanguage.tsx, code: usageSnippet },
 
     { kind: blockKind.heading, level: 2, id: "notes", textKey: "notesHeading" },
-    { kind: blockKind.list, ordered: false, itemKeys: ["notes.client", "notes.loop", "notes.provides"] },
+    { kind: blockKind.list, ordered: false, itemKeys: ["notes.client", "notes.provides"] },
   ],
 };
 

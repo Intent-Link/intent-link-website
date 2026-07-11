@@ -242,7 +242,7 @@ const ru: TranslationBundle = {
       "intent-provider": "IntentProvider",
       "intent-link": "IntentLink",
       "intent-context": "IntentContext",
-      "predictive-prefetch": "Предсказательная предзагрузка",
+      "applications": "Применения",
       "custom-components": "Свои компоненты",
       "beyond-prefetch": "За пределами предзагрузки",
       "mobile-behavior": "Поведение на мобильных",

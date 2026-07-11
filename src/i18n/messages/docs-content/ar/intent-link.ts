@@ -17,7 +17,7 @@ const intentLink: DocText = {
   "prop.rest": "أي خاصية لـ next/link أو للرابط (className، style، ref…).",
   "prefetchNote": "ملاحظة: `IntentLink` يضبط `prefetch={false}` على الـ `next/link` الأساسي — إذ يُعامَل التحميل المسبق كأحد مستهلكي الإشارة، ولا يُفرض أبداً.",
   "onIntentHeading": "onIntent",
-  "onIntentBody": "يُطلق مرة واحدة، أول مرة يتحقق فيها `(probability × importanceWeight) − costWeight > 0`. يُعاد ضبط القفل عندما يهبط الاحتمال دون `0.05`، فيمكنه الإطلاق مجدداً. يتلقّى ردّ النداء:",
+  "onIntentBody": "يُطلق مرة واحدة، أول مرة تتجاوز فيها منفعة الهدف الصفر. يتلقّى ردّ النداء:",
   "exampleHeading": "مثال",
 };
 

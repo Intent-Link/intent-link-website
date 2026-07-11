@@ -242,7 +242,7 @@ const ja: TranslationBundle = {
       "intent-provider": "IntentProvider",
       "intent-link": "IntentLink",
       "intent-context": "IntentContext",
-      "predictive-prefetch": "予測プリフェッチ",
+      "applications": "活用例",
       "custom-components": "カスタムコンポーネント",
       "beyond-prefetch": "プリフェッチの先へ",
       "mobile-behavior": "モバイルでの挙動",

@@ -3,16 +3,13 @@ import type { DocText } from "@/content/docs/types";
 const troubleshooting: DocText = {
   "toc.nothing": "Rien ne se déclenche",
   "toc.ssr": "Erreurs SSR",
-  "toc.touch": "Toucher",
   "nothingHeading": "onIntent ne se déclenche jamais",
   "nothing.provider": "Est-ce que `IntentProvider` est monté au-dessus de ces liens ?",
-  "nothing.mousemove": "Le moteur ne s'exécute qu'après le premier `mousemove` — déplacez le curseur.",
-  "nothing.size": "Les cibles très petites ou hors écran obtiennent un score proche de zéro ; donnez de vraies zones de clic.",
+  "nothing.mousemove": "Le moteur ne s'exécute qu'après le premier `mousemove`, alors déplacez le curseur.",
+  "nothing.size": "Les cibles hors écran ne peuvent pas être évaluées — assurez-vous que la cible est bien rendue et dans la zone visible.",
   "nothing.wiring": "Essayez `importance=\"high\"` / `cost=\"low\"` pour confirmer le câblage, puis réduisez.",
   "ssrHeading": "Erreurs SSR / \"use client\"",
-  "ssrBody": "Tous les exports sont des composants client. Dans l'App Router, montez `IntentProvider` à l'intérieur d'une frontière `\"use client\"` ; ne l'appelez pas directement depuis un composant serveur.",
-  "touchHeading": "Les appareils tactiles ne font rien",
-  "touchBody": "Au toucher, l'intention vient du **défilement**, pas du tapotement — voir [Comportement mobile](mobile-behavior).",
+  "ssrBody": "Chaque export porte sa propre directive `\"use client\"` et fonctionne directement à l'intérieur d'une mise en page serveur, vous n'ajoutez donc pas `\"use client\"` vous-même.",
 };
 
 export { troubleshooting };

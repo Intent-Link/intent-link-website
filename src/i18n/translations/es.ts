@@ -242,7 +242,7 @@ const es: TranslationBundle = {
       "intent-provider": "IntentProvider",
       "intent-link": "IntentLink",
       "intent-context": "IntentContext",
-      "predictive-prefetch": "Precarga predictiva",
+      "applications": "Aplicaciones",
       "custom-components": "Componentes personalizados",
       "beyond-prefetch": "Más allá de la precarga",
       "mobile-behavior": "Comportamiento móvil",

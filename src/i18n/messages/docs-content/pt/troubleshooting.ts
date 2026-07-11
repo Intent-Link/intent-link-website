@@ -3,16 +3,13 @@ import type { DocText } from "@/content/docs/types";
 const troubleshooting: DocText = {
   "toc.nothing": "Nada dispara",
   "toc.ssr": "Erros de SSR",
-  "toc.touch": "Toque",
   "nothingHeading": "onIntent nunca dispara",
-  "nothing.provider": "O `IntentProvider` está montado acima desses links?",
-  "nothing.mousemove": "O motor só roda após o primeiro `mousemove` — mova o cursor.",
-  "nothing.size": "Alvos muito pequenos ou fora da tela pontuam perto de zero; dê áreas de clique reais.",
+  "nothing.provider": "O `IntentProvider` está montado acima dos links?",
+  "nothing.mousemove": "O motor só roda após o primeiro `mousemove`, então mova o cursor.",
+  "nothing.size": "Alvos fora da tela não podem ser pontuados — certifique-se de que o alvo está realmente renderizado e dentro da viewport.",
   "nothing.wiring": "Tente `importance=\"high\"` / `cost=\"low\"` para confirmar a conexão, depois reduza.",
   "ssrHeading": "Erros de SSR / \"use client\"",
-  "ssrBody": "Todos os exports são componentes cliente. No App Router, monte o `IntentProvider` dentro de uma fronteira `\"use client\"`; não o chame diretamente de um componente de servidor.",
-  "touchHeading": "Dispositivos de toque não fazem nada",
-  "touchBody": "No toque, a intenção vem da **rolagem**, não do toque — veja [Comportamento móvel](mobile-behavior).",
+  "ssrBody": "Cada export carrega a sua própria diretiva `\"use client\"` e funciona diretamente dentro de um layout de servidor, então você não adiciona `\"use client\"` por conta própria.",
 };
 
 export { troubleshooting };

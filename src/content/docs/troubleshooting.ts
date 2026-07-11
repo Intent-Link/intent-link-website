@@ -16,8 +16,6 @@ const troubleshooting: DocContent = {
     },
     { kind: blockKind.heading, level: 2, id: "ssr", textKey: "ssrHeading" },
     { kind: blockKind.paragraph, textKey: "ssrBody" },
-    { kind: blockKind.heading, level: 2, id: "touch", textKey: "touchHeading" },
-    { kind: blockKind.paragraph, textKey: "touchBody" },
   ],
 };
 

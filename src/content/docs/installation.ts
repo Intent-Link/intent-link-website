@@ -1,16 +1,4 @@
 import { blockKind, inlineKind, tableCellKind, type DocContent } from "./types";
-import { codeLanguage } from "@/utils/syntax-highlight";
-
-const pagesRouterSnippet = `// pages/_app.jsx  (Pages Router)
-import { IntentProvider } from "intent-link"
-
-export default function App({ Component, pageProps }) {
-  return (
-    <IntentProvider>
-      <Component {...pageProps} />
-    </IntentProvider>
-  )
-}`;
 
 const installation: DocContent = {
   slug: "installation",
@@ -43,7 +31,6 @@ const installation: DocContent = {
 
     { kind: blockKind.heading, level: 2, id: "app-router", textKey: "appRouterHeading" },
     { kind: blockKind.paragraph, textKey: "appRouterBody" },
-    { kind: blockKind.code, language: codeLanguage.tsx, code: pagesRouterSnippet },
   ],
 };
 

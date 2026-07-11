@@ -2,13 +2,13 @@ import type { DocText } from "@/content/docs/types";
 
 const installation: DocText = {
   "toc.requirements": "Требования",
-  "toc.app-router": "App и Pages Router",
+  "toc.app-router": "Монтирование",
   "intro": "intent-link поставляется как ESM + CJS с типами TypeScript. Установите его вашим любимым менеджером пакетов.",
   "requirementsHeading": "Требования",
   "col.peer": "Peer-зависимость",
   "col.version": "Версия",
-  "appRouterHeading": "App Router и Pages Router",
-  "appRouterBody": "Каждый экспорт — это клиентский компонент (они содержат `\"use client\"`). В **App Router** монтируйте `IntentProvider` внутри клиентской границы — либо в `\"use client\"`-макете, либо в небольшой клиентской обёртке, которую вы рендерите из серверного макета. В **Pages Router** оберните приложение в `pages/_app.jsx`.",
+  "appRouterHeading": "Монтирование",
+  "appRouterBody": "Каждый экспорт поставляется с собственной директивой `\"use client\"`, поэтому вам никогда не нужно добавлять её самим. Смонтируйте `IntentProvider` один раз в `app/layout.jsx` — он работает прямо внутри серверного макета. Полный сниппет см. в [Быстром старте](quickstart).",
 };
 
 export { installation };
