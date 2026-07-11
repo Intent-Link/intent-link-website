@@ -4,7 +4,7 @@
  */
 const testConstants = {
   demoTile: {
-    id: "tile-1",
+    id: "shoes",
     label: "Running shoes",
   },
   doc: {

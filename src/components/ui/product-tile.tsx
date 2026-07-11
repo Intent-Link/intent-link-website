@@ -3,7 +3,9 @@
 import { memo, useContext, useEffect, useRef } from "react";
 import { IntentContext } from "intent-link";
 import { ProbabilityRing } from "./probability-ring";
+import { tileIcons } from "./tile-icons";
 import { cn } from "@/utils/class-names";
+import type { TileCategory } from "@/constants/tile-categories";
 
 /** Visual state of a demo tile. Const map + derived union — no magic strings. */
 const tileState = {
@@ -21,7 +23,7 @@ const stateColor: Record<TileState, string> = {
 };
 
 interface ProductTileProps {
-  id: string;
+  id: TileCategory;
   label: string;
   /** Solid tint color for the "product shot" image area. */
   tint?: string;
@@ -75,6 +77,7 @@ const ProductTileView = memo(({
   }, [id, registerLink, unregisterLink]);
   const state = resolveState(armed, liveProbability);
   const percent = Math.round(liveProbability * 100);
+  const Icon = tileIcons[id];
 
   return (
     <div
@@ -90,8 +93,9 @@ const ProductTileView = memo(({
             : "border-[rgba(0,0,0,.1)] shadow-[0_1px_3px_rgba(0,0,0,.05)]",
       )}
     >
-      <div className="absolute inset-0 flex items-center justify-center font-mono text-[10.5px] text-black/[0.26]">
-        {text.tileImageLabel}
+      <div className="absolute inset-0 flex items-center justify-center text-black/[0.26]">
+        <Icon className="h-8 w-8" />
+        <span className="sr-only">{text.tileImageLabel}</span>
       </div>
 
       {armed && (

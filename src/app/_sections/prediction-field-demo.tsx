@@ -13,14 +13,15 @@ import { useSectionsText } from "@/hooks/use-sections-text";
 import { intentLevel, type IntentLevel } from "@/utils/intent-link-internals";
 import { sectionIds } from "@/constants/section-ids";
 import { testIds } from "@/constants/test-ids";
+import { tileCategory } from "@/constants/tile-categories";
 
 const tiles = [
-  { id: "women", tint: "#eef0f4" },
-  { id: "men", tint: "#eef1f0" },
-  { id: "kids", tint: "#f1eff2" },
-  { id: "shoes", tint: "#f0f0ec" },
-  { id: "bags", tint: "#edf0f3" },
-  { id: "sale", tint: "#f2eeed" },
+  { id: tileCategory.women, tint: "#eef0f4" },
+  { id: tileCategory.men, tint: "#eef1f0" },
+  { id: tileCategory.kids, tint: "#f1eff2" },
+  { id: tileCategory.shoes, tint: "#f0f0ec" },
+  { id: tileCategory.bags, tint: "#edf0f3" },
+  { id: tileCategory.sale, tint: "#f2eeed" },
 ] as const;
 
 const tileIds = tiles.map((tile) => tile.id);
