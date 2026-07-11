@@ -72,12 +72,12 @@ const ko: TranslationBundle = {
       titleLead: "목적지를 알아냅니다",
       titleEmphasis: "클릭하기 전에.",
       subcopy:
-        "intent-link는 커서든 스크롤이든 움직임을 읽어 사용자가 향하는 요소를 ~98 % 정확도로 예측합니다. 경로를 미리 가져오고, 미리보기를 준비하고, 의도를 기록하고, 인터페이스를 맞춥니다. 하나의 신호, 다양한 활용.",
+        "intent-link는 커서든 스크롤이든 움직임을 읽어 사용자가 향하는 요소를 ~98 % 정확도로 예측합니다. 클릭이 도착하기 전에 다음 페이지를 미리 가져오고, 미리보기를 드러내거나, 인터페이스를 맞춥니다. 하나의 신호, 다양한 활용.",
       getStarted: "시작하기",
       liveDemo: "라이브 데모",
     },
     predictionFieldDemo: {
-      eyebrow: "01 / 라이브 데모",
+      eyebrow: "02 / 라이브 데모",
       ariaLabel: "라이브 예측 데모",
       heading: "카드 쪽으로 움직여 보세요 — 어떻게 미리 가져오는지 확인하세요.",
       bodyTail: "아래 콘솔은 같은 움직임을 관찰하는 intent-link입니다.",
@@ -109,21 +109,6 @@ const ko: TranslationBundle = {
         bags: "가방",
         sale: "세일",
       },
-    },
-    kalmanLens: {
-      eyebrow: "02 / 작동 원리",
-      ariaLabel: "작동 원리",
-      heading: "당신이 어디로 향하는지 어떻게 알아보는가.",
-      body:
-        "잡음이 섞인 움직임을 측정하고, 추정하고, 앞으로 투영합니다. 캔버스에 그려 실제로 확인해 보세요.",
-      beats: [
-        { title: "측정", body: "매 프레임마다 포인터를 샘플링합니다 — 잡음이 섞인 위치의 흐름." },
-        { title: "추정", body: "칼만 필터가 이를 속도와 신뢰도로 매끄럽게 다듬습니다." },
-        { title: "투영과 실행", body: "궤적을 연장하고 도착하기 전에 onIntent를 실행합니다." },
-      ],
-      hintCursor: "캔버스 위에서 커서를 움직여 궤적을 그려 보세요.",
-      hintTouch: "캔버스 위를 드래그하여 궤적을 그려 보세요.",
-      legend: { raw: "원본 샘플", filtered: "필터링된 추정", cone: "투영 원뿔" },
     },
     latencyRace: {
       eyebrow: "03 / 차이를 느껴 보세요",
@@ -178,7 +163,7 @@ const ko: TranslationBundle = {
       highlightName: "intent-link",
       rows: [
         { name: "rel=prefetch", timing: "수동, 정적", selective: "당신이 미리 선택", perUser: "—", confidence: "—", setup: "직접 선언" },
-        { name: "quicklink", timing: "화면에 들어올 때", selective: "보이는 모든 것", perUser: "—", confidence: "—", setup: "끼워 넣기" },
+        { name: "ForesightJS", timing: "궤적을 따라", selective: "그 목적지", perUser: "✓", confidence: "—", setup: "등록 + 콜백" },
         { name: "instant.page", timing: "마우스를 올릴 때", selective: "하나, 늦게", perUser: "✓", confidence: "—", setup: "끼워 넣기" },
         { name: "Next.js prefetch", timing: "화면에 들어올 때", selective: "보이는 모든 것", perUser: "—", confidence: "—", setup: "내장" },
         { name: "Guess.js", timing: "사전 계산", selective: "최선의 추측", perUser: "집계", confidence: "—", setup: "빌드 단계 + 데이터" },
@@ -189,12 +174,12 @@ const ko: TranslationBundle = {
         { stat: "~98 %", title: "높은 정확도", body: "궤적과 신뢰도가 올바른 목적지를 짚어냅니다." },
         { stat: "노브 2개", title: "조정 가능", body: "importance와 cost로 공격성을 원하는 곳에 맞춥니다." },
         { stat: "끼워 넣기 / 원시", title: "두 가지 표면", body: "80 %의 경우를 위한 컴포넌트 하나, 나머지를 위한 원시 확률." },
-        { stat: "React · Next", title: "프레임워크 네이티브", body: "next/link를 그대로 대체합니다 — App Router와 Pages Router." },
+        { stat: "React · Next", title: "프레임워크 네이티브", body: "Next.js App Router에서 next/link를 그대로 대체합니다." },
         { stat: "MIT", title: "작고 오픈된", body: "데이터 수집 없음 — 움직임은 기기 밖으로 나가지 않습니다." },
       ],
     },
     beyondPrefetch: {
-      eyebrow: "06 / 미리 가져오기를 넘어",
+      eyebrow: "01 / 미리 가져오기를 넘어",
       ariaLabel: "미리 가져오기를 넘어",
       heading: "하나의 신호. 다양한 활용.",
       body:

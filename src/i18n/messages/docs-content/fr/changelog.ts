@@ -10,7 +10,7 @@ const changelog: DocText = {
   "v107Heading": "1.0.7",
   "v107.maint": "Version corrective : maintenance des dépendances et de l'empaquetage.",
   "v106Heading": "1.0.6",
-  "v106.engine": "Moteur de trajectoire à filtre de Kalman (curseur 2D + défilement 1D) avec évaluation pondérée par la confiance.",
+  "v106.engine": "Moteur de prédiction de trajectoire pour curseur 2D et défilement 1D, avec évaluation pondérée par la confiance.",
   "v106.api": "`IntentProvider`, `IntentLink` et `IntentContext` avec le modèle d'utilité `importance`/`cost`.",
   "v106.stream": "Flux `PhysicsState` brut exposé pour les composants personnalisés.",
   "v106.meta": "Sous licence MIT · React ≥ 18 · Next ≥ 13.",

@@ -72,12 +72,12 @@ const ar: TranslationBundle = {
       titleLead: "اعرف الوجهة",
       titleEmphasis: "قبل النقرة.",
       subcopy:
-        "يقرأ intent-link الحركة —المؤشر أو التمرير— ويتنبأ بالعنصر الذي يتجه إليه المستخدم بدقة تبلغ ~98 %. يُحمّل مساراً مسبقاً، يُسخّن معاينة، يسجّل النية، يكيّف الواجهة. إشارة واحدة، استخدامات عديدة.",
+        "يقرأ intent-link حركة المؤشر أو التمرير ويتنبأ بالعنصر الذي يتجه إليه المستخدم بدقة تبلغ ~98 %. حمّل الصفحة التالية مسبقاً قبل أن تقع النقرة، أظهِر معاينة، أو كيّف الواجهة. إشارة واحدة، استخدامات عديدة.",
       getStarted: "ابدأ الآن",
       liveDemo: "عرض حي",
     },
     predictionFieldDemo: {
-      eyebrow: "01 / عرض حي",
+      eyebrow: "02 / عرض حي",
       ariaLabel: "عرض التنبؤ الحي",
       heading: "تحرّك نحو بطاقة — وشاهد كيف تُحمَّل مسبقاً.",
       bodyTail: "الوحدة الطرفية بالأسفل هي intent-link وهو يراقب الحركة نفسها.",
@@ -109,21 +109,6 @@ const ar: TranslationBundle = {
         bags: "حقائب",
         sale: "تخفيضات",
       },
-    },
-    kalmanLens: {
-      eyebrow: "02 / كيف يعمل",
-      ariaLabel: "كيف يعمل",
-      heading: "كيف يرى إلى أين تتجه.",
-      body:
-        "يقيس الحركة المشوّشة، ويقدّرها، ثم يسقطها إلى الأمام. ارسم على اللوحة لتراه أثناء العمل.",
-      beats: [
-        { title: "القياس", body: "يأخذ عينات من المؤشر في كل إطار — تدفق مشوّش من المواضع." },
-        { title: "التقدير", body: "يُنعّمها مرشّح كالمان محوّلاً إياها إلى سرعة، مع درجة ثقة." },
-        { title: "الإسقاط والإطلاق", body: "يمدّ المسار ويطلق onIntent قبل أن تصل." },
-      ],
-      hintCursor: "حرّك المؤشر عبر اللوحة لرسم مسار.",
-      hintTouch: "اسحب عبر اللوحة لرسم مسار.",
-      legend: { raw: "عينات خام", filtered: "تقدير مُرشَّح", cone: "مخروط الإسقاط" },
     },
     latencyRace: {
       eyebrow: "03 / اشعر بالفرق",
@@ -178,7 +163,7 @@ const ar: TranslationBundle = {
       highlightName: "intent-link",
       rows: [
         { name: "rel=prefetch", timing: "يدوي، ثابت", selective: "تختار أنت مسبقاً", perUser: "—", confidence: "—", setup: "معلَن يدوياً" },
-        { name: "quicklink", timing: "عند الظهور", selective: "كل ما هو مرئي", perUser: "—", confidence: "—", setup: "قابل للدمج" },
+        { name: "ForesightJS", timing: "على المسار", selective: "الوجهة", perUser: "✓", confidence: "—", setup: "تسجيل + ردّ نداء" },
         { name: "instant.page", timing: "عند التحويم", selective: "واحد، متأخر", perUser: "✓", confidence: "—", setup: "قابل للدمج" },
         { name: "Next.js prefetch", timing: "عند الظهور", selective: "كل ما هو مرئي", perUser: "—", confidence: "—", setup: "مدمج" },
         { name: "Guess.js", timing: "محسوب مسبقاً", selective: "أفضل التخمينات", perUser: "مُجمَّع", confidence: "—", setup: "خطوة بناء + بيانات" },
@@ -189,12 +174,12 @@ const ar: TranslationBundle = {
         { stat: "~98 %", title: "دقة عالية", body: "المسار + الثقة يحدّدان الوجهة الصحيحة." },
         { stat: "مِقبضان", title: "قابل للضبط", body: "importance وcost يضعان مستوى الجرأة حيث تريد." },
         { stat: "قابل للدمج / خام", title: "سطحان", body: "مكوّن واحد لـ 80 % من الحالات، واحتمالات خام للبقية." },
-        { stat: "React · Next", title: "أصيل في إطار العمل", body: "بديل مباشر لـ next/link — App Router وPages Router." },
+        { stat: "React · Next", title: "أصيل في إطار العمل", body: "بديل مباشر لـ next/link في Next.js App Router." },
         { stat: "MIT", title: "صغير ومفتوح", body: "لا جمع للبيانات — الحركة لا تغادر الجهاز." },
       ],
     },
     beyondPrefetch: {
-      eyebrow: "06 / ما وراء التحميل المسبق",
+      eyebrow: "01 / ما وراء التحميل المسبق",
       ariaLabel: "ما وراء التحميل المسبق",
       heading: "إشارة واحدة. استخدامات عديدة.",
       body:

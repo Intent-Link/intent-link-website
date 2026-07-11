@@ -73,7 +73,16 @@ const Hero = ({ text, locale }: HeroProps) => {
           </div>
         </div>
 
-        <GravityWell className="lg:h-[520px]" />
+        <GravityWell
+          className="lg:h-[520px]"
+          labels={{
+            cursor: text.well.cursor,
+            target: text.well.target,
+            arming: text.well.arming,
+            armed: text.well.armed,
+          }}
+          caption={{ lead: text.well.captionLead, body: text.well.captionBody }}
+        />
       </div>
     </Section>
   );

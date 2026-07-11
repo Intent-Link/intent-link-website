@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Hero } from "../_sections/hero";
+import { BeyondPrefetch } from "../_sections/beyond-prefetch";
 import { PredictionFieldDemo } from "../_sections/prediction-field-demo";
-import { KalmanLens } from "../_sections/kalman-lens";
 import { LatencyRace } from "../_sections/latency-race";
 import { CodeExample } from "../_sections/code-example";
 import { WhyDifferent } from "../_sections/why-different";
-import { BeyondPrefetch } from "../_sections/beyond-prefetch";
 import { CtaBand } from "../_sections/cta-band";
 import { appRoutes, localeAlternates } from "@/constants/routes";
 import { getSectionsText } from "@/i18n/messages/sections";
@@ -27,12 +26,11 @@ const LandingPage = async ({ params }: LandingPageProps) => {
   return (
     <>
       <Hero text={text.hero} locale={locale} />
+      <BeyondPrefetch text={text.beyondPrefetch} />
       <PredictionFieldDemo />
-      <KalmanLens text={text.kalmanLens} />
       <LatencyRace />
       <CodeExample text={text.codeExample} locale={locale} />
       <WhyDifferent text={text.whyDifferent} />
-      <BeyondPrefetch text={text.beyondPrefetch} />
       <CtaBand text={text.ctaBand} locale={locale} />
     </>
   );

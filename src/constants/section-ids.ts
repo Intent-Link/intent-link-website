@@ -6,7 +6,6 @@
 const sectionIds = {
   hero: "hero",
   predictionFieldDemo: "prediction-field-demo",
-  kalmanLens: "kalman-lens",
   latencyRace: "latency-race",
   codeExample: "code-example",
   whyDifferent: "why-different",

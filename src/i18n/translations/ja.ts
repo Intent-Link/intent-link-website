@@ -72,12 +72,12 @@ const ja: TranslationBundle = {
       titleLead: "クリックの前に、",
       titleEmphasis: "遷移先がわかる。",
       subcopy:
-        "intent-link は動き（カーソルやスクロール）を読み取り、ユーザーが向かっている要素を約 98 % の精度で予測します。ルートをプリフェッチし、プレビューを温め、意図を記録し、UI を適応させる。ひとつのシグナルで、多くの用途に。",
+        "intent-link は動き（カーソルやスクロール）を読み取り、ユーザーが向かっている要素を約 98 % の精度で予測します。クリックが着地する前に次のページをプリフェッチし、プレビューを表示し、UI を適応させる。ひとつのシグナルで、多くの用途に。",
       getStarted: "はじめる",
       liveDemo: "ライブデモ",
     },
     predictionFieldDemo: {
-      eyebrow: "01 / ライブデモ",
+      eyebrow: "02 / ライブデモ",
       ariaLabel: "ライブ予測デモ",
       heading: "カードに向かって動かすと — プリフェッチされる様子が見えます。",
       bodyTail: "下のコンソールは、同じ動きを観察している intent-link です。",
@@ -109,21 +109,6 @@ const ja: TranslationBundle = {
         bags: "バッグ",
         sale: "セール",
       },
-    },
-    kalmanLens: {
-      eyebrow: "02 / 仕組み",
-      ariaLabel: "仕組み",
-      heading: "どこへ向かっているかを、どう捉えるか。",
-      body:
-        "ノイズの多い動きを計測し、推定し、先へ投影します。キャンバスに描いて、実際の動作を確かめてください。",
-      beats: [
-        { title: "計測", body: "毎フレーム、ポインターをサンプリング — ノイズの多い位置の流れです。" },
-        { title: "推定", body: "カルマンフィルターがそれを速度へと滑らかにし、確信度を加えます。" },
-        { title: "投影して発火", body: "軌道を延長し、到達する前に onIntent を発火します。" },
-      ],
-      hintCursor: "キャンバス上でカーソルを動かして軌道を描いてください。",
-      hintTouch: "キャンバス上でドラッグして軌道を描いてください。",
-      legend: { raw: "生サンプル", filtered: "フィルター後の推定", cone: "投影コーン" },
     },
     latencyRace: {
       eyebrow: "03 / 違いを体感",
@@ -178,7 +163,7 @@ const ja: TranslationBundle = {
       highlightName: "intent-link",
       rows: [
         { name: "rel=prefetch", timing: "手動・静的", selective: "事前に自分で選ぶ", perUser: "—", confidence: "—", setup: "手書きで宣言" },
-        { name: "quicklink", timing: "表示に入ったとき", selective: "見えているもの全部", perUser: "—", confidence: "—", setup: "組み込み可能" },
+        { name: "ForesightJS", timing: "軌道上で", selective: "その遷移先", perUser: "✓", confidence: "—", setup: "登録 + コールバック" },
         { name: "instant.page", timing: "ホバー時", selective: "1つ、遅れて", perUser: "✓", confidence: "—", setup: "組み込み可能" },
         { name: "Next.js prefetch", timing: "表示に入ったとき", selective: "見えているもの全部", perUser: "—", confidence: "—", setup: "組み込み済み" },
         { name: "Guess.js", timing: "事前計算", selective: "最有力の推測", perUser: "集計値", confidence: "—", setup: "ビルド手順 + データ" },
@@ -189,12 +174,12 @@ const ja: TranslationBundle = {
         { stat: "~98 %", title: "高い精度", body: "軌道 + 確信度が正しい遷移先を特定します。" },
         { stat: "2つのつまみ", title: "調整可能", body: "importance と cost で、積極性を好きな位置に設定できます。" },
         { stat: "組み込み / 生データ", title: "2つの使い方", body: "80 % のケースにはコンポーネントを、残りには生の確率を。" },
-        { stat: "React · Next", title: "フレームワークネイティブ", body: "next/link のドロップイン置き換え — App Router も Pages Router も。" },
+        { stat: "React · Next", title: "フレームワークネイティブ", body: "Next.js App Router での next/link のドロップイン置き換え。" },
         { stat: "MIT", title: "小さくてオープン", body: "データ収集なし — 動きの情報は端末の外に出ません。" },
       ],
     },
     beyondPrefetch: {
-      eyebrow: "06 / プリフェッチの先へ",
+      eyebrow: "01 / プリフェッチの先へ",
       ariaLabel: "プリフェッチの先へ",
       heading: "ひとつのシグナル。多くの用途。",
       body:

@@ -72,12 +72,12 @@ const de: TranslationBundle = {
       titleLead: "Kenne das Ziel",
       titleEmphasis: "vor dem Klick.",
       subcopy:
-        "intent-link liest die Bewegung — Cursor oder Scrollen — und sagt mit ~98 % Genauigkeit voraus, auf welches Element der Nutzer zusteuert. Lade eine Route vor, wärme eine Vorschau vor, protokolliere die Absicht, passe die Oberfläche an. Ein Signal, viele Anwendungen.",
+        "intent-link liest die Bewegung — Cursor oder Scrollen — und sagt mit ~98 % Genauigkeit voraus, auf welches Element der Nutzer zusteuert. Lade die nächste Seite vor, bevor der Klick landet, zeige eine Vorschau oder passe die Oberfläche an. Ein Signal, viele Anwendungen.",
       getStarted: "Loslegen",
       liveDemo: "Live-Demo",
     },
     predictionFieldDemo: {
-      eyebrow: "01 / live-demo",
+      eyebrow: "02 / live-demo",
       ariaLabel: "Live-Vorhersage-Demo",
       heading: "Bewege dich auf eine Karte zu — sieh zu, wie sie vorgeladen wird.",
       bodyTail: "Die Konsole unten ist intent-link, die dieselbe Bewegung beobachtet.",
@@ -109,21 +109,6 @@ const de: TranslationBundle = {
         bags: "Taschen",
         sale: "Sale",
       },
-    },
-    kalmanLens: {
-      eyebrow: "02 / wie es funktioniert",
-      ariaLabel: "Wie es funktioniert",
-      heading: "Wie es sieht, wohin du gehst.",
-      body:
-        "Miss die verrauschte Bewegung, schätze sie, projiziere sie nach vorn. Zeichne auf die Leinwand, um es in Aktion zu sehen.",
-      beats: [
-        { title: "Messen", body: "Tastet den Zeiger in jedem Frame ab — ein verrauschter Strom von Positionen." },
-        { title: "Schätzen", body: "Ein Kalman-Filter glättet ihn zu einer Geschwindigkeit, plus einer Konfidenz." },
-        { title: "Projizieren und auslösen", body: "Verlängert die Bahn und löst onIntent aus, bevor du ankommst." },
-      ],
-      hintCursor: "Bewege den Cursor über die Leinwand, um eine Bahn zu zeichnen.",
-      hintTouch: "Ziehe über die Leinwand, um eine Bahn zu zeichnen.",
-      legend: { raw: "rohe Messwerte", filtered: "gefilterte Schätzung", cone: "Projektionskegel" },
     },
     latencyRace: {
       eyebrow: "03 / spüre den Unterschied",
@@ -178,7 +163,7 @@ const de: TranslationBundle = {
       highlightName: "intent-link",
       rows: [
         { name: "rel=prefetch", timing: "manuell, statisch", selective: "du wählst vorab", perUser: "—", confidence: "—", setup: "manuell deklariert" },
-        { name: "quicklink", timing: "beim Sichtbarwerden", selective: "alles Sichtbare", perUser: "—", confidence: "—", setup: "einbindbar" },
+        { name: "ForesightJS", timing: "auf der Bahn", selective: "das Ziel", perUser: "✓", confidence: "—", setup: "registrieren + Callback" },
         { name: "instant.page", timing: "beim Überfahren", selective: "eins, spät", perUser: "✓", confidence: "—", setup: "einbindbar" },
         { name: "Next.js prefetch", timing: "beim Sichtbarwerden", selective: "alles Sichtbare", perUser: "—", confidence: "—", setup: "integriert" },
         { name: "Guess.js", timing: "vorberechnet", selective: "beste Vermutungen", perUser: "aggregiert", confidence: "—", setup: "Build-Schritt + Daten" },
@@ -189,12 +174,12 @@ const de: TranslationBundle = {
         { stat: "~98 %", title: "Hohe Genauigkeit", body: "Bahn + Konfidenz bestimmen das richtige Ziel." },
         { stat: "2 Regler", title: "Anpassbar", body: "importance und cost setzen die Aggressivität dorthin, wo du sie willst." },
         { stat: "einbindbar / roh", title: "Zwei Oberflächen", body: "Eine Komponente für 80 % der Fälle, rohe Wahrscheinlichkeiten für den Rest." },
-        { stat: "React · Next", title: "Framework-nativ", body: "Ein direkter Ersatz für next/link — App Router und Pages Router." },
+        { stat: "React · Next", title: "Framework-nativ", body: "Ein direkter Ersatz für next/link im Next.js App Router." },
         { stat: "MIT", title: "Klein und offen", body: "Keine Datensammlung — die Bewegung verlässt das Gerät nicht." },
       ],
     },
     beyondPrefetch: {
-      eyebrow: "06 / über die vorladung hinaus",
+      eyebrow: "01 / über die vorladung hinaus",
       ariaLabel: "Über die Vorladung hinaus",
       heading: "Ein Signal. Viele Anwendungen.",
       body:

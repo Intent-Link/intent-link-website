@@ -1,7 +1,7 @@
 import { blockKind, type DocContent } from "./types";
 import { codeLanguage } from "@/utils/syntax-highlight";
 
-const probabilitySnippet = `probability = weight / (1 + Σ weights)`;
+const probabilitySnippet = `probability = a target's weight as a share of all weights`;
 
 const howItWorks: DocContent = {
   slug: "how-it-works",

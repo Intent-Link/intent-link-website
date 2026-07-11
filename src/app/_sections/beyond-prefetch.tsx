@@ -17,9 +17,7 @@ const BeyondPrefetch = ({ text }: BeyondPrefetchProps) => {
       id={sectionIds.beyondPrefetch}
       testId={testIds.section.beyondPrefetch}
       ariaLabel={text.ariaLabel}
-      decor="glyph"
-      glyphVariant="vision"
-      className="border-t border-line-soft bg-[linear-gradient(180deg,rgba(255,255,255,0),var(--paper)_90%)]"
+      className="border-t border-line-soft bg-white"
     >
       <div className="mx-auto max-w-[1240px] px-8 pb-[100px] pt-[88px]">
         <SectionHeading

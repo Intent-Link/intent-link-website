@@ -72,12 +72,12 @@ const fr: TranslationBundle = {
       titleLead: "Devinez la destination",
       titleEmphasis: "avant le clic.",
       subcopy:
-        "intent-link lit le mouvement — curseur ou défilement — et prédit l'élément vers lequel l'utilisateur se dirige avec ~98 % de précision. Précharge une route, prépare un aperçu, enregistre l'intention, adapte l'interface. Un signal, de multiples usages.",
+        "intent-link lit le mouvement — curseur ou défilement — et prédit l'élément vers lequel l'utilisateur se dirige avec ~98 % de précision. Précharge la page suivante avant que le clic n'atterrisse, révèle un aperçu ou adapte l'interface. Un signal, de multiples usages.",
       getStarted: "Commencer",
       liveDemo: "Démo en direct",
     },
     predictionFieldDemo: {
-      eyebrow: "01 / démo en direct",
+      eyebrow: "02 / démo en direct",
       ariaLabel: "Démo de prédiction en direct",
       heading: "Dirigez-vous vers une carte — regardez-la se précharger.",
       bodyTail: "La console ci-dessous, c'est intent-link qui observe le même mouvement.",
@@ -109,21 +109,6 @@ const fr: TranslationBundle = {
         bags: "Sacs",
         sale: "Soldes",
       },
-    },
-    kalmanLens: {
-      eyebrow: "02 / comment ça marche",
-      ariaLabel: "Comment ça marche",
-      heading: "Comment il voit où vous allez.",
-      body:
-        "Mesurer le mouvement bruité, l'estimer, le projeter en avant. Dessinez sur le canevas pour le voir à l'œuvre.",
-      beats: [
-        { title: "Mesurer", body: "Échantillonne le pointeur à chaque image — un flux bruité de positions." },
-        { title: "Estimer", body: "Un filtre de Kalman le lisse en vitesse, avec une confiance." },
-        { title: "Projeter et déclencher", body: "Prolonge la trajectoire et déclenche onIntent avant que vous n'arriviez." },
-      ],
-      hintCursor: "Déplacez le curseur sur le canevas pour tracer une trajectoire.",
-      hintTouch: "Faites glisser sur le canevas pour tracer une trajectoire.",
-      legend: { raw: "échantillons bruts", filtered: "estimation filtrée", cone: "cône de projection" },
     },
     latencyRace: {
       eyebrow: "03 / ressentez la différence",
@@ -178,7 +163,7 @@ const fr: TranslationBundle = {
       highlightName: "intent-link",
       rows: [
         { name: "rel=prefetch", timing: "manuel, statique", selective: "vous choisissez à l'avance", perUser: "—", confidence: "—", setup: "déclaré à la main" },
-        { name: "quicklink", timing: "à l'entrée dans la vue", selective: "tout ce qui est visible", perUser: "—", confidence: "—", setup: "intégrable" },
+        { name: "ForesightJS", timing: "sur la trajectoire", selective: "la destination", perUser: "✓", confidence: "—", setup: "enregistrer + rappel" },
         { name: "instant.page", timing: "au survol", selective: "un seul, tardif", perUser: "✓", confidence: "—", setup: "intégrable" },
         { name: "Next.js prefetch", timing: "à l'entrée dans la vue", selective: "tout ce qui est visible", perUser: "—", confidence: "—", setup: "intégré" },
         { name: "Guess.js", timing: "précalculé", selective: "meilleures suppositions", perUser: "agrégé", confidence: "—", setup: "étape de build + données" },
@@ -189,12 +174,12 @@ const fr: TranslationBundle = {
         { stat: "~98 %", title: "Haute précision", body: "Trajectoire + confiance identifient la bonne destination." },
         { stat: "2 réglages", title: "Ajustable", body: "importance et cost placent l'agressivité là où vous le souhaitez." },
         { stat: "intégrable / brut", title: "Deux surfaces", body: "Un composant pour 80 % des cas, probabilités brutes pour le reste." },
-        { stat: "React · Next", title: "Natif du framework", body: "Un remplacement direct de next/link — App Router et Pages Router." },
+        { stat: "React · Next", title: "Natif du framework", body: "Un remplacement direct de next/link dans l'App Router de Next.js." },
         { stat: "MIT", title: "Léger et ouvert", body: "Aucune collecte de données — le mouvement ne quitte jamais l'appareil." },
       ],
     },
     beyondPrefetch: {
-      eyebrow: "06 / au-delà du préchargement",
+      eyebrow: "01 / au-delà du préchargement",
       ariaLabel: "Au-delà du préchargement",
       heading: "Un signal. De multiples usages.",
       body:

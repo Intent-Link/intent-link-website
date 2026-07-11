@@ -72,12 +72,12 @@ const zh: TranslationBundle = {
       titleLead: "点击之前，就知道",
       titleEmphasis: "目的地。",
       subcopy:
-        "intent-link 读取移动——光标或滚动——并以约 98 % 的精度预测用户正在前往的元素。预取路由、预热预览、记录意图、适配界面。一个信号，多种用途。",
+        "intent-link 读取光标或滚动的移动，并以 ~98 % 的精度预测用户正在前往的元素。在点击落下之前预取下一页、显示预览，或适配界面。一个信号，多种用途。",
       getStarted: "开始使用",
       liveDemo: "在线演示",
     },
     predictionFieldDemo: {
-      eyebrow: "01 / 在线演示",
+      eyebrow: "02 / 在线演示",
       ariaLabel: "实时预测演示",
       heading: "移向一张卡片——看它如何被预取。",
       bodyTail: "下方的控制台就是 intent-link 在观察同样的移动。",
@@ -109,21 +109,6 @@ const zh: TranslationBundle = {
         bags: "箱包",
         sale: "特卖",
       },
-    },
-    kalmanLens: {
-      eyebrow: "02 / 工作原理",
-      ariaLabel: "工作原理",
-      heading: "它如何看清你要去哪里。",
-      body:
-        "测量带噪声的移动，进行估计，再向前投射。在画布上绘制，看它如何运作。",
-      beats: [
-        { title: "测量", body: "每一帧采样指针——一串带噪声的位置流。" },
-        { title: "估计", body: "卡尔曼滤波器将其平滑为速度，并附带一个置信度。" },
-        { title: "投射并触发", body: "延伸轨迹，在你到达之前触发 onIntent。" },
-      ],
-      hintCursor: "在画布上移动光标以绘制一条轨迹。",
-      hintTouch: "在画布上拖动以绘制一条轨迹。",
-      legend: { raw: "原始采样", filtered: "滤波估计", cone: "投射锥" },
     },
     latencyRace: {
       eyebrow: "03 / 感受差异",
@@ -178,7 +163,7 @@ const zh: TranslationBundle = {
       highlightName: "intent-link",
       rows: [
         { name: "rel=prefetch", timing: "手动、静态", selective: "你事先挑选", perUser: "—", confidence: "—", setup: "手写声明" },
-        { name: "quicklink", timing: "进入视口时", selective: "所有可见项", perUser: "—", confidence: "—", setup: "可接入" },
+        { name: "ForesightJS", timing: "沿轨迹", selective: "目的地", perUser: "✓", confidence: "—", setup: "注册 + 回调" },
         { name: "instant.page", timing: "悬停时", selective: "单个，偏晚", perUser: "✓", confidence: "—", setup: "可接入" },
         { name: "Next.js prefetch", timing: "进入视口时", selective: "所有可见项", perUser: "—", confidence: "—", setup: "内置" },
         { name: "Guess.js", timing: "预先计算", selective: "最佳猜测", perUser: "聚合", confidence: "—", setup: "构建步骤 + 数据" },
@@ -189,12 +174,12 @@ const zh: TranslationBundle = {
         { stat: "~98 %", title: "高精度", body: "轨迹 + 置信度锁定正确的目的地。" },
         { stat: "2 个旋钮", title: "可调节", body: "importance 与 cost 让你把激进程度调到想要的位置。" },
         { stat: "可接入 / 原始", title: "两种接口", body: "一个组件覆盖 80 % 的场景，原始概率覆盖其余部分。" },
-        { stat: "React · Next", title: "框架原生", body: "next/link 的直接替代——支持 App Router 与 Pages Router。" },
+        { stat: "React · Next", title: "框架原生", body: "在 Next.js App Router 中直接替代 next/link。" },
         { stat: "MIT", title: "小巧且开放", body: "不采集数据——移动数据不离开设备。" },
       ],
     },
     beyondPrefetch: {
-      eyebrow: "06 / 超越预取",
+      eyebrow: "01 / 超越预取",
       ariaLabel: "超越预取",
       heading: "一个信号。多种用途。",
       body:

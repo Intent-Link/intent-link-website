@@ -9,12 +9,20 @@ const en = {
     titleLead: "Know the target",
     titleEmphasis: "before the click.",
     subcopy:
-      "intent-link reads cursor or scroll motion and predicts the element a user is heading toward with ~98% accuracy. Prefetch a route, warm a preview, log intent, adapt the UI. One signal, many uses.",
+      "intent-link reads cursor or scroll motion and predicts the element a user is heading toward with ~98% accuracy. Prefetch the next page before the click lands, reveal a preview, or adapt the UI. One signal, many uses.",
     getStarted: "Get started",
     liveDemo: "Live demo",
+    well: {
+      cursor: "cursor",
+      target: "target",
+      arming: "arming",
+      armed: "armed → prefetch",
+      captionLead: "Your links have gravity.",
+      captionBody: "Your motion falls toward a target, it arms, and the page is prefetched before the click.",
+    },
   },
   predictionFieldDemo: {
-    eyebrow: "01 / live demo",
+    eyebrow: "02 / live demo",
     ariaLabel: "Live prediction demo",
     heading: "Move toward a tile and watch it prefetch.",
     bodyTail: "The console below is intent-link watching the same motion.",
@@ -49,21 +57,6 @@ const en = {
       bags: "Bags",
       sale: "Sale",
     },
-  },
-  kalmanLens: {
-    eyebrow: "02 / how it works",
-    ariaLabel: "How it works",
-    heading: "How it sees where you're going.",
-    body:
-      "Measure the noisy motion, estimate it, project it forward. Draw on the canvas to watch it work.",
-    beats: [
-      { title: "Measure", body: "Sample the pointer every frame: a noisy stream of positions." },
-      { title: "Estimate", body: "A Kalman filter smooths it into velocity, plus a confidence." },
-      { title: "Project & fire", body: "Extend the path forward and fire onIntent before you arrive." },
-    ],
-    hintCursor: "Move your cursor across the canvas to draw a path.",
-    hintTouch: "Drag across the canvas to draw a path.",
-    legend: { raw: "raw samples", filtered: "filtered estimate", cone: "projection cone" },
   },
   latencyRace: {
     eyebrow: "03 / feel the difference",
@@ -118,7 +111,7 @@ const en = {
     highlightName: "intent-link",
     rows: [
       { name: "rel=prefetch", timing: "manual, static", selective: "you pre-pick", perUser: "—", confidence: "—", setup: "hand-declared" },
-      { name: "quicklink", timing: "on viewport", selective: "all visible", perUser: "—", confidence: "—", setup: "drop-in" },
+      { name: "ForesightJS", timing: "on trajectory", selective: "the target", perUser: "✓", confidence: "—", setup: "register + callback" },
       { name: "instant.page", timing: "on hover", selective: "one, late", perUser: "✓", confidence: "—", setup: "drop-in" },
       { name: "Next.js prefetch", timing: "on viewport", selective: "all visible", perUser: "—", confidence: "—", setup: "built-in" },
       { name: "Guess.js", timing: "precomputed", selective: "top guesses", perUser: "aggregate", confidence: "—", setup: "build step + data" },
@@ -129,12 +122,12 @@ const en = {
       { stat: "~98%", title: "High accuracy", body: "Trajectory + confidence identifies the right target." },
       { stat: "2 knobs", title: "Tunable", body: "importance and cost place the aggressiveness where you want it." },
       { stat: "drop-in / raw", title: "Two surfaces", body: "One component for the 80% case, raw probabilities for the rest." },
-      { stat: "React · Next", title: "Framework-native", body: "A drop-in for next/link, in both the App Router & Pages Router." },
+      { stat: "React · Next", title: "Framework-native", body: "A drop-in for next/link in the Next.js App Router." },
       { stat: "MIT", title: "Small & open", body: "No data collection. Motion stays on the device." },
     ],
   },
   beyondPrefetch: {
-    eyebrow: "06 / beyond prefetch",
+    eyebrow: "01 / beyond prefetch",
     ariaLabel: "Beyond prefetch",
     heading: "One signal. Many uses.",
     body:

@@ -72,12 +72,12 @@ const es: TranslationBundle = {
       titleLead: "Conoce el destino",
       titleEmphasis: "antes del clic.",
       subcopy:
-        "intent-link lee el movimiento —cursor o desplazamiento— y predice el elemento hacia el que se dirige el usuario con ~98 % de precisión. Precarga una ruta, calienta una vista previa, registra la intención, adapta la interfaz. Una señal, muchos usos.",
+        "intent-link lee el movimiento —cursor o desplazamiento— y predice el elemento hacia el que se dirige el usuario con ~98 % de precisión. Precarga la siguiente página antes de que aterrice el clic, muestra una vista previa o adapta la interfaz. Una señal, muchos usos.",
       getStarted: "Empezar",
       liveDemo: "Demo en vivo",
     },
     predictionFieldDemo: {
-      eyebrow: "01 / demo en vivo",
+      eyebrow: "02 / demo en vivo",
       ariaLabel: "Demo de predicción en vivo",
       heading: "Muévete hacia una tarjeta — mira cómo se precarga.",
       bodyTail: "La consola de abajo es intent-link observando el mismo movimiento.",
@@ -109,21 +109,6 @@ const es: TranslationBundle = {
         bags: "Bolsos",
         sale: "Rebajas",
       },
-    },
-    kalmanLens: {
-      eyebrow: "02 / cómo funciona",
-      ariaLabel: "Cómo funciona",
-      heading: "Cómo ve hacia dónde vas.",
-      body:
-        "Mide el movimiento ruidoso, estímalo, proyéctalo hacia adelante. Dibuja en el lienzo para verlo en acción.",
-      beats: [
-        { title: "Medir", body: "Muestrea el puntero en cada fotograma — un flujo ruidoso de posiciones." },
-        { title: "Estimar", body: "Un filtro de Kalman lo suaviza en velocidad, más una confianza." },
-        { title: "Proyectar y disparar", body: "Extiende la trayectoria y dispara onIntent antes de que llegues." },
-      ],
-      hintCursor: "Mueve el cursor por el lienzo para dibujar una trayectoria.",
-      hintTouch: "Arrastra por el lienzo para dibujar una trayectoria.",
-      legend: { raw: "muestras sin procesar", filtered: "estimación filtrada", cone: "cono de proyección" },
     },
     latencyRace: {
       eyebrow: "03 / siente la diferencia",
@@ -178,7 +163,7 @@ const es: TranslationBundle = {
       highlightName: "intent-link",
       rows: [
         { name: "rel=prefetch", timing: "manual, estático", selective: "eliges tú antes", perUser: "—", confidence: "—", setup: "declarado a mano" },
-        { name: "quicklink", timing: "al entrar en vista", selective: "todo lo visible", perUser: "—", confidence: "—", setup: "integrable" },
+        { name: "ForesightJS", timing: "sobre la trayectoria", selective: "el destino", perUser: "✓", confidence: "—", setup: "registro + callback" },
         { name: "instant.page", timing: "al pasar el ratón", selective: "uno, tarde", perUser: "✓", confidence: "—", setup: "integrable" },
         { name: "Next.js prefetch", timing: "al entrar en vista", selective: "todo lo visible", perUser: "—", confidence: "—", setup: "integrado" },
         { name: "Guess.js", timing: "precalculado", selective: "mejores conjeturas", perUser: "agregado", confidence: "—", setup: "paso de build + datos" },
@@ -189,12 +174,12 @@ const es: TranslationBundle = {
         { stat: "~98 %", title: "Alta precisión", body: "Trayectoria + confianza identifican el destino correcto." },
         { stat: "2 mandos", title: "Ajustable", body: "importance y cost colocan la agresividad donde tú quieras." },
         { stat: "integrable / crudo", title: "Dos superficies", body: "Un componente para el 80 % de los casos, probabilidades en crudo para el resto." },
-        { stat: "React · Next", title: "Nativo del framework", body: "Un reemplazo directo de next/link — App Router y Pages Router." },
+        { stat: "React · Next", title: "Nativo del framework", body: "Un reemplazo directo de next/link en el App Router de Next.js." },
         { stat: "MIT", title: "Pequeño y abierto", body: "Sin recopilación de datos — el movimiento no sale del dispositivo." },
       ],
     },
     beyondPrefetch: {
-      eyebrow: "06 / más allá de la precarga",
+      eyebrow: "01 / más allá de la precarga",
       ariaLabel: "Más allá de la precarga",
       heading: "Una señal. Muchos usos.",
       body:

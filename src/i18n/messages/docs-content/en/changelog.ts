@@ -10,7 +10,7 @@ const changelog: DocText = {
   "v107Heading": "1.0.7",
   "v107.maint": "Patch release: dependency and packaging maintenance.",
   "v106Heading": "1.0.6",
-  "v106.engine": "Kalman-filter trajectory engine (2D cursor + 1D scroll) with confidence-weighted scoring.",
+  "v106.engine": "Trajectory prediction engine for 2D cursor and 1D scroll, with confidence-weighted scoring.",
   "v106.api": "`IntentProvider`, `IntentLink`, and `IntentContext` with the `importance`/`cost` utility model.",
   "v106.stream": "Raw `PhysicsState` stream exposed for custom components.",
   "v106.meta": "MIT licensed · React ≥ 18 · Next ≥ 13.",

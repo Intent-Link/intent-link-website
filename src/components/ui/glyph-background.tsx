@@ -23,39 +23,39 @@ interface Glyph {
 
 const glyphSets: Record<GlyphVariant, Glyph[]> = {
   hero: [
-    { text: "P(t|x)", top: "11%", left: "5%", size: 15 },
-    { text: "σ²", top: "66%", left: "2.5%", size: 13 },
-    { text: "x̂ₖ = x̂ₖ₋₁ + Kₖ(zₖ − Hx̂ₖ₋₁)", top: "30%", left: "44%", size: 13 },
+    { text: "Eₖ = ½mv²", top: "11%", left: "5%", size: 15 },
+    { text: "U = −GM/r", top: "66%", left: "2.5%", size: 13 },
+    { text: "F = G·m₁m₂/r²", top: "30%", left: "44%", size: 13 },
     { text: "Δt", top: "82%", left: "36%", size: 14 },
-    { text: "√Pₖ", top: "14%", right: "6%", size: 13 },
-    { text: "Σ", top: "74%", right: "4%", size: 14 },
+    { text: "a = F/m", top: "14%", right: "6%", size: 13 },
+    { text: "∇U", top: "74%", right: "4%", size: 14 },
   ],
   how: [
-    { text: "Kₖ = PₖHᵀS⁻¹", top: "9%", left: "3%", size: 13 },
-    { text: "σ²", top: "40%", left: "1.5%", size: 14 },
-    { text: "P(t|x)", top: "82%", left: "4%", size: 13 },
-    { text: "√Pₖ", top: "12%", right: "4%", size: 13 },
+    { text: "F = G·m₁m₂/r²", top: "9%", left: "3%", size: 13 },
+    { text: "U = −GM/r", top: "40%", left: "1.5%", size: 14 },
+    { text: "Eₖ = ½mv²", top: "82%", left: "4%", size: 13 },
+    { text: "a = F/m", top: "12%", right: "4%", size: 13 },
     { text: "Δt", top: "52%", right: "2%", size: 14 },
-    { text: "Σ", top: "86%", right: "6%", size: 13 },
+    { text: "∇U", top: "86%", right: "6%", size: 13 },
   ],
   race: [
-    { text: "utility = P·imp − cost", top: "8%", left: "2.5%", size: 14 },
+    { text: "Eₖ = ½mv²", top: "8%", left: "2.5%", size: 14 },
     { text: "Δt", top: "72%", left: "3%", size: 13 },
-    { text: "P(t|x)", top: "20%", right: "3%", size: 13 },
-    { text: "σ²", top: "82%", right: "5%", size: 14 },
+    { text: "v = dx/dt", top: "20%", right: "3%", size: 13 },
+    { text: "F = ma", top: "82%", right: "5%", size: 14 },
   ],
   vision: [
-    { text: "P(t|x)", top: "9%", left: "3%", size: 13 },
-    { text: "Σ", top: "58%", left: "1.5%", size: 14 },
-    { text: "x̂ₖ", top: "85%", left: "5%", size: 13 },
-    { text: "e·d²/w²", top: "13%", right: "4%", size: 14 },
-    { text: "√Pₖ", top: "76%", right: "3%", size: 13 },
+    { text: "Eₖ = ½mv²", top: "9%", left: "3%", size: 13 },
+    { text: "∫ L dt", top: "58%", left: "1.5%", size: 14 },
+    { text: "p = mv", top: "85%", left: "5%", size: 13 },
+    { text: "U = −GM/r", top: "13%", right: "4%", size: 14 },
+    { text: "a = F/m", top: "76%", right: "3%", size: 13 },
   ],
   cta: [
-    { text: "P(t|x)", top: "16%", left: "7%", size: 14 },
-    { text: "x̂ₖ", top: "64%", left: "4%", size: 13 },
-    { text: "Σ", top: "22%", right: "8%", size: 13 },
-    { text: "σ²", top: "70%", right: "6%", size: 14 },
+    { text: "Eₖ = ½mv²", top: "16%", left: "7%", size: 14 },
+    { text: "p = mv", top: "64%", left: "4%", size: 13 },
+    { text: "∫ L dt", top: "22%", right: "8%", size: 13 },
+    { text: "U = −GM/r", top: "70%", right: "6%", size: 14 },
   ],
 };
 
@@ -74,8 +74,9 @@ interface GlyphBackgroundProps {
 }
 
 /**
- * Decorative floating math-glyph layer (Kalman/probability notation) behind
- * hero/how/race/vision sections — aria-hidden, low opacity, IBM Plex Mono.
+ * Decorative floating math-glyph layer (physics-of-motion notation — kinetic
+ * and gravitational-potential energy) behind the sections — aria-hidden, low
+ * opacity, IBM Plex Mono.
  */
 const GlyphBackground = ({ variant = glyphVariant.hero, className }: GlyphBackgroundProps) => {
   return (

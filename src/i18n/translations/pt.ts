@@ -72,12 +72,12 @@ const pt: TranslationBundle = {
       titleLead: "Conheça o destino",
       titleEmphasis: "antes do clique.",
       subcopy:
-        "O intent-link lê o movimento — cursor ou rolagem — e prevê o elemento para o qual o usuário está indo com ~98 % de precisão. Pré-carregue uma rota, aqueça uma prévia, registre a intenção, adapte a interface. Um sinal, muitos usos.",
+        "O intent-link lê o movimento — cursor ou rolagem — e prevê o elemento para o qual o usuário está indo com ~98 % de precisão. Pré-carregue a próxima página antes de o clique acontecer, revele uma prévia ou adapte a interface. Um sinal, muitos usos.",
       getStarted: "Começar",
       liveDemo: "Demo ao vivo",
     },
     predictionFieldDemo: {
-      eyebrow: "01 / demo ao vivo",
+      eyebrow: "02 / demo ao vivo",
       ariaLabel: "Demo de previsão ao vivo",
       heading: "Mova-se em direção a um card — veja como ele é pré-carregado.",
       bodyTail: "O console abaixo é o intent-link observando o mesmo movimento.",
@@ -109,21 +109,6 @@ const pt: TranslationBundle = {
         bags: "Bolsas",
         sale: "Promoção",
       },
-    },
-    kalmanLens: {
-      eyebrow: "02 / como funciona",
-      ariaLabel: "Como funciona",
-      heading: "Como ele enxerga para onde você vai.",
-      body:
-        "Mede o movimento ruidoso, estima-o, projeta-o adiante. Desenhe na tela para vê-lo em ação.",
-      beats: [
-        { title: "Medir", body: "Amostra o ponteiro a cada quadro — um fluxo ruidoso de posições." },
-        { title: "Estimar", body: "Um filtro de Kalman o suaviza em velocidade, mais uma confiança." },
-        { title: "Projetar e disparar", body: "Estende a trajetória e dispara onIntent antes de você chegar." },
-      ],
-      hintCursor: "Mova o cursor pela tela para desenhar uma trajetória.",
-      hintTouch: "Arraste pela tela para desenhar uma trajetória.",
-      legend: { raw: "amostras brutas", filtered: "estimativa filtrada", cone: "cone de projeção" },
     },
     latencyRace: {
       eyebrow: "03 / sinta a diferença",
@@ -178,7 +163,7 @@ const pt: TranslationBundle = {
       highlightName: "intent-link",
       rows: [
         { name: "rel=prefetch", timing: "manual, estático", selective: "você escolhe antes", perUser: "—", confidence: "—", setup: "declarado à mão" },
-        { name: "quicklink", timing: "ao entrar na visão", selective: "tudo o que é visível", perUser: "—", confidence: "—", setup: "integrável" },
+        { name: "ForesightJS", timing: "na trajetória", selective: "o destino", perUser: "✓", confidence: "—", setup: "registrar + callback" },
         { name: "instant.page", timing: "ao passar o mouse", selective: "um, tarde", perUser: "✓", confidence: "—", setup: "integrável" },
         { name: "Next.js prefetch", timing: "ao entrar na visão", selective: "tudo o que é visível", perUser: "—", confidence: "—", setup: "integrado" },
         { name: "Guess.js", timing: "pré-calculado", selective: "melhores palpites", perUser: "agregado", confidence: "—", setup: "etapa de build + dados" },
@@ -189,12 +174,12 @@ const pt: TranslationBundle = {
         { stat: "~98 %", title: "Alta precisão", body: "Trajetória + confiança identificam o destino certo." },
         { stat: "2 controles", title: "Ajustável", body: "importance e cost colocam a agressividade onde você quiser." },
         { stat: "integrável / bruto", title: "Duas superfícies", body: "Um componente para 80 % dos casos, probabilidades brutas para o resto." },
-        { stat: "React · Next", title: "Nativo do framework", body: "Um substituto direto do next/link — App Router e Pages Router." },
+        { stat: "React · Next", title: "Nativo do framework", body: "Um substituto direto do next/link no App Router do Next.js." },
         { stat: "MIT", title: "Pequeno e aberto", body: "Sem coleta de dados — o movimento não sai do dispositivo." },
       ],
     },
     beyondPrefetch: {
-      eyebrow: "06 / além do pré-carregamento",
+      eyebrow: "01 / além do pré-carregamento",
       ariaLabel: "Além do pré-carregamento",
       heading: "Um sinal. Muitos usos.",
       body:

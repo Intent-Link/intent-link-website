@@ -4,6 +4,20 @@ import { useEffect, useRef } from "react";
 import { cn } from "@/utils/class-names";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
+/** In-scene labels for the narrated metaphor. Defaults are English. */
+interface GravityWellLabels {
+  cursor: string;
+  target: string;
+  arming: string;
+  armed: string;
+}
+
+/** Grounding caption beneath the canvas (real text — accessible). */
+interface GravityWellCaption {
+  lead: string;
+  body: string;
+}
+
 interface GravityWellProps {
   /** Well depth as a fraction of the plate scale. */
   depth?: number;
@@ -11,8 +25,22 @@ interface GravityWellProps {
   gravity?: number;
   /** Draw the fading comet trail behind the marker. */
   trail?: boolean;
+  labels?: GravityWellLabels;
+  caption?: GravityWellCaption;
   className?: string;
 }
+
+const defaultLabels: GravityWellLabels = {
+  cursor: "cursor",
+  target: "target",
+  arming: "arming",
+  armed: "armed → prefetch",
+};
+
+const defaultCaption: GravityWellCaption = {
+  lead: "Your links have gravity.",
+  body: "Motion falls toward a target, it arms, and the page is prefetched before the click.",
+};
 
 /** Simplified drop-in defaults — the well "just works" with no configuration. */
 const defaultDepth = 0.38;
@@ -37,6 +65,16 @@ const idleAfterMs = 4000;
 const idleSpiralRadius = 1.05;
 const idleSpiralPeriodMs = 13000;
 /**
+ * Arming phases keyed off the marker's grid radius, with hysteresis so the
+ * label doesn't flicker on the boundary. The dashed "capture basin" is drawn
+ * at `armedRadius`; crossing it locks the target and fires a prefetch pulse.
+ */
+const armedRadius = 0.2;
+const armedRelease = 0.34;
+const armingEnter = 0.55;
+const armingRelease = 0.62;
+const pulseDurationMs = 720;
+/**
  * Slack left around the projected plate when fitting it to the container.
  * Tight so the well fills its column rather than floating in whitespace; the
  * height factor also budgets for the downward depth of the well.
@@ -44,6 +82,8 @@ const idleSpiralPeriodMs = 13000;
 const widthFitMargin = 1.02;
 const heightFitMargin = 1.45;
 const accent = "0,102,255";
+
+type ArmPhase = "watching" | "arming" | "armed";
 
 interface Vec {
   u: number;
@@ -56,6 +96,8 @@ interface SimulationState {
   pointer: { x: number; y: number } | null;
   lastInputTime: number;
   trail: { x: number; y: number }[];
+  phase: ArmPhase;
+  pulseStart: number;
   scale: number;
   centerX: number;
   centerY: number;
@@ -68,20 +110,29 @@ const wellHeight = (r: number, depth: number): number => (depth * sigmaSquared) 
 
 /**
  * Gravity Well — an interactive isometric field that dips toward a single low
- * point. A marker springs toward the cursor but is drawn "downhill" into the
- * well (weaker as you steer away, so escape is always possible); left alone it
- * spirals back in. A literal picture of intent settling onto a predicted
- * target. Canvas-only, self-contained, no configuration.
+ * point, and narrates intent-link's metaphor as it runs. A marker (the cursor's
+ * motion) springs toward the pointer but is drawn "downhill" into a target's
+ * well; as it crosses the capture basin the target steps watching → arming →
+ * armed and fires a prefetch pulse. Left alone it spirals back in, replaying the
+ * whole story on a loop. Canvas-only, self-contained, no configuration.
  */
 const GravityWell = ({
   depth = defaultDepth,
   gravity = defaultGravity,
   trail = true,
+  labels = defaultLabels,
+  caption = defaultCaption,
   className,
 }: GravityWellProps) => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  // Keep the latest labels in a ref so the canvas loop reads current copy
+  // without re-subscribing the effect on every render.
+  const labelsRef = useRef(labels);
+  useEffect(() => {
+    labelsRef.current = labels;
+  }, [labels]);
 
   useEffect(() => {
     const wrap = wrapRef.current;
@@ -95,6 +146,8 @@ const GravityWell = ({
       pointer: null,
       lastInputTime: 0,
       trail: [],
+      phase: "watching",
+      pulseStart: -1,
       scale: 0,
       centerX: 0,
       centerY: 0,
@@ -137,6 +190,20 @@ const GravityWell = ({
       state.lastInputTime = performance.now();
     };
 
+    /** Advance the arming phase from the marker radius, with hysteresis. */
+    const updatePhase = (radius: number, now: number) => {
+      const previous = state.phase;
+      if (state.phase === "armed") {
+        if (radius > armedRelease) state.phase = "arming";
+      } else if (state.phase === "arming") {
+        if (radius < armedRadius) state.phase = "armed";
+        else if (radius > armingRelease) state.phase = "watching";
+      } else if (radius < armingEnter) {
+        state.phase = "arming";
+      }
+      if (state.phase === "armed" && previous !== "armed") state.pulseStart = now;
+    };
+
     const step = (now: number) => {
       const dt = 1 / 60;
       const depthPx = state.scale * depth;
@@ -176,6 +243,8 @@ const GravityWell = ({
       const markerZ = wellHeight(markerRadius, depthPx);
       const markerPoint = project(state.position.u, state.position.v, markerZ);
 
+      updatePhase(markerRadius, now);
+
       if (trail) {
         state.trail.push({
           x: markerPoint.x + (Math.random() - 0.5) * 2.4,
@@ -189,8 +258,25 @@ const GravityWell = ({
       return markerPoint;
     };
 
+    /** A small pill-backed monospace tag centred on (x, y). */
+    const drawTag = (x: number, y: number, text: string, alpha: number, bold: boolean) => {
+      context.font = `${bold ? 600 : 500} 11px "IBM Plex Mono", ui-monospace, monospace`;
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      const width = context.measureText(text).width;
+      context.fillStyle = `rgba(255,255,255,${0.72 * alpha})`;
+      context.beginPath();
+      context.roundRect(x - width / 2 - 7, y - 9.5, width + 14, 19, 6);
+      context.fill();
+      context.fillStyle = `rgba(${accent},${alpha})`;
+      context.fillText(text, x, y + 0.5);
+    };
+
     const render = (markerPoint: { x: number; y: number }) => {
       const depthPx = state.scale * depth;
+      const label = labelsRef.current;
+      const armed = state.phase === "armed";
+      const arming = state.phase === "arming";
       context.clearRect(0, 0, state.width, state.height);
 
       const lineIndex: number[] = [];
@@ -232,16 +318,54 @@ const GravityWell = ({
       context.closePath();
       context.stroke();
 
-      // Glow pooled at the bottom of the well (multiply tints the white plate blue).
+      // Glow pooled at the bottom of the well — brightens as the target locks.
       const glow = project(0, 0, depthPx * 0.8);
+      const glowStrength = armed ? 0.82 : arming ? 0.66 : 0.55;
       const glowGradient = context.createRadialGradient(glow.x, glow.y, 0, glow.x, glow.y, state.scale * 0.85);
-      glowGradient.addColorStop(0, `rgba(${accent},0.55)`);
-      glowGradient.addColorStop(0.45, `rgba(${accent},0.18)`);
+      glowGradient.addColorStop(0, `rgba(${accent},${glowStrength})`);
+      glowGradient.addColorStop(0.45, `rgba(${accent},${glowStrength * 0.32})`);
       glowGradient.addColorStop(1, `rgba(${accent},0)`);
       context.globalCompositeOperation = "multiply";
       context.fillStyle = glowGradient;
       context.fillRect(glow.x - state.scale, glow.y - state.scale, state.scale * 2, state.scale * 2);
       context.globalCompositeOperation = "source-over";
+
+      // Capture basin — the dashed ring the marker must cross to arm the target.
+      const floor = project(0, 0, depthPx);
+      context.setLineDash([3, 4]);
+      context.lineWidth = 1;
+      context.strokeStyle = `rgba(${accent},${arming || armed ? 0.5 : 0.3})`;
+      context.beginPath();
+      const basinZ = wellHeight(armedRadius, depthPx);
+      for (let i = 0; i <= 56; i++) {
+        const angle = (i / 56) * Math.PI * 2;
+        const point = project(armedRadius * Math.cos(angle), armedRadius * Math.sin(angle), basinZ);
+        if (i === 0) context.moveTo(point.x, point.y);
+        else context.lineTo(point.x, point.y);
+      }
+      context.closePath();
+      context.stroke();
+      context.setLineDash([]);
+
+      // Prefetch pulse — one expanding ring on the watching/arming → armed lock.
+      if (state.pulseStart >= 0) {
+        const progress = (performance.now() - state.pulseStart) / pulseDurationMs;
+        if (progress <= 1) {
+          context.strokeStyle = `rgba(${accent},${(1 - progress) * 0.55})`;
+          context.lineWidth = 2 * (1 - progress) + 0.5;
+          context.beginPath();
+          context.arc(floor.x, floor.y, 9 + progress * 52, 0, Math.PI * 2);
+          context.stroke();
+        }
+      }
+
+      // Target beacon at the well floor + its live state label.
+      context.fillStyle = `rgba(${accent},${armed ? 0.9 : 0.5})`;
+      context.beginPath();
+      context.arc(floor.x, floor.y, 3, 0, Math.PI * 2);
+      context.fill();
+      const targetText = armed ? label.armed : arming ? label.arming : label.target;
+      drawTag(floor.x, floor.y + 20, targetText, armed ? 0.95 : arming ? 0.82 : 0.62, armed);
 
       // Fading marker trail.
       for (let i = 1; i < state.trail.length; i++) {
@@ -272,6 +396,9 @@ const GravityWell = ({
       context.beginPath();
       context.arc(markerPoint.x, markerPoint.y, 4.5, 0, Math.PI * 2);
       context.stroke();
+
+      // The marker carries a quiet "cursor" tag — that dot is the user's motion.
+      drawTag(markerPoint.x, markerPoint.y - 18, label.cursor, 0.72, false);
     };
 
     let raf = 0;
@@ -284,8 +411,10 @@ const GravityWell = ({
 
     const renderStill = () => {
       if (!state.scale) return;
-      // Settle the marker just off-centre so the well reads clearly, then draw once.
-      state.position = { u: 0.16, v: 0.1 };
+      // Settle the marker inside the basin so the "armed" story reads at a glance.
+      state.position = { u: 0.12, v: 0.08 };
+      state.phase = "armed";
+      state.pulseStart = -1;
       const markerZ = wellHeight(Math.hypot(state.position.u, state.position.v), state.scale * depth);
       render(project(state.position.u, state.position.v, markerZ));
     };
@@ -314,12 +443,13 @@ const GravityWell = ({
   }, [depth, gravity, trail, reducedMotion]);
 
   return (
-    <div
-      ref={wrapRef}
-      aria-hidden
-      className={cn("relative w-full overflow-hidden h-[380px] sm:h-[440px] lg:h-[500px]", className)}
-    >
-      <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full [touch-action:none]" />
+    <div className={cn("flex w-full flex-col h-[400px] sm:h-[460px] lg:h-[500px]", className)}>
+      <div ref={wrapRef} aria-hidden className="relative min-h-0 w-full flex-1 overflow-hidden">
+        <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full [touch-action:none]" />
+      </div>
+      <p className="mt-2 px-4 text-center font-mono text-[12px] leading-[1.5] text-ink-3">
+        <span className="font-semibold text-ink-2">{caption.lead}</span> {caption.body}
+      </p>
     </div>
   );
 };
