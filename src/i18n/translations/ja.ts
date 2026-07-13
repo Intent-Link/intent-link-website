@@ -77,11 +77,6 @@ const ja: TranslationBundle = {
       eyebrow: "02 / ライブデモ",
       ariaLabel: "ライブ予測デモ",
       heading: "カードに向かって動かすと — プリフェッチされる様子が見えます。",
-      bodyTail: "下のコンソールは、同じ動きを観察している intent-link です。",
-      modeHintCursor:
-        "カードに向かってカーソルを動かすと — あなたの軌道をもとに、到達する前に準備されます。",
-      modeHintTouch:
-        "カードに向かってスクロールすると — あなたのスクロール速度をもとに、触れる前に準備されます。",
       addressBar: "shop.example/new-in",
       categories: (count: number) => `${count} カテゴリー`,
       storefrontIdle: "// カードに向かって動かすとプリフェッチが起動します",

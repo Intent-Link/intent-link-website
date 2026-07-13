@@ -77,11 +77,6 @@ const ar: TranslationBundle = {
       eyebrow: "02 / عرض حي",
       ariaLabel: "عرض التنبؤ الحي",
       heading: "تحرّك نحو بطاقة — وشاهد كيف تُحمَّل مسبقاً.",
-      bodyTail: "الوحدة الطرفية بالأسفل هي intent-link وهو يراقب الحركة نفسها.",
-      modeHintCursor:
-        "حرّك المؤشر نحو بطاقة — تتهيأ وفق مسارك قبل أن تصل إليها.",
-      modeHintTouch:
-        "مرّر نحو بطاقة — تتهيأ وفق سرعة تمريرك قبل أن تلمسها.",
       addressBar: "shop.example/new-in",
       categories: (count: number) => `${count} فئات`,
       storefrontIdle: "// تحرّك نحو بطاقة لتفعيل تحميل مسبق",

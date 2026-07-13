@@ -77,11 +77,6 @@ const de: TranslationBundle = {
       eyebrow: "02 / live-demo",
       ariaLabel: "Live-Vorhersage-Demo",
       heading: "Bewege dich auf eine Karte zu — sieh zu, wie sie vorgeladen wird.",
-      bodyTail: "Die Konsole unten ist intent-link, die dieselbe Bewegung beobachtet.",
-      modeHintCursor:
-        "Bewege den Cursor auf eine Karte zu — sie wird anhand deiner Bahn vorbereitet, bevor du ankommst.",
-      modeHintTouch:
-        "Scrolle auf eine Karte zu — sie wird anhand deiner Scrollgeschwindigkeit vorbereitet, bevor du sie berührst.",
       addressBar: "shop.example/new-in",
       categories: (count: number) => `${count} Kategorien`,
       storefrontIdle: "// bewege dich auf eine Karte zu, um eine Vorladung auszulösen",

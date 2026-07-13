@@ -77,11 +77,6 @@ const fr: TranslationBundle = {
       eyebrow: "02 / démo en direct",
       ariaLabel: "Démo de prédiction en direct",
       heading: "Dirigez-vous vers une carte — regardez-la se précharger.",
-      bodyTail: "La console ci-dessous, c'est intent-link qui observe le même mouvement.",
-      modeHintCursor:
-        "Déplacez le curseur vers une carte — elle se prépare grâce à votre trajectoire avant que vous n'arriviez.",
-      modeHintTouch:
-        "Faites défiler vers une carte — elle se prépare grâce à votre vitesse de défilement avant que vous ne la touchiez.",
       addressBar: "shop.example/new-in",
       categories: (count: number) => `${count} catégories`,
       storefrontIdle: "// dirigez-vous vers une carte pour déclencher un préchargement",

@@ -77,11 +77,6 @@ const zh: TranslationBundle = {
       eyebrow: "02 / 在线演示",
       ariaLabel: "实时预测演示",
       heading: "移向一张卡片——看它如何被预取。",
-      bodyTail: "下方的控制台就是 intent-link 在观察同样的移动。",
-      modeHintCursor:
-        "把光标移向一张卡片——在你到达之前，它已凭你的轨迹准备就绪。",
-      modeHintTouch:
-        "向一张卡片滚动——在你触碰之前，它已凭你的滚动速度准备就绪。",
       addressBar: "shop.example/new-in",
       categories: (count: number) => `${count} 个分类`,
       storefrontIdle: "// 移向一张卡片以触发预取",

@@ -29,8 +29,7 @@ const it: TranslationBundle = {
       getStarted: "Inizia", liveDemo: "Demo dal vivo",
     },
     predictionFieldDemo: {
-      eyebrow: "02 / demo dal vivo", ariaLabel: "Demo della previsione dal vivo", heading: "Muoviti verso una scheda e osserva il prefetch.", bodyTail: "La console qui sotto mostra intent-link mentre osserva lo stesso movimento.",
-      modeHintCursor: "Muovi il puntatore verso una scheda: si prepara seguendo la tua traiettoria prima che tu la raggiunga.", modeHintTouch: "Scorri verso una scheda: si prepara seguendo la velocità dello scorrimento prima del tocco.",
+      eyebrow: "02 / demo dal vivo", ariaLabel: "Demo della previsione dal vivo", heading: "Muoviti verso una scheda e osserva il prefetch.",
       addressBar: "shop.example/new-in", categories: (count: number) => `${count} categorie`, storefrontIdle: "// muoviti verso una scheda per attivare un prefetch", consoleTitle: "intent-link", reset: "reimposta", importanceLabel: "importance", costLabel: "cost", streamTitle: "flusso onIntent", firedCount: (count: number) => `${count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count} attivazioni`, streamEmpty: "// muoviti verso una scheda per attivare un segnale…", levels: { low: "basso", medium: "medio", high: "alto" },
       tiles: { women: "Donna", men: "Uomo", kids: "Bambini", shoes: "Scarpe", bags: "Borse", accessories: "Accessori", sport: "Sport", denim: "Denim", outerwear: "Capispalla", beauty: "Bellezza", home: "Casa", sale: "Saldi", electronics: "Elettronica", watches: "Orologi", jewelry: "Gioielli", furniture: "Mobili", gifts: "Regali", travel: "Viaggi" },
     },

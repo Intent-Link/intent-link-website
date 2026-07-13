@@ -50,7 +50,6 @@ const PredictionFieldDemo = () => {
   const text = useSectionsText().predictionFieldDemo;
   const panel = usePredictionConsole();
   const { ref, revealed } = useScrollReveal<HTMLDivElement>();
-  const isTouch = useMediaQuery("(pointer: coarse)");
   const isNarrowMobile = useMediaQuery("(max-width: 499px)");
   const isMobile = useMediaQuery("(max-width: 699px)");
   const isTablet = useMediaQuery("(max-width: 1023px)");
@@ -91,9 +90,7 @@ const PredictionFieldDemo = () => {
         <SectionHeading
           eyebrow={text.eyebrow}
           heading={text.heading}
-          body={`${isTouch ? text.modeHintTouch : text.modeHintCursor} ${text.bodyTail}`}
           className="max-w-[60ch]"
-          bodyClassName="text-[14.5px]"
           reveal={false}
         />
 

@@ -77,11 +77,6 @@ const pt: TranslationBundle = {
       eyebrow: "02 / demo ao vivo",
       ariaLabel: "Demo de previsão ao vivo",
       heading: "Mova-se em direção a um card — veja como ele é pré-carregado.",
-      bodyTail: "O console abaixo é o intent-link observando o mesmo movimento.",
-      modeHintCursor:
-        "Mova o cursor em direção a um card — ele se prepara com a sua trajetória antes de você chegar.",
-      modeHintTouch:
-        "Deslize em direção a um card — ele se prepara com a sua velocidade de rolagem antes de você tocá-lo.",
       addressBar: "shop.example/new-in",
       categories: (count: number) => `${count} categorias`,
       storefrontIdle: "// mova-se em direção a um card para acionar um pré-carregamento",

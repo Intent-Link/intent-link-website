@@ -25,11 +25,6 @@ const en = {
     eyebrow: "02 / live demo",
     ariaLabel: "Live prediction demo",
     heading: "Move toward a tile and watch it prefetch.",
-    bodyTail: "The console below is intent-link watching the same motion.",
-    modeHintCursor:
-      "Move your cursor toward a tile. It arms from your trajectory before you arrive.",
-    modeHintTouch:
-      "Scroll toward a tile. It arms from your scroll velocity before you commit.",
     addressBar: "shop.example/new-in",
     categories: (count: number) => `${count} categories`,
     storefrontIdle: "// move toward a tile to trigger a prefetch",

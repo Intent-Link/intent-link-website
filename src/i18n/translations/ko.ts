@@ -77,11 +77,6 @@ const ko: TranslationBundle = {
       eyebrow: "02 / 라이브 데모",
       ariaLabel: "라이브 예측 데모",
       heading: "카드 쪽으로 움직여 보세요 — 어떻게 미리 가져오는지 확인하세요.",
-      bodyTail: "아래 콘솔은 같은 움직임을 관찰하는 intent-link입니다.",
-      modeHintCursor:
-        "카드 쪽으로 커서를 움직여 보세요 — 도착하기 전에 당신의 궤적으로 준비됩니다.",
-      modeHintTouch:
-        "카드 쪽으로 스크롤해 보세요 — 만지기 전에 당신의 스크롤 속도로 준비됩니다.",
       addressBar: "shop.example/new-in",
       categories: (count: number) => `${count}개 카테고리`,
       storefrontIdle: "// 카드 쪽으로 움직여 미리 가져오기를 실행하세요",
