@@ -38,8 +38,20 @@ const Hero = ({ text, locale }: HeroProps) => {
       ariaLabel={text.ariaLabel}
       decor="glyph"
       glyphVariant="hero"
+      className="overflow-hidden bg-white"
     >
-      <div className="mx-auto grid max-w-[1180px] items-center gap-[60px] px-8 pt-[78px] pb-[92px] lg:grid-cols-[1.08fr_0.92fr]">
+      <GravityWell
+        fullField
+        depth={0.5}
+        labels={{
+          cursor: text.well.cursor,
+          target: text.well.target,
+          detected: text.well.detected,
+        }}
+        caption={text.well.caption}
+      />
+
+      <div className="relative z-10 mx-auto grid min-h-[calc(1180px-20vw)] max-w-[1180px] items-start gap-[60px] px-8 pt-[78px] pb-[92px] min-[500px]:min-h-[960px] min-[801px]:min-h-[900px] min-[1025px]:min-h-0 min-[1025px]:items-center min-[1025px]:grid-cols-[1.08fr_0.92fr]">
         <div>
           <Chip>{text.eyebrow}</Chip>
           <h1 className="mt-6 text-balance text-[54px] font-extrabold leading-[1.03] tracking-[-0.04em]">
@@ -72,17 +84,6 @@ const Hero = ({ text, locale }: HeroProps) => {
             ))}
           </div>
         </div>
-
-        <GravityWell
-          className="lg:h-[520px]"
-          labels={{
-            cursor: text.well.cursor,
-            target: text.well.target,
-            arming: text.well.arming,
-            armed: text.well.armed,
-          }}
-          caption={{ lead: text.well.captionLead, body: text.well.captionBody }}
-        />
       </div>
     </Section>
   );

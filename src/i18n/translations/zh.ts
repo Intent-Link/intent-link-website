@@ -69,7 +69,7 @@ const zh: TranslationBundle = {
       titleLead: "点击之前，就知道",
       titleEmphasis: "目的地。",
       subcopy:
-        "intent-link 读取光标或滚动的移动，并以 ~98 % 的精度预测用户正在前往的元素。在点击落下之前预取下一页、显示预览，或适配界面。一个信号，多种用途。",
+        "以 98% 的准确率预测用户的目标。Intent-link 利用运动速度和距离产生的动能与势能来计算概率。",
       getStarted: "开始使用",
       liveDemo: "在线演示",
     },

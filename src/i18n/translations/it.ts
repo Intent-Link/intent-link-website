@@ -25,7 +25,7 @@ const it: TranslationBundle = {
   sections: {
     hero: {
       ariaLabel: "Introduzione", eyebrow: "Previsione della destinazione per React e Next.js", titleLead: "Conosci la destinazione", titleEmphasis: "prima del clic.",
-      subcopy: "intent-link legge il movimento del puntatore o dello scorrimento e prevede l’elemento verso cui si dirige l’utente. Carica in anticipo la pagina successiva, mostra un’anteprima o adatta l’interfaccia. Un segnale, molti utilizzi.",
+      subcopy: "Prevedi l’obiettivo dell’utente con una precisione del 98%. Intent-link calcola la probabilità usando l’energia cinetica e potenziale derivata dalla velocità del movimento e dalla distanza.",
       getStarted: "Inizia", liveDemo: "Demo dal vivo",
     },
     predictionFieldDemo: {

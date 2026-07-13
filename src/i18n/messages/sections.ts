@@ -9,16 +9,14 @@ const en = {
     titleLead: "Know the target",
     titleEmphasis: "before the click.",
     subcopy:
-      "intent-link reads cursor or scroll motion and predicts the element a user is heading toward with ~98% accuracy. Prefetch the next page before the click lands, reveal a preview, or adapt the UI. One signal, many uses.",
+      "Predict the user’s target with 98% accuracy. Intent-link computes probability using the kinetic and potential energy due to motion velocity and distance.",
     getStarted: "Get started",
     liveDemo: "Live demo",
     well: {
       cursor: "cursor",
       target: "target",
-      arming: "arming",
-      armed: "armed → prefetch",
-      captionLead: "Your links have gravity.",
-      captionBody: "Your motion falls toward a target, it arms, and the page is prefetched before the click.",
+      detected: "Intent Detected",
+      caption: "pixels have gravity",
     },
   },
   predictionFieldDemo: {

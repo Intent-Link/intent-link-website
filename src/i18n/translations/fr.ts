@@ -69,7 +69,7 @@ const fr: TranslationBundle = {
       titleLead: "Devinez la destination",
       titleEmphasis: "avant le clic.",
       subcopy:
-        "intent-link lit le mouvement — curseur ou défilement — et prédit l'élément vers lequel l'utilisateur se dirige avec ~98 % de précision. Précharge la page suivante avant que le clic n'atterrisse, révèle un aperçu ou adapte l'interface. Un signal, de multiples usages.",
+        "Prédisez la cible de l’utilisateur avec une précision de 98 %. Intent-link calcule la probabilité à partir de l’énergie cinétique et potentielle produite par la vitesse du mouvement et la distance.",
       getStarted: "Commencer",
       liveDemo: "Démo en direct",
     },

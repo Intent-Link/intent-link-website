@@ -69,7 +69,7 @@ const de: TranslationBundle = {
       titleLead: "Kenne das Ziel",
       titleEmphasis: "vor dem Klick.",
       subcopy:
-        "intent-link liest die Bewegung — Cursor oder Scrollen — und sagt mit ~98 % Genauigkeit voraus, auf welches Element der Nutzer zusteuert. Lade die nächste Seite vor, bevor der Klick landet, zeige eine Vorschau oder passe die Oberfläche an. Ein Signal, viele Anwendungen.",
+        "Sage das Ziel des Nutzers mit 98 % Genauigkeit voraus. Intent-link berechnet die Wahrscheinlichkeit anhand der kinetischen und potenziellen Energie, die sich aus Bewegungsgeschwindigkeit und Entfernung ergeben.",
       getStarted: "Loslegen",
       liveDemo: "Live-Demo",
     },

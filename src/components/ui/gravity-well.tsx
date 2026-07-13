@@ -8,14 +8,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 interface GravityWellLabels {
   cursor: string;
   target: string;
-  arming: string;
-  armed: string;
-}
-
-/** Grounding caption beneath the canvas (real text — accessible). */
-interface GravityWellCaption {
-  lead: string;
-  body: string;
+  detected: string;
 }
 
 interface GravityWellProps {
@@ -26,21 +19,19 @@ interface GravityWellProps {
   /** Draw the fading comet trail behind the marker. */
   trail?: boolean;
   labels?: GravityWellLabels;
-  caption?: GravityWellCaption;
+  caption?: string;
+  /** Expand the projected grid across its containing section instead of drawing a finite plate. */
+  fullField?: boolean;
   className?: string;
 }
 
 const defaultLabels: GravityWellLabels = {
   cursor: "cursor",
   target: "target",
-  arming: "arming",
-  armed: "armed → prefetch",
+  detected: "Intent Detected",
 };
 
-const defaultCaption: GravityWellCaption = {
-  lead: "Your links have gravity.",
-  body: "Motion falls toward a target, it arms, and the page is prefetched before the click.",
-};
+const defaultCaption = "pixels have gravity";
 
 /** Simplified drop-in defaults — the well "just works" with no configuration. */
 const defaultDepth = 0.38;
@@ -51,9 +42,14 @@ const isoX = 0.866;
 const isoY = 0.5;
 /** Well profile constant: σ² in grid units for `depth·σ²/(r²+σ²)`. */
 const sigmaSquared = 0.09;
+/** Manifold-aligned singularity colour: peak opacity and Gaussian sigma. */
+const singularityGradientSaturation = 0.30;
+const singularityGradientExtent = 0.40;
 /** Deformed plate: `gridDivisions²` cells spanning ±`plateExtent` in each axis. */
 const gridDivisions = 44;
 const plateExtent = 1.08;
+/** Cell spacing for the larger, section-wide diagonal field. */
+const fullFieldGridStep = 0.16;
 /** Spring-damper that chases the pointer; gravity is layered on top. */
 const springStiffness = 13;
 const springDamping = 6.5;
@@ -65,15 +61,22 @@ const idleAfterMs = 4000;
 const idleSpiralRadius = 1.05;
 const idleSpiralPeriodMs = 13000;
 /**
- * Arming phases keyed off the marker's grid radius, with hysteresis so the
- * label doesn't flicker on the boundary. The dashed "capture basin" is drawn
- * at `armedRadius`; crossing it locks the target and fires a prefetch pulse.
+ * Intent detection is keyed off the marker's grid radius, with hysteresis so
+ * the label does not flicker on the boundary.
  */
-const armedRadius = 0.2;
-const armedRelease = 0.34;
-const armingEnter = 0.55;
-const armingRelease = 0.62;
-const pulseDurationMs = 720;
+const detectionEnter = 0.55;
+const detectionRelease = 0.62;
+/** Keep the caption locked to the visible target rather than to the viewport. */
+const targetMarkerFloorRatio = 0.92;
+const captionDistanceFromTargetPx = 225;
+const mobileCaptionDistanceFromTargetPx = 105;
+const tabletCaptionLeftOffsetPx = 440;
+const tabletCaptionUpOffsetPx = 40;
+/** Two quiet decorative orbits around the target; independent of cursor physics. */
+const targetOrbits = [
+  { fieldRadius: 0.85, periodMs: 7200, phase: 0.08 },
+  { fieldRadius: 1.3, periodMs: 10400, phase: 0.58 },
+] as const;
 /**
  * Slack left around the projected plate when fitting it to the container.
  * Tight so the well fills its column rather than floating in whitespace; the
@@ -83,7 +86,7 @@ const widthFitMargin = 1.02;
 const heightFitMargin = 1.45;
 const accent = "0,102,255";
 
-type ArmPhase = "watching" | "arming" | "armed";
+type DetectionPhase = "watching" | "detected";
 
 interface Vec {
   u: number;
@@ -96,13 +99,13 @@ interface SimulationState {
   pointer: { x: number; y: number } | null;
   lastInputTime: number;
   trail: { x: number; y: number }[];
-  phase: ArmPhase;
-  pulseStart: number;
+  phase: DetectionPhase;
   scale: number;
   centerX: number;
   centerY: number;
   width: number;
   height: number;
+  fieldExtent: number;
 }
 
 /** Well height at grid radius `r`, given depth `d` (in pixels) — a Lorentzian dip. */
@@ -112,9 +115,9 @@ const wellHeight = (r: number, depth: number): number => (depth * sigmaSquared) 
  * Gravity Well — an interactive isometric field that dips toward a single low
  * point, and narrates intent-link's metaphor as it runs. A marker (the cursor's
  * motion) springs toward the pointer but is drawn "downhill" into a target's
- * well; as it crosses the capture basin the target steps watching → arming →
- * armed and fires a prefetch pulse. Left alone it spirals back in, replaying the
- * whole story on a loop. Canvas-only, self-contained, no configuration.
+ * well; as it enters the target region the field reports that intent has been
+ * detected. Left alone it spirals back in, replaying the whole story on a loop.
+ * Canvas-only, self-contained, no configuration.
  */
 const GravityWell = ({
   depth = defaultDepth,
@@ -122,6 +125,7 @@ const GravityWell = ({
   trail = true,
   labels = defaultLabels,
   caption = defaultCaption,
+  fullField = false,
   className,
 }: GravityWellProps) => {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -139,6 +143,9 @@ const GravityWell = ({
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
     if (!wrap || !canvas || !context) return;
+    const surfaceCanvas = document.createElement("canvas");
+    const surfaceContext = surfaceCanvas.getContext("2d");
+    if (!surfaceContext) return;
 
     const state: SimulationState = {
       position: { u: -0.95, v: -0.95 },
@@ -147,12 +154,12 @@ const GravityWell = ({
       lastInputTime: 0,
       trail: [],
       phase: "watching",
-      pulseStart: -1,
       scale: 0,
       centerX: 0,
       centerY: 0,
       width: 0,
       height: 0,
+      fieldExtent: plateExtent,
     };
 
     const layout = () => {
@@ -161,13 +168,73 @@ const GravityWell = ({
       state.height = wrap.clientHeight;
       canvas.width = state.width * dpr;
       canvas.height = state.height * dpr;
+      surfaceCanvas.width = state.width * dpr;
+      surfaceCanvas.height = state.height * dpr;
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      // Fit the full projected footprint (±plateExtent per axis) with a margin.
-      const fitByWidth = state.width / (4 * plateExtent * isoX * widthFitMargin);
-      const fitByHeight = state.height / (4 * plateExtent * isoY * heightFitMargin);
-      state.scale = Math.min(fitByWidth, fitByHeight);
-      state.centerX = state.width / 2;
-      state.centerY = state.height * 0.4;
+      surfaceContext.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (fullField) {
+        // Keep a consistent visual cell size and anchor the well in the right-hand
+        // side of the hero. The field extent is derived from the furthest corner,
+        // so diagonal lines always continue beyond the section bounds.
+        const mobile = state.width <= 800;
+        const tablet = state.width > 800 && state.width <= 1024;
+        state.scale = mobile
+          ? Math.max(90, Math.min(120, state.width * 0.18))
+          : Math.max(140, Math.min(190, state.width * 0.09));
+        state.centerX = state.width * (mobile ? 0.5 : 0.72);
+        if (mobile) {
+          if (state.width < 500) {
+            // The narrowest layout keeps the previous breathing room and moves
+            // the well slightly lower beneath the heavily wrapped content.
+            state.centerY = 835 + (500 - state.width) * 0.15;
+          } else {
+            // Mid-sized mobile has enough horizontal room for a tighter stack.
+            state.centerY = 720 + (800 - state.width) * 0.1;
+          }
+        } else if (tablet) {
+          // Preserve the tablet well position even though the hero now ends
+          // closer beneath it.
+          state.centerY = 690;
+        } else {
+          state.centerY = state.height * 0.43;
+        }
+        const targetY = state.centerY + state.scale * depth * targetMarkerFloorRatio;
+        const captionX = tablet
+          ? state.centerX - tabletCaptionLeftOffsetPx
+          : state.centerX;
+        const captionY = tablet
+          ? targetY - tabletCaptionUpOffsetPx
+          : targetY + (mobile
+            ? mobileCaptionDistanceFromTargetPx
+            : captionDistanceFromTargetPx);
+        wrap.style.setProperty(
+          "--gravity-caption-x",
+          `${captionX}px`,
+        );
+        wrap.style.setProperty(
+          "--gravity-caption-y",
+          `${captionY}px`,
+        );
+        const corners = [
+          [0, 0],
+          [state.width, 0],
+          [state.width, state.height],
+          [0, state.height],
+        ];
+        state.fieldExtent = Math.max(...corners.flatMap(([x, y]) => {
+          const a = (x - state.centerX) / (isoX * state.scale);
+          const b = (y - state.centerY) / (isoY * state.scale);
+          return [Math.abs((b + a) / 2), Math.abs((b - a) / 2)];
+        })) + 1;
+      } else {
+        // Fit the full projected footprint (±plateExtent per axis) with a margin.
+        const fitByWidth = state.width / (4 * plateExtent * isoX * widthFitMargin);
+        const fitByHeight = state.height / (4 * plateExtent * isoY * heightFitMargin);
+        state.scale = Math.min(fitByWidth, fitByHeight);
+        state.centerX = state.width / 2;
+        state.centerY = state.height * 0.4;
+        state.fieldExtent = plateExtent;
+      }
     };
 
     const project = (u: number, v: number, z: number) => ({
@@ -175,33 +242,78 @@ const GravityWell = ({
       y: state.centerY + (u + v) * isoY * state.scale + z,
     });
 
+    /**
+     * Build smooth potential contours once per layout. Closely spaced projected
+     * rings preserve the well's physical shape. Every contour is preblended
+     * directly against paper, making saturation linear and avoiding translucent
+     * overlap buildup, flat cell patches, or a generic radial blur.
+     */
+    const buildSurface = () => {
+      surfaceContext.clearRect(0, 0, state.width, state.height);
+      const gradientRadius = Math.min(
+        singularityGradientExtent * 4,
+        fullField ? state.fieldExtent : plateExtent,
+      );
+      const depthPx = state.scale * depth;
+      const ringCount = fullField ? 480 : 280;
+      const ringSegments = fullField ? 128 : 96;
+
+      for (let ring = ringCount; ring >= 1; ring--) {
+        const radius = (gradientRadius * ring) / ringCount;
+        // Gaussian distance is measured in field coordinates, then projected
+        // onto the deformed surface by the contour geometry below.
+        const gaussian = Math.exp(
+          -(radius * radius)
+          / (2 * singularityGradientExtent * singularityGradientExtent),
+        );
+        const intensity = singularityGradientSaturation * gaussian;
+        const red = 255 * (1 - intensity);
+        const green = 255 - 200 * intensity;
+
+        const height = wellHeight(radius, depthPx);
+        surfaceContext.fillStyle = `rgb(${red.toFixed(2)},${green.toFixed(2)},255)`;
+        surfaceContext.beginPath();
+        for (let segment = 0; segment <= ringSegments; segment++) {
+          const angle = (segment / ringSegments) * Math.PI * 2;
+          const point = project(radius * Math.cos(angle), radius * Math.sin(angle), height);
+          if (segment === 0) surfaceContext.moveTo(point.x, point.y);
+          else surfaceContext.lineTo(point.x, point.y);
+        }
+        surfaceContext.closePath();
+        surfaceContext.fill();
+      }
+    };
+
     const unproject = (x: number, y: number): Vec => {
       const a = (x - state.centerX) / (isoX * state.scale);
       const b = (y - state.centerY) / (isoY * state.scale);
+      const limit = fullField ? state.fieldExtent * 0.92 : 1.05;
       return {
-        u: Math.max(-1.05, Math.min(1.05, (b + a) / 2)),
-        v: Math.max(-1.05, Math.min(1.05, (b - a) / 2)),
+        u: Math.max(-limit, Math.min(limit, (b + a) / 2)),
+        v: Math.max(-limit, Math.min(limit, (b - a) / 2)),
       };
     };
 
     const onPointer = (event: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
+      if (
+        fullField
+        && (event.clientX < rect.left
+          || event.clientX > rect.right
+          || event.clientY < rect.top
+          || event.clientY > rect.bottom)
+      ) return;
       state.pointer = { x: event.clientX - rect.left, y: event.clientY - rect.top };
       state.lastInputTime = performance.now();
     };
 
-    /** Advance the arming phase from the marker radius, with hysteresis. */
-    const updatePhase = (radius: number, now: number) => {
-      const previous = state.phase;
-      if (state.phase === "armed") {
-        if (radius > armedRelease) state.phase = "arming";
-      } else if (state.phase === "arming") {
-        if (radius < armedRadius) state.phase = "armed";
-        else if (radius > armingRelease) state.phase = "watching";
-      } else if (radius < armingEnter) {
-        state.phase = "arming";
+    /** Toggle the single detected state from marker radius, with hysteresis. */
+    const updatePhase = (radius: number) => {
+      if (state.phase === "detected") {
+        if (radius > detectionRelease) state.phase = "watching";
+      } else if (radius < detectionEnter) {
+        state.phase = "detected";
       }
-      if (state.phase === "armed" && previous !== "armed") state.pulseStart = now;
     };
 
     const step = (now: number) => {
@@ -243,7 +355,7 @@ const GravityWell = ({
       const markerZ = wellHeight(markerRadius, depthPx);
       const markerPoint = project(state.position.u, state.position.v, markerZ);
 
-      updatePhase(markerRadius, now);
+      updatePhase(markerRadius);
 
       if (trail) {
         state.trail.push({
@@ -275,97 +387,137 @@ const GravityWell = ({
     const render = (markerPoint: { x: number; y: number }) => {
       const depthPx = state.scale * depth;
       const label = labelsRef.current;
-      const armed = state.phase === "armed";
-      const arming = state.phase === "arming";
+      const detected = state.phase === "detected";
       context.clearRect(0, 0, state.width, state.height);
+      context.drawImage(surfaceCanvas, 0, 0, state.width, state.height);
 
       const lineIndex: number[] = [];
-      for (let i = 0; i <= gridDivisions; i++) lineIndex.push(-plateExtent + (2 * plateExtent * i) / gridDivisions);
+      if (fullField) {
+        const lineCount = Math.ceil((state.fieldExtent * 2) / fullFieldGridStep);
+        const start = -(lineCount * fullFieldGridStep) / 2;
+        for (let i = 0; i <= lineCount; i++) lineIndex.push(start + i * fullFieldGridStep);
+      } else {
+        for (let i = 0; i <= gridDivisions; i++) {
+          lineIndex.push(-plateExtent + (2 * plateExtent * i) / gridDivisions);
+        }
+      }
 
       context.lineWidth = 1;
-      context.strokeStyle = "rgba(11,18,32,0.13)";
+      context.strokeStyle = fullField ? "rgba(0,102,255,0.13)" : "rgba(11,18,32,0.13)";
       for (let pass = 0; pass < 2; pass++) {
-        for (let i = 0; i <= gridDivisions; i++) {
-          context.beginPath();
-          for (let j = 0; j <= gridDivisions; j++) {
-            const u = pass === 0 ? lineIndex[j] : lineIndex[i];
-            const v = pass === 0 ? lineIndex[i] : lineIndex[j];
+        for (let i = 0; i < lineIndex.length; i++) {
+          const fixedCoordinate = lineIndex[i];
+          const pointOnLine = (variableCoordinate: number) => {
+            const u = pass === 0 ? variableCoordinate : fixedCoordinate;
+            const v = pass === 0 ? fixedCoordinate : variableCoordinate;
             let z = wellHeight(Math.hypot(u, v), depthPx);
             const dentDistance = Math.hypot(u - state.position.u, v - state.position.v);
-            z += state.scale * 0.05 * Math.exp(-(dentDistance * dentDistance) / 0.018);
-            const point = project(u, v, z);
-            if (j === 0) context.moveTo(point.x, point.y);
-            else context.lineTo(point.x, point.y);
+            const dentDepth = fullField ? 0.1 : 0.05;
+            const dentSpread = fullField ? 0.045 : 0.018;
+            z += state.scale * dentDepth * Math.exp(-(dentDistance * dentDistance) / dentSpread);
+            return project(u, v, z);
+          };
+
+          context.beginPath();
+          const firstPoint = pointOnLine(lineIndex[0]);
+          context.moveTo(firstPoint.x, firstPoint.y);
+          for (let j = 0; j < lineIndex.length - 1; j++) {
+            const start = lineIndex[j];
+            const end = lineIndex[j + 1];
+            const midpoint = (start + end) / 2;
+            const midpointU = pass === 0 ? midpoint : fixedCoordinate;
+            const midpointV = pass === 0 ? fixedCoordinate : midpoint;
+            const nearWell = Math.hypot(midpointU, midpointV) < 1.35;
+            const nearCursor = Math.hypot(
+              midpointU - state.position.u,
+              midpointV - state.position.v,
+            ) < 0.65;
+            const subdivisions = nearWell || nearCursor ? 5 : 1;
+
+            for (let subdivision = 1; subdivision <= subdivisions; subdivision++) {
+              const coordinate = start + ((end - start) * subdivision) / subdivisions;
+              const point = pointOnLine(coordinate);
+              context.lineTo(point.x, point.y);
+            }
           }
           context.stroke();
         }
       }
 
-      // Plate edge.
-      context.strokeStyle = "rgba(11,18,32,0.22)";
-      context.beginPath();
-      const corners = [
-        [-plateExtent, -plateExtent],
-        [plateExtent, -plateExtent],
-        [plateExtent, plateExtent],
-        [-plateExtent, plateExtent],
-      ];
-      corners.forEach((corner, i) => {
-        const point = project(corner[0], corner[1], wellHeight(Math.hypot(corner[0], corner[1]), depthPx));
-        if (i === 0) context.moveTo(point.x, point.y);
-        else context.lineTo(point.x, point.y);
-      });
-      context.closePath();
-      context.stroke();
-
-      // Glow pooled at the bottom of the well — brightens as the target locks.
-      const glow = project(0, 0, depthPx * 0.8);
-      const glowStrength = armed ? 0.82 : arming ? 0.66 : 0.55;
-      const glowGradient = context.createRadialGradient(glow.x, glow.y, 0, glow.x, glow.y, state.scale * 0.85);
-      glowGradient.addColorStop(0, `rgba(${accent},${glowStrength})`);
-      glowGradient.addColorStop(0.45, `rgba(${accent},${glowStrength * 0.32})`);
-      glowGradient.addColorStop(1, `rgba(${accent},0)`);
-      context.globalCompositeOperation = "multiply";
-      context.fillStyle = glowGradient;
-      context.fillRect(glow.x - state.scale, glow.y - state.scale, state.scale * 2, state.scale * 2);
-      context.globalCompositeOperation = "source-over";
-
-      // Capture basin — the dashed ring the marker must cross to arm the target.
-      const floor = project(0, 0, depthPx);
-      context.setLineDash([3, 4]);
-      context.lineWidth = 1;
-      context.strokeStyle = `rgba(${accent},${arming || armed ? 0.5 : 0.3})`;
-      context.beginPath();
-      const basinZ = wellHeight(armedRadius, depthPx);
-      for (let i = 0; i <= 56; i++) {
-        const angle = (i / 56) * Math.PI * 2;
-        const point = project(armedRadius * Math.cos(angle), armedRadius * Math.sin(angle), basinZ);
-        if (i === 0) context.moveTo(point.x, point.y);
-        else context.lineTo(point.x, point.y);
-      }
-      context.closePath();
-      context.stroke();
-      context.setLineDash([]);
-
-      // Prefetch pulse — one expanding ring on the watching/arming → armed lock.
-      if (state.pulseStart >= 0) {
-        const progress = (performance.now() - state.pulseStart) / pulseDurationMs;
-        if (progress <= 1) {
-          context.strokeStyle = `rgba(${accent},${(1 - progress) * 0.55})`;
-          context.lineWidth = 2 * (1 - progress) + 0.5;
-          context.beginPath();
-          context.arc(floor.x, floor.y, 9 + progress * 52, 0, Math.PI * 2);
-          context.stroke();
-        }
+      if (!fullField) {
+        // Plate edge for the standalone finite-field presentation.
+        context.strokeStyle = "rgba(11,18,32,0.22)";
+        context.beginPath();
+        const corners = [
+          [-plateExtent, -plateExtent],
+          [plateExtent, -plateExtent],
+          [plateExtent, plateExtent],
+          [-plateExtent, plateExtent],
+        ];
+        corners.forEach((corner, i) => {
+          const point = project(corner[0], corner[1], wellHeight(Math.hypot(corner[0], corner[1]), depthPx));
+          if (i === 0) context.moveTo(point.x, point.y);
+          else context.lineTo(point.x, point.y);
+        });
+        context.closePath();
+        context.stroke();
       }
 
-      // Target beacon at the well floor + its live state label.
-      context.fillStyle = `rgba(${accent},${armed ? 0.9 : 0.5})`;
+      // Two decorative target orbits. They share no state with the live cursor.
+      const orbitTime = performance.now();
+      for (const orbit of targetOrbits) {
+        // A constant-radius circle in field coordinates projects to this
+        // horizontal ellipse. Its vertical centre follows the well surface,
+        // keeping each track aligned with the distortion and colour contours.
+        const orbitCenter = project(
+          0,
+          0,
+          wellHeight(orbit.fieldRadius, depthPx),
+        );
+        const radiusX = state.scale * orbit.fieldRadius * isoX * Math.SQRT2;
+        const radiusY = state.scale * orbit.fieldRadius * isoY * Math.SQRT2;
+        context.strokeStyle = `rgba(${accent},0.2)`;
+        context.lineWidth = 1;
+        context.beginPath();
+        context.ellipse(
+          orbitCenter.x,
+          orbitCenter.y,
+          radiusX,
+          radiusY,
+          0,
+          0,
+          Math.PI * 2,
+        );
+        context.stroke();
+
+        const angle = ((orbitTime / orbit.periodMs) + orbit.phase) * Math.PI * 2;
+        const dotX = orbitCenter.x + radiusX * Math.cos(angle);
+        const dotY = orbitCenter.y + radiusY * Math.sin(angle);
+        const orbitHalo = context.createRadialGradient(dotX, dotY, 0, dotX, dotY, 12);
+        orbitHalo.addColorStop(0, `rgba(${accent},0.35)`);
+        orbitHalo.addColorStop(1, `rgba(${accent},0)`);
+        context.fillStyle = orbitHalo;
+        context.beginPath();
+        context.arc(dotX, dotY, 12, 0, Math.PI * 2);
+        context.fill();
+        context.fillStyle = "#0066FF";
+        context.beginPath();
+        context.arc(dotX, dotY, 3.8, 0, Math.PI * 2);
+        context.fill();
+        context.strokeStyle = "#ffffff";
+        context.lineWidth = 1.35;
+        context.stroke();
+      }
+
+      // Lift the beacon slightly onto the visible floor so the side-on
+      // projection reads as an embedded singularity rather than a detached dot.
+      const targetPoint = project(0, 0, depthPx * targetMarkerFloorRatio);
+      context.fillStyle = "#000000";
       context.beginPath();
-      context.arc(floor.x, floor.y, 3, 0, Math.PI * 2);
+      context.arc(targetPoint.x, targetPoint.y, 3.5, 0, Math.PI * 2);
       context.fill();
-      const targetText = armed ? label.armed : arming ? label.arming : label.target;
-      drawTag(floor.x, floor.y + 20, targetText, armed ? 0.95 : arming ? 0.82 : 0.62, armed);
+      const targetText = detected ? label.detected : label.target;
+      drawTag(targetPoint.x, targetPoint.y + 20, targetText, detected ? 0.95 : 0.62, detected);
 
       // Fading marker trail.
       for (let i = 1; i < state.trail.length; i++) {
@@ -411,36 +563,53 @@ const GravityWell = ({
 
     const renderStill = () => {
       if (!state.scale) return;
-      // Settle the marker inside the basin so the "armed" story reads at a glance.
+      // Settle the marker close enough that the detected state reads at a glance.
       state.position = { u: 0.12, v: 0.08 };
-      state.phase = "armed";
-      state.pulseStart = -1;
+      state.phase = "detected";
       const markerZ = wellHeight(Math.hypot(state.position.u, state.position.v), state.scale * depth);
       render(project(state.position.u, state.position.v, markerZ));
     };
 
     const observer = new ResizeObserver(() => {
       layout();
+      buildSurface();
       if (reducedMotion) renderStill();
     });
     observer.observe(wrap);
     layout();
+    buildSurface();
 
     if (reducedMotion) {
       renderStill();
     } else {
-      canvas.addEventListener("pointermove", onPointer);
-      canvas.addEventListener("pointerdown", onPointer);
+      const pointerSurface: Window | HTMLCanvasElement = fullField ? window : canvas;
+      pointerSurface.addEventListener("pointermove", onPointer as EventListener);
+      pointerSurface.addEventListener("pointerdown", onPointer as EventListener);
       raf = requestAnimationFrame(frame);
     }
 
     return () => {
       observer.disconnect();
       cancelAnimationFrame(raf);
-      canvas.removeEventListener("pointermove", onPointer);
-      canvas.removeEventListener("pointerdown", onPointer);
+      const pointerSurface: Window | HTMLCanvasElement = fullField ? window : canvas;
+      pointerSurface.removeEventListener("pointermove", onPointer as EventListener);
+      pointerSurface.removeEventListener("pointerdown", onPointer as EventListener);
     };
-  }, [depth, gravity, trail, reducedMotion]);
+  }, [depth, gravity, trail, reducedMotion, fullField]);
+
+  if (fullField) {
+    return (
+      <div
+        ref={wrapRef}
+        className={cn("pointer-events-none absolute inset-0 h-full w-full overflow-hidden", className)}
+      >
+        <canvas ref={canvasRef} aria-hidden className="absolute inset-0 block h-full w-full" />
+        <p className="absolute left-[var(--gravity-caption-x)] top-[var(--gravity-caption-y)] -translate-x-1/2 whitespace-nowrap px-4 text-center font-mono text-[12px] font-semibold leading-[1.5] text-ink-2">
+          {caption}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className={cn("flex w-full flex-col h-[400px] sm:h-[460px] lg:h-[500px]", className)}>
@@ -448,7 +617,7 @@ const GravityWell = ({
         <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full [touch-action:none]" />
       </div>
       <p className="mt-2 px-4 text-center font-mono text-[12px] leading-[1.5] text-ink-3">
-        <span className="font-semibold text-ink-2">{caption.lead}</span> {caption.body}
+        {caption}
       </p>
     </div>
   );
