@@ -14,11 +14,8 @@ type PrefetchLinkProps = ComponentProps<typeof IntentLink>;
  * A drop-in for `next/link` on first-party routes; external links use a plain
  * anchor instead.
  *
- * `onIntent` is memoized: `intent-link`'s `IntentLink` re-derives a fresh
- * `physicsState` object every animation frame, so its trigger effect (which
- * depends on `onIntent`'s identity) already reruns constantly — passing an
- * inline closure here would add a second always-different dependency and
- * needlessly amplify that churn across every mounted link.
+ * `onIntent` is memoized so links keep a stable callback while the surrounding
+ * layout re-renders.
  */
 const PrefetchLink = ({
   href,
@@ -29,9 +26,9 @@ const PrefetchLink = ({
 }: PrefetchLinkProps) => {
   const router = useRouter();
   const handleIntent = useCallback<NonNullable<PrefetchLinkProps["onIntent"]>>(
-    (data) => {
+    () => {
       if (typeof href === "string") router.prefetch(href);
-      onIntent?.(data);
+      onIntent?.();
     },
     [href, router, onIntent],
   );

@@ -30,7 +30,7 @@ const renderNode = (node: InlineNode, key: number, locale: Locale): ReactNode =>
       return <Fragment key={key}>{node.value}</Fragment>;
     case inlineKind.code:
       return (
-        <code key={key} className={inlineCodeClass}>
+        <code key={key} dir="ltr" className={inlineCodeClass}>
           {node.value}
         </code>
       );
@@ -82,10 +82,10 @@ const calloutClass: Record<CalloutTone, string> = {
 
 const renderCell = (cell: TableCell, text: DocText, locale: Locale): ReactNode => {
   if (cell.kind === inlineKind.code) {
-    return <code className={tableInlineCodeClass}>{cell.value}</code>;
+    return <code dir="ltr" className={tableInlineCodeClass}>{cell.value}</code>;
   }
   if (cell.kind === tableCellKind.value) {
-    return <span className="font-mono text-[12px]">{cell.value}</span>;
+    return <span dir="ltr" className="font-mono text-[12px]">{cell.value}</span>;
   }
   return <Inline text={text[cell.textKey]} locale={locale} />;
 };

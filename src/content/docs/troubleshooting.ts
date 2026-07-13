@@ -9,13 +9,20 @@ const troubleshooting: DocContent = {
       ordered: false,
       itemKeys: [
         "nothing.provider",
-        "nothing.mousemove",
+        "nothing.callback",
+        "nothing.input",
         "nothing.size",
         "nothing.wiring",
       ],
     },
-    { kind: blockKind.heading, level: 2, id: "ssr", textKey: "ssrHeading" },
-    { kind: blockKind.paragraph, textKey: "ssrBody" },
+    { kind: blockKind.heading, level: 2, id: "prefetch", textKey: "prefetchHeading" },
+    { kind: blockKind.paragraph, textKey: "prefetchBody" },
+    { kind: blockKind.heading, level: 2, id: "custom", textKey: "customHeading" },
+    { kind: blockKind.paragraph, textKey: "customBody" },
+    { kind: blockKind.heading, level: 2, id: "mobile", textKey: "mobileHeading" },
+    { kind: blockKind.paragraph, textKey: "mobileBody" },
+    { kind: blockKind.heading, level: 2, id: "development", textKey: "developmentHeading" },
+    { kind: blockKind.paragraph, textKey: "developmentBody" },
   ],
 };
 

@@ -41,25 +41,13 @@ function ProductCard({ href }) {
     </IntentLink>
   )
 }`,
-  custom: `// read the raw probability stream — build anything
-import { useContext, useRef, useEffect, useId } from 'react'
-import { IntentContext } from 'intent-link'
+  custom: `// any HTML element can become an intent target
+import { useIntentTarget } from 'intent-link'
 
 function PredictiveButton({ onIntent, children }) {
-  const { probabilities, registerLink, unregisterLink } = useContext(IntentContext)
-  const ref = useRef(null)
-  const id = useId()
+  const intentRef = useIntentTarget<HTMLButtonElement>({ onIntent })
 
-  useEffect(() => {
-    if (!ref.current) return
-    registerLink(id, ref.current)
-    return () => unregisterLink(id)
-  }, [id, registerLink, unregisterLink])
-
-  const p = probabilities[id]?.probability ?? 0
-  useEffect(() => { if (p > 0.5) onIntent?.() }, [p])
-
-  return <button ref={ref}>{children}</button>
+  return <button ref={intentRef}>{children}</button>
 }`,
 } as const;
 

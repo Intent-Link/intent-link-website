@@ -3,7 +3,7 @@
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { locales, localeNames } from "@/i18n/locales";
+import { localeCookieName, locales, localeNames, type Locale } from "@/i18n/locales";
 import { useLocale } from "@/i18n/locale-provider";
 import { appRoutes, localePath, switchLocalePath } from "@/constants/routes";
 import { useCommonText } from "@/hooks/use-common-text";
@@ -12,7 +12,9 @@ import { cn } from "@/utils/class-names";
 
 const panelWidth = 184;
 const rowHeight = 40;
-const maxPanelHeight = 320;
+// Twelve languages fit without scrolling at the normal viewport sizes used by
+// the navbar and footer. Short viewports still receive a bounded scroll area.
+const maxPanelHeight = 494;
 const viewportMargin = 12;
 
 interface LanguageDropdownProps {
@@ -45,7 +47,9 @@ const LanguageDropdown = ({ openUp = false, boxed = false, className }: Language
 
   // Selecting an option closes the panel and hands focus back to the trigger
   // so keyboard users keep their place while the navigation happens.
-  const selectOption = useCallback(() => {
+  const selectOption = useCallback((option: Locale) => {
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${localeCookieName}=${option}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
     setOpen(false);
     triggerRef.current?.focus();
   }, []);
@@ -119,7 +123,7 @@ const LanguageDropdown = ({ openUp = false, boxed = false, className }: Language
             alignLeft ? "left-0" : "right-0",
             dropUp ? "bottom-full mb-1" : "mt-1",
           )}
-          style={{ width: panelWidth, maxHeight: maxPanelHeight }}
+          style={{ width: panelWidth, maxHeight: `min(${maxPanelHeight}px, calc(100vh - 24px))` }}
         >
           {locales.map((option) => (
             <li key={option}>
@@ -128,7 +132,7 @@ const LanguageDropdown = ({ openUp = false, boxed = false, className }: Language
                 aria-selected={option === locale}
                 href={switchLocalePath(pathname ?? localePath(locale, appRoutes.home), option)}
                 scroll={false}
-                onClick={selectOption}
+                onClick={() => selectOption(option)}
                 onKeyDown={(event) => {
                   // role="option" promises Space activation; anchors only activate on Enter.
                   if (event.key === " ") {

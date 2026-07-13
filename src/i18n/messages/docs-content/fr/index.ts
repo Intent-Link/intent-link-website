@@ -1,35 +1,37 @@
 import type { DocsContentText } from "@/content/docs/types";
-import { quickstart } from "./quickstart";
-import { installation } from "./installation";
-import { howItWorks } from "./how-it-works";
-import { importanceAndCost } from "./importance-and-cost";
-import { intentProvider } from "./intent-provider";
-import { intentLink } from "./intent-link";
-import { intentContext } from "./intent-context";
-import { applications } from "./applications";
-import { customComponents } from "./custom-components";
-import { beyondPrefetch } from "./beyond-prefetch";
-import { mobileBehavior } from "./mobile-behavior";
-import { typescript } from "./typescript";
-import { troubleshooting } from "./troubleshooting";
-import { changelog } from "./changelog";
+import type { PartialText } from "@/i18n/create-text-query";
 
-/** French docs prose, keyed by slug. */
-const fr: DocsContentText = {
-  quickstart,
-  installation,
-  "how-it-works": howItWorks,
-  "importance-and-cost": importanceAndCost,
-  "intent-provider": intentProvider,
-  "intent-link": intentLink,
-  "intent-context": intentContext,
-  "applications": applications,
-  "custom-components": customComponents,
-  "beyond-prefetch": beyondPrefetch,
-  "mobile-behavior": mobileBehavior,
-  typescript,
-  troubleshooting,
-  changelog,
+const fr: PartialText<DocsContentText> = {
+  quickstart: {
+    "toc.1-install": "Installer", "toc.2-wrap": "Encadrer l’application", "toc.3-links": "Utiliser IntentLink",
+    intro: "Ajoutez des actions basées sur l’intention à une application Next.js en trois étapes.", installHeading: "1 · Installer", wrapHeading: "2 · Encadrez votre application une fois", wrapBody: "Montez `IntentProvider` une fois dans le layout racine. Il exécute le moteur d’intention partagé pour tout son contenu.", linksHeading: "3 · Utilisez IntentLink", linksBody: "Utilisez `IntentLink` comme un lien Next.js normal et placez dans `onIntent` le travail à démarrer plus tôt.", closing: "C’est tout ce dont la plupart des applications ont besoin. La bibliothèque ne précharge rien automatiquement : vous choisissez ce que fait `onIntent`.",
+  },
+  "how-it-works": {
+    "toc.observe": "Observer", "toc.decide": "Estimer", "toc.fire": "Lancer l’action", "toc.devices": "Ordinateur et mobile", "toc.physics": "L’idée physique",
+    intro: "intent-link observe la façon dont une personne se déplace dans la page et estime la cible visible dont elle se rapproche. Quand le signal est assez fort, il appelle la fonction `onIntent` de cette cible.", observeHeading: "1 · Observer le mouvement", observeBody: "Sur ordinateur, le moteur lit le mouvement du pointeur. Sur un appareil tactile, il lit le défilement. Il ne démarre qu’à la première interaction et se rendort quand le mouvement s’arrête.", decideHeading: "2 · Estimer la cible", decideBody: "Le moteur compare le mouvement de l’utilisateur aux cibles d’intention visibles. Les cibles hors de la fenêtre visible sont exclues des calculs actifs.", fireHeading: "3 · Lancer votre action", fireBody: "Quand une cible devient assez probable, son callback `onIntent` s’exécute une fois. Il peut s’exécuter de nouveau après que l’utilisateur s’est éloigné puis rapproché.",
+    devicesHeading: "Ordinateur et mobile", "devices.desktop": "Sur ordinateur, la prédiction suit le pointeur dans deux dimensions.", "devices.mobile": "Sur mobile, la prédiction suit le défilement vertical. Le premier défilement l’active.", "devices.visible": "Les cibles masquées ou hors écran sont ignorées, y compris celles masquées par du CSS responsive.", physicsHeading: "L’idée physique", physicsEnergy: "Imaginez chaque cible comme un petit puits de gravité. Le mouvement crée de l’**énergie cinétique**, tandis que la distance à une cible crée de l’**énergie potentielle**. Un pointeur ou un défilement rapide a encore du mouvement ; un mouvement lent près d’une cible semble s’y stabiliser. Le moteur applique une règle inspirée de la thermodynamique qui considère ces destinations de faible énergie comme plus probables.", physicsKalman: "Les données de mouvement du navigateur contiennent de petits sauts et des erreurs. Un **filtre de Kalman** lisse ce bruit avant le calcul physique. En termes simples, il aide le moteur à distinguer un mouvement volontaire de mesures instables. Tout cela reste interne à la bibliothèque ; l’application reçoit seulement `onIntent`.", paperNote: "[Lire l’article de recherche](https://intentlink.dev/paper). Ce lien est provisoire jusqu’à la publication ACM.",
+  },
+  "intent-provider": {
+    "toc.usage": "Utilisation", "toc.notes": "Remarques", intro: "Montez `IntentProvider` une fois près de la racine de votre application. Il exécute le moteur d’intention partagé pour `IntentLink` et `useIntentTarget`.", usageHeading: "Utilisation", notesHeading: "Remarques", "notes.once": "Utilisez un seul provider pour l’application. N’imbriquez pas les providers.", "notes.props": "Il a seulement besoin de `children` ; rien d’autre n’est à configurer.", "notes.client": "Il contient déjà sa frontière client et peut donc être importé depuis un layout serveur Next.js.",
+  },
+  "intent-link": {
+    "toc.props": "Props", "toc.onintent": "onIntent", "toc.tuning": "Importance et coût", "toc.example": "Exemple", intro: "Utilisez `IntentLink` partout où vous utiliseriez normalement le `Link` de Next.js. Ajoutez `onIntent` pour le travail qui doit commencer avant le clic.", propsHeading: "Props", "col.prop": "Prop", "col.type": "Type", "col.default": "Valeur par défaut", "col.description": "Description", "prop.href": "Obligatoire. Identique au Link de Next.js.", "prop.importance": "Facilité avec laquelle l’action peut démarrer.", "prop.cost": "Niveau de prudence de la prédiction.", "prop.onIntent": "Appelé une fois quand l’utilisateur choisira probablement ce lien.", "prop.rest": "Toute prop de Link Next.js ou d’ancre HTML, dont className, style et ref.", prefetchNote: "`IntentLink` désactive le préchargement automatique de Next.js. Pour un préchargement prédictif, appelez `router.prefetch()` dans `onIntent`.", onIntentHeading: "onIntent", onIntentBody: "Le callback ne reçoit aucun argument et ne renvoie rien. Il s’exécute une fois par approche, puis se réarme quand l’utilisateur s’éloigne.", tuningHeading: "Importance et coût", tuningBody: "Ces réglages sont facultatifs. La plupart des applications devraient conserver les valeurs par défaut.", "tuning.importance": "`importance` contrôle la facilité avec laquelle l’action démarre. Valeur par défaut : `medium`.", "tuning.cost": "`cost` contrôle la prudence de la prédiction. Valeur par défaut : `low`.", "tuning.defaults": "Ne les modifiez qu’après avoir testé l’action réelle sur ordinateur et mobile.", exampleHeading: "Exemple",
+  },
+  "use-intent-target": {
+    "toc.button": "Utilisation de base", "toc.options": "Options", "toc.third-party": "Composants tiers", intro: "`useIntentTarget` ajoute la détection d’intention à un bouton, une carte ou un autre élément HTML. Il renvoie une ref ; attachez-la à l’élément à observer.", buttonHeading: "Utilisation de base", buttonBody: "Utilisez le hook dans un composant client et attachez la ref renvoyée à un élément HTML.", optionsHeading: "Options", "options.onIntent": "`onIntent` : action à exécuter lorsque l’élément devient la cible probable.", "options.importance": "`importance` : `high`, `medium` ou `low`, facultatif. Valeur par défaut : `medium`.", "options.cost": "`cost` : `high`, `medium` ou `low`, facultatif. Valeur par défaut : `low`.", thirdPartyHeading: "Composants tiers", thirdPartyBody: "Attachez directement la ref lorsque le composant transmet sa ref à un élément HTML.", wrapperBody: "S’il ne transmet pas de ref, entourez-le d’un élément natif et attachez la ref à ce conteneur.",
+  },
+  "custom-intent-components": {
+    "toc.intent-button": "IntentButton", "toc.intent-button-usage": "Utilisation", "toc.intent-article": "IntentArticle", "toc.intent-article-usage": "Utilisation", intro: "Si votre application contient plusieurs cibles du même type, encapsulez `useIntentTarget` une fois et réutilisez le composant obtenu.", buttonHeading: "IntentButton réutilisable", buttonBody: "Ce composant accepte les props normales d’un bouton avec `onIntent`, `importance` et `cost`.", articleHeading: "IntentArticle réutilisable", articleBody: "Le même modèle fonctionne pour les fiches produit et autres conteneurs sémantiques.", usageHeading: "Utilisation",
+  },
+  examples: {
+    "toc.route": "Précharger une route", "toc.data": "Préparer les données", "toc.asset": "Précharger une image", "toc.action": "Préparer un composant", intro: "`onIntent` peut lancer tout travail de préparation sûr et répétable. Gardez les actions irréversibles, comme les achats, messages et envois de formulaires, derrière un vrai clic.", routeHeading: "Précharger une route", routeBody: "Le cas d’usage courant avec Next.js.", dataHeading: "Préparer les données", dataBody: "Demandez à votre bibliothèque de données de mettre en cache les informations nécessaires à l’écran suivant.", assetHeading: "Précharger une image", assetBody: "Commencez à charger une ressource lourde avant la navigation.", actionHeading: "Préparer un composant", actionBody: "Utilisez `useIntentTarget` lorsque la cible n’est pas un lien.",
+  },
+  troubleshooting: {
+    "toc.nothing": "Rien ne se déclenche", "toc.prefetch": "Préchargement inattendu", "toc.custom": "Refs des composants personnalisés", "toc.mobile": "Tests sur mobile", "toc.development": "Mode développement", nothingHeading: "onIntent ne se déclenche jamais", "nothing.provider": "`IntentProvider` est-il monté au-dessus de ces liens ?", "nothing.callback": "La cible possède-t-elle un callback `onIntent` ? Les cibles sans callback ne sont pas enregistrées.", "nothing.input": "Déplacez le pointeur sur ordinateur ou faites défiler sur mobile. Le moteur dort jusqu’à la première interaction.", "nothing.size": "Vérifiez que la cible est visible et possède une largeur et une hauteur réelles.", "nothing.wiring": "Essayez temporairement `importance=\"high\"` et `cost=\"low\"` pour vérifier l’intégration, puis restaurez les valeurs par défaut.", prefetchHeading: "Une route se précharge sans onIntent", prefetchBody: "Recherchez un autre `Link` Next.js vers la même route, y compris les liens masqués par des styles responsive. Vérifiez aussi le code qui appelle directement `router.prefetch()`.", customHeading: "Un composant personnalisé ne fonctionne pas", customBody: "Le composant doit transmettre la ref à un véritable élément HTML. Sinon, attachez la ref d’intention à un conteneur natif tel qu’un `div`.", mobileHeading: "Tests sur mobile", mobileBody: "Utilisez un véritable appareil tactile ou activez l’émulation tactile dans les outils du navigateur, puis faites défiler. Réduire simplement la largeur d’une fenêtre de bureau n’active pas toujours le comportement mobile.", developmentHeading: "Développement et production", developmentBody: "Testez également les comportements importants dans un build de production. Les vérifications de développement de React et les outils du framework peuvent modifier l’apparence des callbacks et des requêtes réseau.",
+  },
+  changelog: {
+    "toc.v1013": "1.0.13", v1013Heading: "1.0.13 (actuelle)", "v1013.api": "Ajout de `useIntentTarget` pour les boutons, cartes et composants tiers.", "v1013.visibility": "Seules les cibles visibles participent au travail de prédiction actif.", "v1013.behavior": "`onIntent` est un simple callback void ; l’état interne de prédiction ne fait plus partie de l’API publique.", "v1013.performance": "Amélioration de l’enregistrement, du rendu et des performances sur les pages à forte densité.", history: "Consultez l’[historique complet des versions](https://www.npmjs.com/package/intent-link?activeTab=versions) sur npm.",
+  },
 };
 
 export { fr };

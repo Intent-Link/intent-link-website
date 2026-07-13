@@ -10,12 +10,7 @@ import { usePredictionConsole } from "@/hooks/use-prediction-console";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useSectionsText } from "@/hooks/use-sections-text";
-import {
-  intentLevel,
-  importanceWeight,
-  costWeight,
-  type IntentLevel,
-} from "@/utils/intent-link-internals";
+import type { IntentLevel } from "intent-link";
 import { sectionIds } from "@/constants/section-ids";
 import { testIds } from "@/constants/test-ids";
 import { tileCategory } from "@/constants/tile-categories";
@@ -33,31 +28,46 @@ const tiles = [
   { id: tileCategory.beauty, tint: "#f3eef1" },
   { id: tileCategory.home, tint: "#eff1ed" },
   { id: tileCategory.sale, tint: "#f2eeed" },
+  { id: tileCategory.electronics, tint: "#edf1f4" },
+  { id: tileCategory.watches, tint: "#f1efe9" },
+  { id: tileCategory.jewelry, tint: "#f3eef3" },
+  { id: tileCategory.furniture, tint: "#eef0eb" },
+  { id: tileCategory.gifts, tint: "#f3efed" },
+  { id: tileCategory.travel, tint: "#edf0f2" },
 ] as const;
 
-const tileIds = tiles.map((tile) => tile.id);
-
-/** On mobile the storefront collapses to a 2×2 grid of taller (4/5) tiles. */
-const mobileTileCount = 4;
+/** Phones through 499px use 2×2; 500–699px screens use a 3×3 grid. */
+const narrowMobileTileCount = 4;
+const mobileTileCount = 9;
+/** Mid-sized screens use three rows of four tiles. */
+const tabletTileCount = 12;
 
 /**
  * Prediction Field demo (01) — a storefront grid whose tiles register with the
- * real intent-link engine, beside the dark console that shows the same motion
- * as an importance/cost-tuned onIntent stream.
+ * real intent-link engine, beside a console that records its onIntent calls.
  */
 const PredictionFieldDemo = () => {
   const text = useSectionsText().predictionFieldDemo;
-  const panel = usePredictionConsole(tileIds);
+  const panel = usePredictionConsole();
   const { ref, revealed } = useScrollReveal<HTMLDivElement>();
   const isTouch = useMediaQuery("(pointer: coarse)");
-  const isMobile = useMediaQuery("(max-width: 639px)");
+  const isNarrowMobile = useMediaQuery("(max-width: 499px)");
+  const isMobile = useMediaQuery("(max-width: 699px)");
+  const isTablet = useMediaQuery("(max-width: 1023px)");
 
-  const visibleTiles = isMobile ? tiles.slice(0, mobileTileCount) : tiles;
+  const visibleTileCount = isNarrowMobile
+    ? narrowMobileTileCount
+    : isMobile
+      ? mobileTileCount
+      : isTablet
+        ? tabletTileCount
+        : tiles.length;
+  const visibleTiles = tiles.slice(0, visibleTileCount);
 
   const levelSegments = [
-    { value: intentLevel.low, label: text.levels.low },
-    { value: intentLevel.medium, label: text.levels.medium },
-    { value: intentLevel.high, label: text.levels.high },
+    { value: "low", label: text.levels.low },
+    { value: "medium", label: text.levels.medium },
+    { value: "high", label: text.levels.high },
   ];
 
   const addressSlash = text.addressBar.indexOf("/");
@@ -87,7 +97,7 @@ const PredictionFieldDemo = () => {
           reveal={false}
         />
 
-        <div className="mt-8 flex flex-col gap-5">
+        <div className="mt-8 flex flex-col gap-5 [overflow-anchor:none]">
           {/* Console */}
           <div
             className="flex flex-col overflow-hidden rounded-2xl border border-black/25 bg-term-bg text-term-ink shadow-[0_30px_60px_-30px_rgba(11,18,32,0.55)]"
@@ -100,10 +110,8 @@ const PredictionFieldDemo = () => {
                   <span className="h-[11px] w-[11px] rounded-full bg-[#28c840]" />
                 </span>
                 <span className="font-mono text-xs font-medium text-term-ink">{text.consoleTitle}</span>
-                <span className="font-mono text-[11px] text-term-dim">{text.liveSignal}</span>
               </div>
               <div className="flex items-center gap-3.5">
-                <span className="hidden font-mono text-[11px] text-term-dim sm:inline">{text.formula}</span>
                 <button
                   type="button"
                   onClick={panel.reset}
@@ -130,15 +138,12 @@ const PredictionFieldDemo = () => {
 
             <div className="flex flex-col md:flex-row md:items-stretch">
               <div
-                className="flex w-full shrink-0 flex-col justify-start gap-2 border-b border-white/[0.08] px-[18px] py-3 md:w-[372px] md:border-b-0 md:border-r"
+                className="flex w-full shrink-0 flex-col justify-center gap-2 border-b border-white/[0.08] px-[18px] py-3 md:w-[372px] md:border-b-0 md:border-r"
               >
-                <div className="flex items-center justify-between gap-3 border-b border-white/[0.07] pb-3">
-                  <div className="min-w-0">
-                    <p className="font-mono text-[11px] font-semibold text-term-ink">
-                      {text.importanceLabel}
-                    </p>
-                    <p className="font-mono text-[10px] text-term-dim">{text.importanceSub}</p>
-                  </div>
+                <div className="flex min-h-[44px] items-center justify-between gap-3 border-b border-white/[0.07] pb-2">
+                  <p className="min-w-0 font-mono text-[11px] font-semibold text-term-ink">
+                    {text.importanceLabel}
+                  </p>
                   <div className="w-[174px] shrink-0">
                     <SegmentedControl
                       segments={levelSegments}
@@ -148,13 +153,10 @@ const PredictionFieldDemo = () => {
                     />
                   </div>
                 </div>
-                <div className="flex items-center justify-between gap-3 pt-1">
-                  <div className="min-w-0">
-                    <p className="font-mono text-[11px] font-semibold text-term-ink">
-                      {text.costLabel}
-                    </p>
-                    <p className="font-mono text-[10px] text-term-dim">{text.costSub}</p>
-                  </div>
+                <div className="flex min-h-[44px] items-center justify-between gap-3 pt-1">
+                  <p className="min-w-0 font-mono text-[11px] font-semibold text-term-ink">
+                    {text.costLabel}
+                  </p>
                   <div className="w-[174px] shrink-0">
                     <SegmentedControl
                       segments={levelSegments}
@@ -172,7 +174,7 @@ const PredictionFieldDemo = () => {
                   <span>{text.firedCount(panel.fired)}</span>
                 </div>
                 <div
-                  className="flex-1 overflow-y-auto px-4 pb-2 font-mono text-[11.5px] leading-relaxed"
+                  className="h-[88px] flex-none overflow-y-auto px-4 pb-2 font-mono text-[11.5px] leading-relaxed"
                 >
                   {panel.log.length === 0 ? (
                     <span className="block py-3 text-[#4d5768]">{text.streamEmpty}</span>
@@ -185,7 +187,6 @@ const PredictionFieldDemo = () => {
                         <span className="text-[#4d5768]">{entry.time}</span>
                         <span className="text-[#82aaff]">→ prefetch</span>
                         <span className="min-w-0 flex-1 truncate">{entry.path}</span>
-                        <span className="shrink-0 text-term-dim">p={entry.probability}%</span>
                       </div>
                     ))
                   )}
@@ -221,41 +222,46 @@ const PredictionFieldDemo = () => {
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3 p-[18px] [touch-action:pan-y] sm:grid-cols-4 lg:grid-cols-6">
+            <div className="grid grid-cols-2 gap-3 p-[18px] [touch-action:pan-y] min-[500px]:grid-cols-3 min-[700px]:grid-cols-4 lg:grid-cols-6">
               {visibleTiles.map((tile) => (
                 <ProductTile
-                  key={tile.id}
+                  key={`${panel.generation}-${tile.id}`}
                   id={tile.id}
                   label={text.tiles[tile.id]}
                   tint={tile.tint}
-                  probability={panel.probabilities[tile.id]}
-                  armed={panel.armed[tile.id]}
-                  fireAt={costWeight(panel.cost) / importanceWeight(panel.importance)}
+                  importance={panel.importance}
+                  cost={panel.cost}
+                  prefetched={panel.prefetched[tile.id]}
+                  onIntent={panel.recordIntent}
                   text={{
-                    tileStates: text.tileStates,
                     tileImageLabel: text.tileImageLabel,
                     tileBadge: text.tileBadge,
                   }}
                 />
               ))}
             </div>
-            <div
-              className="flex min-h-[46px] items-center justify-between gap-3 border-t border-line-soft bg-sidebar px-4 py-2.5"
-            >
+            <div className="flex h-[54px] items-center justify-between gap-3 overflow-hidden border-t border-line-soft bg-sidebar px-4 py-2.5">
               {panel.toast ? (
-                <Toast className="inline-flex items-center gap-[9px] rounded-lg border border-white/[0.14] bg-term-bg px-3 py-[7px] font-mono text-xs text-term-ink shadow-[0_8px_20px_-8px_rgba(11,18,32,.45)]">
-                  <span className="h-[7px] w-[7px] rounded-full bg-[#28c840] shadow-[0_0_8px_#28c840]" />
-                  <span>
-                    <span className="text-term-dim">onIntent → </span>
-                    <span className="text-[#82aaff]">router.prefetch(</span>
-                    <span className="text-[#c3e88d]">&apos;{panel.toast.path}&apos;</span>
-                    <span className="text-[#82aaff]">)</span>
+                <Toast className="inline-flex min-w-0 max-w-full flex-1 items-center gap-[9px] overflow-hidden whitespace-nowrap rounded-lg border border-white/[0.14] bg-term-bg px-3 py-[7px] font-mono text-xs text-term-ink shadow-[0_8px_20px_-8px_rgba(11,18,32,.45)]">
+                  <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-[#28c840] shadow-[0_0_8px_#28c840]" />
+                  <span className="min-w-0 truncate whitespace-nowrap">
+                    <span className="min-[700px]:hidden">
+                      <span className="text-[#82aaff]">prefetch(</span>
+                      <span className="text-[#c3e88d]">&quot;{panel.toast.path}&quot;</span>
+                      <span className="text-[#82aaff]">)</span>
+                    </span>
+                    <span className="hidden min-[700px]:inline">
+                      <span className="text-term-dim">onIntent → </span>
+                      <span className="text-[#82aaff]">router.prefetch(</span>
+                      <span className="text-[#c3e88d]">&apos;{panel.toast.path}&apos;</span>
+                      <span className="text-[#82aaff]">)</span>
+                    </span>
                   </span>
                 </Toast>
               ) : (
-                <span className="font-mono text-xs text-ink-3">{text.storefrontIdle}</span>
+                <span className="min-w-0 truncate font-mono text-xs text-ink-3">{text.storefrontIdle}</span>
               )}
-              <span className="font-mono text-[11px] text-ink-3">{text.categories(visibleTiles.length)}</span>
+              <span className="shrink-0 font-mono text-[11px] text-ink-3">{text.categories(visibleTiles.length)}</span>
             </div>
           </div>
         </div>

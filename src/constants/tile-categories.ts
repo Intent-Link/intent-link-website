@@ -1,9 +1,9 @@
 /**
  * Storefront categories for the prediction-field demo tiles. Const map +
- * derived union — the single source of truth for the 12 tile ids, so the
+ * derived union — the single source of truth for the 18 tile ids, so the
  * demo's `tiles` array, `ProductTile`, the tile-icon registry, and the i18n
  * `tiles` dictionary all key off the same identifiers instead of re-typing
- * a parallel string union. Twelve compact tiles keep each target at the
+ * a parallel string union. Eighteen compact tiles keep each target at the
  * link scale where the engine's equilibrium model is validated.
  */
 const tileCategory = {
@@ -19,6 +19,12 @@ const tileCategory = {
   beauty: "beauty",
   home: "home",
   sale: "sale",
+  electronics: "electronics",
+  watches: "watches",
+  jewelry: "jewelry",
+  furniture: "furniture",
+  gifts: "gifts",
+  travel: "travel",
 } as const;
 
 type TileCategory = (typeof tileCategory)[keyof typeof tileCategory];

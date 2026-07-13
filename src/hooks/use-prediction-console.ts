@@ -1,21 +1,12 @@
 "use client";
 
-/* eslint-disable react-hooks/refs -- the render-time ref cache is the churn
-   defense documented on `usePredictionConsole`: the engine publishes a fresh
-   probabilities object every animation frame, and holding the quantized copy
-   in state instead would re-trip React's nested-update guard. */
-
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { IntentContext } from "intent-link";
-import { evaluateTiles, quantizeProbability, areRecordsEqual } from "@/utils/scoring";
-import { intentLevel, type IntentLevel } from "@/utils/intent-link-internals";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { IntentLevel } from "intent-link";
 
 interface StreamEntry {
   key: number;
   time: string;
   path: string;
-  /** Probability (0..100, whole percent) at the moment `onIntent` fired. */
-  probability: number;
 }
 
 interface ToastState {
@@ -26,113 +17,88 @@ interface UsePredictionConsoleInfo {
   fired: number;
   log: StreamEntry[];
   toast: ToastState | null;
-  armed: Record<string, boolean>;
-  utilities: Record<string, number>;
-  probabilities: Record<string, number>;
+  prefetched: Record<string, boolean>;
   importance: IntentLevel;
   cost: IntentLevel;
+  generation: number;
   setImportance: (level: IntentLevel) => void;
   setCost: (level: IntentLevel) => void;
+  recordIntent: (id: string) => void;
   reset: () => void;
 }
 
 const logCap = 9;
-const toastMilliseconds = 1900;
+const toastMilliseconds = 1000;
+const prefetchedMilliseconds = 1000;
 
-/**
- * The prediction-field console. Probabilities come from the real `intent-link`
- * engine (tiles register through `ProductTile`); this layers the importance/cost
- * knobs, the arm/fire hysteresis, the onIntent stream log, and the toast on top
- * — ported from the prototype's `loop`, but reading the real engine's output.
- *
- * The engine publishes a fresh `probabilities` object every animation frame,
- * even when nothing moved. `armed`/`utilities` are therefore derived (not
- * state), and the tile probabilities are quantized behind a stable reference:
- * idle frames produce zero downstream work, and the fire side effects (log,
- * toast, counter) are the only setState in the effect — otherwise React's
- * nested-update guard trips ("Maximum update depth exceeded").
- */
-const usePredictionConsole = (tileIds: readonly string[]): UsePredictionConsoleInfo => {
-  const { probabilities } = useContext(IntentContext);
-  const [importance, setImportance] = useState<IntentLevel>(intentLevel.medium);
-  const [cost, setCost] = useState<IntentLevel>(intentLevel.low);
+/** Records the real onIntent callbacks emitted by the current public API. */
+const usePredictionConsole = (): UsePredictionConsoleInfo => {
+  const [importance, setImportance] = useState<IntentLevel>("medium");
+  const [cost, setCost] = useState<IntentLevel>("low");
   const [fired, setFired] = useState(0);
   const [log, setLog] = useState<StreamEntry[]>([]);
   const [toast, setToast] = useState<ToastState | null>(null);
-  // Bumped by reset() so the evaluation memo re-runs even though it reads the
-  // mutable prevArmed ref — otherwise tiles stay visually armed after a reset.
-  const [resetTick, setResetTick] = useState(0);
-
-  const prevArmed = useRef<Record<string, boolean>>({});
-  const stableProbabilities = useRef<Record<string, number>>({});
+  const [prefetched, setPrefetched] = useState<Record<string, boolean>>({});
+  const [generation, setGeneration] = useState(0);
   const logId = useRef(0);
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const prefetchedTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
 
-  const tileProbabilities = useMemo(() => {
-    const next: Record<string, number> = {};
-    for (const id of tileIds) {
-      next[id] = quantizeProbability(probabilities[id]?.probability ?? 0);
-    }
-    if (areRecordsEqual(stableProbabilities.current, next)) {
-      return stableProbabilities.current;
-    }
-    stableProbabilities.current = next;
-    return next;
-  }, [probabilities, tileIds]);
+  const recordIntent = useCallback((id: string) => {
+    logId.current += 1;
+    const entry: StreamEntry = {
+      key: logId.current,
+      time: new Date().toTimeString().slice(0, 8),
+      path: `/${id}`,
+    };
 
-  const evaluation = useMemo(
-    () => evaluateTiles(tileProbabilities, prevArmed.current, importance, cost),
-    // resetTick is not read — it only invalidates the memo after reset() clears prevArmed.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tileProbabilities, importance, cost, resetTick],
-  );
-
-  useEffect(() => {
-    prevArmed.current = evaluation.armed;
-    if (evaluation.fired.length === 0) return;
-
-    const stamp = new Date().toTimeString().slice(0, 8);
-    const newestFirst: StreamEntry[] = evaluation.fired
-      .map((fire) => {
-        logId.current += 1;
-        return {
-          key: logId.current,
-          time: stamp,
-          path: `/${fire.id}`,
-          probability: Math.round(fire.probability * 100),
-        };
-      })
-      .reverse();
-
-    setFired((count) => count + newestFirst.length);
-    setLog((previous) => [...newestFirst, ...previous].slice(0, logCap));
-    setToast({ path: newestFirst[0].path });
+    setFired((count) => count + 1);
+    setLog((previous) => [entry, ...previous].slice(0, logCap));
+    setPrefetched((previous) => ({ ...previous, [id]: true }));
+    clearTimeout(prefetchedTimers.current.get(id));
+    prefetchedTimers.current.set(id, setTimeout(() => {
+      setPrefetched((previous) => {
+        if (!previous[id]) return previous;
+        const next = { ...previous };
+        delete next[id];
+        return next;
+      });
+      prefetchedTimers.current.delete(id);
+    }, prefetchedMilliseconds));
+    setToast({ path: entry.path });
     clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToast(null), toastMilliseconds);
-  }, [evaluation]);
+  }, []);
 
-  useEffect(() => () => clearTimeout(toastTimer.current), []);
+  useEffect(() => () => {
+    clearTimeout(toastTimer.current);
+    for (const timer of prefetchedTimers.current.values()) clearTimeout(timer);
+    prefetchedTimers.current.clear();
+  }, []);
 
   const reset = () => {
     clearTimeout(toastTimer.current);
-    prevArmed.current = {};
+    for (const timer of prefetchedTimers.current.values()) clearTimeout(timer);
+    prefetchedTimers.current.clear();
     setFired(0);
     setLog([]);
     setToast(null);
-    setResetTick((tick) => tick + 1);
+    setPrefetched({});
+    // Remounting the targets also clears the engine's per-target trigger lock.
+    setGeneration((current) => current + 1);
   };
 
   return {
     fired,
     log,
     toast,
-    armed: evaluation.armed,
-    utilities: evaluation.utilities,
-    probabilities: tileProbabilities,
+    prefetched,
     importance,
     cost,
+    generation,
     setImportance,
     setCost,
+    recordIntent,
     reset,
   };
 };

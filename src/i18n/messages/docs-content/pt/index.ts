@@ -1,35 +1,34 @@
 import type { DocsContentText } from "@/content/docs/types";
-import { quickstart } from "./quickstart";
-import { installation } from "./installation";
-import { howItWorks } from "./how-it-works";
-import { importanceAndCost } from "./importance-and-cost";
-import { intentProvider } from "./intent-provider";
-import { intentLink } from "./intent-link";
-import { intentContext } from "./intent-context";
-import { applications } from "./applications";
-import { customComponents } from "./custom-components";
-import { beyondPrefetch } from "./beyond-prefetch";
-import { mobileBehavior } from "./mobile-behavior";
-import { typescript } from "./typescript";
-import { troubleshooting } from "./troubleshooting";
-import { changelog } from "./changelog";
+import type { PartialText } from "@/i18n/create-text-query";
 
-/** Portuguese docs prose, keyed by slug. */
-const pt: DocsContentText = {
-  quickstart,
-  installation,
-  "how-it-works": howItWorks,
-  "importance-and-cost": importanceAndCost,
-  "intent-provider": intentProvider,
-  "intent-link": intentLink,
-  "intent-context": intentContext,
-  "applications": applications,
-  "custom-components": customComponents,
-  "beyond-prefetch": beyondPrefetch,
-  "mobile-behavior": mobileBehavior,
-  typescript,
-  troubleshooting,
-  changelog,
+const pt: PartialText<DocsContentText> = {
+  quickstart: {
+    "toc.1-install": "Instalar", "toc.2-wrap": "Envolver o app", "toc.3-links": "Usar IntentLink", intro: "Adicione comportamento sensível à intenção ao seu app Next.js em três etapas.", installHeading: "1 · Instalar", wrapHeading: "2 · Envolver o app uma vez", wrapBody: "Adicione `IntentProvider` uma vez no layout raiz. Ele executa um único mecanismo de intenção compartilhado para tudo dentro dele.", linksHeading: "3 · Usar IntentLink", linksBody: "Use `IntentLink` como um link normal do Next.js e coloque em `onIntent` o trabalho que deve começar mais cedo.", closing: "Isso é tudo para a maioria dos apps. A biblioteca não faz prefetch sozinha; você decide o que `onIntent` faz.",
+  },
+  "how-it-works": {
+    "toc.observe": "Observar", "toc.decide": "Decidir", "toc.fire": "Executar o trabalho", "toc.devices": "Desktop e celular", "toc.physics": "A ideia da física", intro: "intent-link observa como o usuário se move pela página e estima de qual alvo visível ele está se aproximando. Quando o sinal é forte o bastante, chama a função `onIntent` desse alvo.", observeHeading: "1 · Observar o movimento", observeBody: "No desktop, ele lê o movimento do ponteiro. Em dispositivos de toque, lê a rolagem. Só desperta quando o usuário interage e volta a descansar quando o movimento para.", decideHeading: "2 · Decidir o alvo", decideBody: "O mecanismo compara o movimento do usuário com os alvos de intenção visíveis. Alvos fora da viewport não entram nos cálculos.", fireHeading: "3 · Executar o trabalho", fireBody: "Quando um alvo se torna provável o bastante, seu callback `onIntent` é executado uma vez. Ele pode ser executado novamente se o usuário se afastar e voltar depois.", devicesHeading: "Desktop e celular", "devices.desktop": "No desktop, o mecanismo acompanha o movimento bidimensional do ponteiro.", "devices.mobile": "No celular, acompanha a rolagem vertical e é ativado na primeira rolagem.", "devices.visible": "Alvos ocultos ou fora da tela são ignorados, inclusive elementos escondidos por CSS responsivo.", physicsHeading: "A ideia da física", physicsEnergy: "Imagine cada alvo como um pequeno poço de gravidade. O movimento cria **energia cinética**, e a distância até o alvo cria **energia potencial**. Um ponteiro ou uma rolagem rápida ainda tem impulso, enquanto um movimento lento perto de um alvo parece estar se acomodando ali. O mecanismo usa uma regra parecida com a termodinâmica para tratar esses destinos de baixa energia como escolhas mais prováveis.", physicsKalman: "Os dados de movimento do navegador contêm pequenos saltos e erros. Um **filtro de Kalman** suaviza esse ruído antes do cálculo físico. Em termos simples, ele ajuda a separar movimento intencional de medições instáveis. Tudo isso fica dentro da biblioteca; seu app só recebe `onIntent`.", paperNote: "[Leia o artigo de pesquisa](https://intentlink.dev/paper). Este é um link provisório até a publicação na ACM.",
+  },
+  "intent-provider": {
+    "toc.usage": "Uso", "toc.notes": "Observações", intro: "Adicione `IntentProvider` uma vez perto da raiz do app. Ele executa o mecanismo de intenção compartilhado para `IntentLink` e `useIntentTarget`.", usageHeading: "Uso", notesHeading: "Observações", "notes.once": "Use apenas um provider por app. Não os aninhe.", "notes.props": "Ele só precisa de `children`; não há outras configurações.", "notes.client": "Ele contém sua própria fronteira de cliente, então pode ser importado diretamente de um layout servidor do Next.js.",
+  },
+  "intent-link": {
+    "toc.props": "Props", "toc.onintent": "onIntent", "toc.tuning": "importance e cost", "toc.example": "Exemplo", intro: "Use `IntentLink` onde normalmente usaria o `Link` do Next.js. Adicione a `onIntent` o trabalho que deve começar antes do clique.", propsHeading: "Props", "col.prop": "Prop", "col.type": "Tipo", "col.default": "Padrão", "col.description": "Descrição", "prop.href": "Obrigatório. Igual ao Link do Next.js.", "prop.importance": "Quão fácil deve ser iniciar o trabalho.", "prop.cost": "Quão cautelosa deve ser a previsão.", "prop.onIntent": "Chamado uma vez quando o usuário provavelmente escolherá este link.", "prop.rest": "Qualquer prop de Link do Next.js ou de âncora, incluindo className, style e ref.", prefetchNote: "`IntentLink` desativa o prefetch automático do Next.js. Para prefetch preditivo, chame `router.prefetch()` dentro de `onIntent`.", onIntentHeading: "onIntent", onIntentBody: "O callback não recebe argumentos nem retorna um valor. Ele é executado uma vez por aproximação e pode ser rearmado quando o usuário se afasta.", tuningHeading: "importance e cost", tuningBody: "Essas configurações são opcionais. A maioria dos apps deve manter os valores padrão.", "tuning.importance": "`importance` controla a facilidade para iniciar o trabalho. Padrão: `medium`.", "tuning.cost": "`cost` controla o cuidado da previsão. Padrão: `low`.", "tuning.defaults": "Só altere esses valores depois de testar o trabalho real no desktop e no celular.", exampleHeading: "Exemplo",
+  },
+  "use-intent-target": {
+    "toc.button": "Uso básico", "toc.options": "Opções", "toc.third-party": "Componentes de terceiros", intro: "`useIntentTarget` adiciona detecção de intenção a um botão, cartão ou qualquer outro elemento HTML. Anexe a ref retornada ao elemento que deseja observar.", buttonHeading: "Uso básico", buttonBody: "Chame o hook em um componente cliente e anexe a ref retornada a um elemento HTML.", optionsHeading: "Opções", "options.onIntent": "`onIntent`: o trabalho executado quando o elemento se torna um alvo provável.", "options.importance": "`importance`: `high`, `medium` ou `low`, opcional. Padrão: `medium`.", "options.cost": "`cost`: `high`, `medium` ou `low`, opcional. Padrão: `low`.", thirdPartyHeading: "Componentes de terceiros", thirdPartyBody: "Se o componente encaminha a ref para um elemento HTML real, anexe-a diretamente.", wrapperBody: "Se ele não encaminha refs, envolva-o em um elemento nativo e anexe a ref ao envoltório.",
+  },
+  "custom-intent-components": {
+    "toc.intent-button": "IntentButton", "toc.intent-button-usage": "Uso", "toc.intent-article": "IntentArticle", "toc.intent-article-usage": "Uso", intro: "Se você tem muitos alvos do mesmo tipo, envolva `useIntentTarget` uma vez e reutilize o componente resultante.", buttonHeading: "Um IntentButton reutilizável", buttonBody: "Ele aceita props normais de botão, além de `onIntent`, `importance` e `cost`.", articleHeading: "Um IntentArticle reutilizável", articleBody: "O mesmo padrão funciona para cartões de produto ou outros contêineres semânticos.", usageHeading: "Uso",
+  },
+  examples: {
+    "toc.route": "Prefetch de rota", "toc.data": "Preparar dados", "toc.asset": "Pré-carregar imagem", "toc.action": "Preparar componente", intro: "Use `onIntent` para iniciar trabalhos de preparação seguros e repetíveis. Ações irreversíveis, como comprar, enviar uma mensagem ou submeter um formulário, devem esperar pelo clique real.", routeHeading: "Prefetch de rota", routeBody: "O caso de uso mais comum no Next.js.", dataHeading: "Preparar dados", dataBody: "Coloque no cache da sua biblioteca de dados as informações necessárias para a próxima tela.", assetHeading: "Pré-carregar imagem", assetBody: "Comece a carregar um recurso grande antes da navegação.", actionHeading: "Preparar componente", actionBody: "Use `useIntentTarget` quando o alvo não for um link.",
+  },
+  troubleshooting: {
+    "toc.nothing": "Nada acontece", "toc.prefetch": "Prefetch inesperado", "toc.custom": "Ref de componente personalizado", "toc.mobile": "Teste no celular", "toc.development": "Modo de desenvolvimento", nothingHeading: "onIntent não é executado", "nothing.provider": "Existe um `IntentProvider` acima desses links?", "nothing.callback": "O alvo tem um callback `onIntent`? Alvos sem callback não são registrados.", "nothing.input": "Mova o ponteiro no desktop ou role no celular. O mecanismo fica em repouso até a primeira interação.", "nothing.size": "Confirme que o alvo está visível e tem largura e altura reais.", "nothing.wiring": "Tente temporariamente `importance=\"high\"` e `cost=\"low\"` para conferir a ligação e depois volte aos padrões.", prefetchHeading: "Uma rota é carregada sem onIntent", prefetchBody: "Procure outro `Link` do Next.js apontando para a mesma rota, inclusive links ocultos em layouts responsivos. Procure também chamadas diretas a `router.prefetch()`.", customHeading: "Um componente personalizado não funciona", customBody: "O componente precisa encaminhar sua ref para um elemento HTML real. Caso contrário, anexe a ref de intenção a um envoltório nativo, como uma `div`.", mobileHeading: "Testar no celular", mobileBody: "Use um dispositivo de toque real ou ative a emulação de toque nas ferramentas do navegador e depois role. Apenas estreitar uma janela de desktop pode não ativar o comportamento móvel.", developmentHeading: "Desenvolvimento e produção", developmentBody: "Verifique o comportamento importante em um build de produção. As verificações de desenvolvimento do React e as ferramentas do framework podem fazer callbacks ou requisições parecerem diferentes da produção.",
+  },
+  changelog: {
+    "toc.v1013": "1.0.13", v1013Heading: "1.0.13 (atual)", "v1013.api": "Adiciona `useIntentTarget` para botões, cartões e componentes de terceiros.", "v1013.visibility": "Somente alvos visíveis participam do trabalho de previsão.", "v1013.behavior": "`onIntent` agora é um callback void simples, e o estado interno da previsão não faz mais parte da API pública.", "v1013.performance": "Melhora o registro, a renderização e o desempenho em páginas com muitos alvos.", history: "Veja o [histórico completo de versões](https://www.npmjs.com/package/intent-link?activeTab=versions) no npm.",
+  },
 };
 
 export { pt };

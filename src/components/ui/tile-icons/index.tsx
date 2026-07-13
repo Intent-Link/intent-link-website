@@ -12,6 +12,12 @@ import { OuterwearIcon } from "./outerwear-icon";
 import { BeautyIcon } from "./beauty-icon";
 import { HomeIcon } from "./home-icon";
 import { SaleIcon } from "./sale-icon";
+import { ElectronicsIcon } from "./electronics-icon";
+import { WatchesIcon } from "./watches-icon";
+import { JewelryIcon } from "./jewelry-icon";
+import { FurnitureIcon } from "./furniture-icon";
+import { GiftsIcon } from "./gifts-icon";
+import { TravelIcon } from "./travel-icon";
 
 /** Registry mapping each `TileCategory` to its icon component — keyed off the
  * same const map as everywhere else, so adding/renaming a category can't
@@ -29,6 +35,12 @@ const tileIcons: Record<TileCategory, (props: TileIconProps) => React.JSX.Elemen
   [tileCategory.beauty]: BeautyIcon,
   [tileCategory.home]: HomeIcon,
   [tileCategory.sale]: SaleIcon,
+  [tileCategory.electronics]: ElectronicsIcon,
+  [tileCategory.watches]: WatchesIcon,
+  [tileCategory.jewelry]: JewelryIcon,
+  [tileCategory.furniture]: FurnitureIcon,
+  [tileCategory.gifts]: GiftsIcon,
+  [tileCategory.travel]: TravelIcon,
 };
 
 export { tileIcons };

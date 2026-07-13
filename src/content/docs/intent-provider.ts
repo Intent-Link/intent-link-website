@@ -1,7 +1,18 @@
 import { blockKind, type DocContent } from "./types";
 import { codeLanguage } from "@/utils/syntax-highlight";
 
-const usageSnippet = `<IntentProvider>{children}</IntentProvider>`;
+const usageSnippet = `// app/layout.tsx
+import { IntentProvider } from "intent-link"
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <IntentProvider>{children}</IntentProvider>
+      </body>
+    </html>
+  )
+}`;
 
 const intentProvider: DocContent = {
   slug: "intent-provider",
@@ -12,7 +23,11 @@ const intentProvider: DocContent = {
     { kind: blockKind.code, language: codeLanguage.tsx, code: usageSnippet },
 
     { kind: blockKind.heading, level: 2, id: "notes", textKey: "notesHeading" },
-    { kind: blockKind.list, ordered: false, itemKeys: ["notes.client", "notes.provides"] },
+    {
+      kind: blockKind.list,
+      ordered: false,
+      itemKeys: ["notes.once", "notes.props", "notes.client"],
+    },
   ],
 };
 

@@ -22,6 +22,7 @@ const CodeBlock = ({ code, language = codeLanguage.text, showCopy = true, classN
 
   return (
     <div
+      dir="ltr"
       className={cn(
         "group relative overflow-hidden rounded-[10px] border border-black/20 bg-term-bg",
         className,
@@ -30,11 +31,10 @@ const CodeBlock = ({ code, language = codeLanguage.text, showCopy = true, classN
       {showCopy && (
         <CopyButton
           value={code}
-          label="copy"
           className="absolute right-2.5 top-2.5 z-10 rounded-md border border-white/[0.18] bg-white/[0.08] px-2.5 py-1 text-[11px] text-[#c7d0e0] transition-colors hover:text-term-ink"
         />
       )}
-      <pre className="overflow-x-auto px-[22px] py-5 font-mono text-[13px] leading-[1.75] text-term-ink [tab-size:2]">
+      <pre className="overflow-x-auto px-[22px] py-5 text-left font-mono text-[13px] leading-[1.75] text-term-ink [tab-size:2]">
         <code>
           {tokens.map((token, tokenIndex) => (
             <Fragment key={tokenIndex}>

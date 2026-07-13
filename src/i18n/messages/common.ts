@@ -12,7 +12,7 @@ const en = {
     github: "GitHub",
   },
   footer: {
-    tagline: "Predict the target before the click. MIT-licensed. Motion stays on the device.",
+    tagline: "Predict the target before the click. MIT-licensed.",
     groupTitles: {
       docs: "Docs",
       resources: "Resources",
@@ -20,7 +20,6 @@ const en = {
     },
     links: {
       quickstart: "Quickstart",
-      installation: "Installation",
       api: "API Reference",
       guides: "Guides",
       github: "GitHub",
@@ -28,10 +27,8 @@ const en = {
       changelog: "Changelog",
       license: "License (MIT)",
       llmsText: "llms.txt",
-      llmsFullText: "llms-full.txt",
     },
-    copyForLlm: "Copy for LLM",
-    builtLine: "Built with predictive prefetch. The docs feel it too.",
+    builtLine: "Website built with Intent Link prefetch",
     copyright: (name: string) => `© 2026 ${name} · MIT`,
   },
   actions: {

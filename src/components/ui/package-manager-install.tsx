@@ -24,7 +24,7 @@ const PackageManagerInstall = ({ className }: PackageManagerInstallProps) => {
   const command = installCommands[selected];
 
   return (
-    <div className={className}>
+    <div dir="ltr" className={cn("text-left", className)}>
       <div className="flex gap-0.5">
         {packageManagers.map((manager) => {
           const isActive = manager === selected;

@@ -11,7 +11,7 @@ const Toast = ({ children, className }: ToastProps) => (
   <div
     role="status"
     className={cn(
-      "animate-[il-toast-in_.24s_cubic-bezier(0.34,1.56,0.5,1)] rounded-md border border-line bg-surface px-3 py-2 text-sm",
+      "rounded-md border border-line bg-surface px-3 py-2 text-sm sm:animate-[il-toast-in_.24s_cubic-bezier(0.34,1.56,0.5,1)]",
       className,
     )}
   >

@@ -11,12 +11,11 @@ const appRoutes = {
   home: "/",
   docs: "/docs",
   llmsText: "/llms.txt",
-  llmsFullText: "/llms-full.txt",
   docsSlug: (slug: string) => `/docs/${slug}`,
 } as const;
 
-/** Routes served outside the [locale] tree (LLM feeds) — never locale-prefixed. */
-const localeFreePaths: readonly string[] = [appRoutes.llmsText, appRoutes.llmsFullText];
+/** Routes served outside the [locale] tree (LLM feed) — never locale-prefixed. */
+const localeFreePaths: readonly string[] = [appRoutes.llmsText];
 
 /** True for plain-document routes (LLM feeds) that must not be locale-prefixed or client-prefetched. */
 const isLocaleFreePath = (path: string): boolean => localeFreePaths.includes(path);

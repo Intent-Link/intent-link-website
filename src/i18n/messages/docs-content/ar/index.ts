@@ -1,35 +1,34 @@
 import type { DocsContentText } from "@/content/docs/types";
-import { quickstart } from "./quickstart";
-import { installation } from "./installation";
-import { howItWorks } from "./how-it-works";
-import { importanceAndCost } from "./importance-and-cost";
-import { intentProvider } from "./intent-provider";
-import { intentLink } from "./intent-link";
-import { intentContext } from "./intent-context";
-import { applications } from "./applications";
-import { customComponents } from "./custom-components";
-import { beyondPrefetch } from "./beyond-prefetch";
-import { mobileBehavior } from "./mobile-behavior";
-import { typescript } from "./typescript";
-import { troubleshooting } from "./troubleshooting";
-import { changelog } from "./changelog";
+import type { PartialText } from "@/i18n/create-text-query";
 
-/** Arabic docs prose, keyed by slug. */
-const ar: DocsContentText = {
-  quickstart,
-  installation,
-  "how-it-works": howItWorks,
-  "importance-and-cost": importanceAndCost,
-  "intent-provider": intentProvider,
-  "intent-link": intentLink,
-  "intent-context": intentContext,
-  "applications": applications,
-  "custom-components": customComponents,
-  "beyond-prefetch": beyondPrefetch,
-  "mobile-behavior": mobileBehavior,
-  typescript,
-  troubleshooting,
-  changelog,
+const ar: PartialText<DocsContentText> = {
+  quickstart: {
+    "toc.1-install": "التثبيت", "toc.2-wrap": "إحاطة التطبيق", "toc.3-links": "استخدام IntentLink", intro: "أضف استشعار نية المستخدم إلى تطبيق Next.js في ثلاث خطوات.", installHeading: "1 · التثبيت", wrapHeading: "2 · أحط التطبيق مرة واحدة", wrapBody: "أضف `IntentProvider` مرة واحدة في التخطيط الجذري. سيشغّل محرك نية واحداً ومشتركاً لكل ما بداخله.", linksHeading: "3 · استخدم IntentLink", linksBody: "استخدم `IntentLink` مثل رابط Next.js عادي، وضع العمل الذي تريد بدءه مبكراً داخل `onIntent`.", closing: "هذا كل ما تحتاجه معظم التطبيقات. لا تجلب المكتبة الصفحات مسبقاً من تلقاء نفسها؛ أنت تحدد ما يفعله `onIntent`.",
+  },
+  "how-it-works": {
+    "toc.observe": "الملاحظة", "toc.decide": "التحديد", "toc.fire": "تشغيل العمل", "toc.devices": "سطح المكتب والهاتف", "toc.physics": "فكرة الفيزياء", intro: "تراقب intent-link حركة المستخدم في الصفحة وتقدّر أي هدف ظاهر يقترب منه. عندما تصبح الإشارة قوية بما يكفي، تستدعي دالة `onIntent` لذلك الهدف.", observeHeading: "1 · ملاحظة الحركة", observeBody: "تقرأ حركة المؤشر على سطح المكتب، والتمرير على أجهزة اللمس. لا تستيقظ إلا عندما يتفاعل المستخدم، ثم تعود إلى السكون عندما تتوقف الحركة.", decideHeading: "2 · تحديد الهدف", decideBody: "يقارن المحرك حركة المستخدم بأهداف النية الظاهرة. لا تدخل الأهداف الواقعة خارج إطار العرض في الحسابات.", fireHeading: "3 · تشغيل العمل", fireBody: "عندما يصبح اختيار هدف ما مرجحاً بما يكفي، يُشغّل رد النداء `onIntent` الخاص به مرة واحدة. ويمكن تشغيله من جديد إذا ابتعد المستخدم ثم اقترب لاحقاً.", devicesHeading: "سطح المكتب والهاتف", "devices.desktop": "يتتبع المحرك حركة المؤشر في بُعدين على سطح المكتب.", "devices.mobile": "يتتبع التمرير العمودي على الهاتف، ويبدأ عند أول تمرير.", "devices.visible": "يتم تجاهل الأهداف المخفية أو الموجودة خارج الشاشة، بما فيها العناصر التي يخفيها CSS المتجاوب.", physicsHeading: "فكرة الفيزياء", physicsEnergy: "تخيل كل هدف كأنه بئر جاذبية صغير. تصنع الحركة **طاقة حركية**، وتصنع المسافة إلى الهدف **طاقة وضع**. لا يزال للمؤشر أو التمرير السريع زخم للحركة، بينما تبدو الحركة البطيئة قرب هدف كأنها تستقر عنده. يستخدم المحرك قاعدة شبيهة بالديناميكا الحرارية ليعدّ هذه الوجهات منخفضة الطاقة اختيارات أكثر احتمالاً.", physicsKalman: "تحتوي بيانات الحركة في المتصفح على قفزات وأخطاء صغيرة. يعمل **مرشح كالمان** على تنعيم هذا التشويش قبل الحساب الفيزيائي. ببساطة، يساعد على التفريق بين الحركة المقصودة والقياسات غير المستقرة. يحدث كل هذا داخل المكتبة، ولا يرى تطبيقك سوى `onIntent`.", paperNote: "[اقرأ الورقة البحثية](https://intentlink.dev/paper). هذا رابط مؤقت إلى أن تُنشر الورقة في ACM.",
+  },
+  "intent-provider": {
+    "toc.usage": "الاستخدام", "toc.notes": "ملاحظات", intro: "أضف `IntentProvider` مرة واحدة قرب جذر التطبيق. فهو يشغّل محرك النية المشترك لـ `IntentLink` و`useIntentTarget`.", usageHeading: "الاستخدام", notesHeading: "ملاحظات", "notes.once": "استخدم provider واحداً فقط لكل تطبيق، ولا تضعها داخل بعضها.", "notes.props": "يحتاج إلى `children` فقط، ولا توجد إعدادات أخرى.", "notes.client": "يحتوي على حد العميل الخاص به، لذلك يمكنك استيراده مباشرة من تخطيط خادم Next.js.",
+  },
+  "intent-link": {
+    "toc.props": "الخصائص", "toc.onintent": "onIntent", "toc.tuning": "importance وcost", "toc.example": "مثال", intro: "استخدم `IntentLink` حيث تستخدم عادةً `Link` من Next.js. أضف إلى `onIntent` العمل الذي تريد بدءه قبل النقر.", propsHeading: "الخصائص", "col.prop": "الخاصية", "col.type": "النوع", "col.default": "الافتراضي", "col.description": "الوصف", "prop.href": "مطلوبة. مماثلة لـ Link في Next.js.", "prop.importance": "مدى سهولة بدء العمل.", "prop.cost": "مدى حذر التنبؤ.", "prop.onIntent": "تُستدعى مرة واحدة عندما يُرجح أن يختار المستخدم هذا الرابط.", "prop.rest": "أي خاصية لرابط Next.js أو لعنصر الرابط، بما فيها className وstyle وref.", prefetchNote: "يعطّل `IntentLink` الجلب المسبق التلقائي في Next.js. للجلب المسبق التنبؤي، استدعِ `router.prefetch()` داخل `onIntent`.", onIntentHeading: "onIntent", onIntentBody: "لا يستقبل رد النداء أي معاملات ولا يعيد قيمة. يُشغّل مرة واحدة لكل اقتراب، ويصبح جاهزاً من جديد عندما يبتعد المستخدم.", tuningHeading: "importance وcost", tuningBody: "هذه الإعدادات اختيارية. ينبغي لمعظم التطبيقات الإبقاء على القيم الافتراضية.", "tuning.importance": "تتحكم `importance` في سهولة بدء العمل. القيمة الافتراضية: `medium`.", "tuning.cost": "تتحكم `cost` في مدى حذر التنبؤ. القيمة الافتراضية: `low`.", "tuning.defaults": "لا تغيّر هذه القيم إلا بعد اختبار العمل الحقيقي على سطح المكتب والهاتف.", exampleHeading: "مثال",
+  },
+  "use-intent-target": {
+    "toc.button": "الاستخدام الأساسي", "toc.options": "الخيارات", "toc.third-party": "مكوّنات الطرف الثالث", intro: "يضيف `useIntentTarget` استشعار النية إلى زر أو بطاقة أو أي عنصر HTML آخر. اربط ref المُعاد بالعنصر الذي تريد مراقبته.", buttonHeading: "الاستخدام الأساسي", buttonBody: "استدعِ hook داخل مكوّن عميل، واربط ref المُعاد بعنصر HTML واحد.", optionsHeading: "الخيارات", "options.onIntent": "`onIntent`: العمل الذي يُشغّل عندما يصبح العنصر هدفاً مرجحاً.", "options.importance": "`importance`: قيمة اختيارية من `high` أو `medium` أو `low`. الافتراضي: `medium`.", "options.cost": "`cost`: قيمة اختيارية من `high` أو `medium` أو `low`. الافتراضي: `low`.", thirdPartyHeading: "مكوّنات الطرف الثالث", thirdPartyBody: "إذا كان المكوّن يمرر ref إلى عنصر HTML حقيقي، فاربطه مباشرة.", wrapperBody: "إذا كان لا يمرر refs، فأحطه بعنصر أصلي واربط ref بالعنصر المحيط.",
+  },
+  "custom-intent-components": {
+    "toc.intent-button": "IntentButton", "toc.intent-button-usage": "الاستخدام", "toc.intent-article": "IntentArticle", "toc.intent-article-usage": "الاستخدام", intro: "إذا كان لديك كثير من الأهداف من النوع نفسه، فغلّف `useIntentTarget` مرة واحدة ثم أعد استخدام المكوّن الناتج.", buttonHeading: "IntentButton قابل لإعادة الاستخدام", buttonBody: "يقبل خصائص الزر العادية بالإضافة إلى `onIntent` و`importance` و`cost`.", articleHeading: "IntentArticle قابل لإعادة الاستخدام", articleBody: "يصلح النمط نفسه لبطاقات المنتجات أو الحاويات ذات المعنى.", usageHeading: "الاستخدام",
+  },
+  examples: {
+    "toc.route": "جلب المسار مسبقاً", "toc.data": "تحضير البيانات", "toc.asset": "تحميل صورة مسبقاً", "toc.action": "تحضير مكوّن", intro: "استخدم `onIntent` لبدء أعمال تحضير آمنة وقابلة للتكرار. يجب أن تنتظر الأفعال غير القابلة للتراجع، مثل الشراء أو إرسال رسالة أو نموذج، إلى أن ينقر المستخدم فعلياً.", routeHeading: "جلب المسار مسبقاً", routeBody: "حالة الاستخدام الأكثر شيوعاً في Next.js.", dataHeading: "تحضير البيانات", dataBody: "ضع المعلومات التي تحتاجها الشاشة التالية في ذاكرة التخزين المؤقت لمكتبة البيانات.", assetHeading: "تحميل صورة مسبقاً", assetBody: "ابدأ تحميل مورد كبير قبل الانتقال.", actionHeading: "تحضير مكوّن", actionBody: "استخدم `useIntentTarget` عندما لا يكون الهدف رابطاً.",
+  },
+  troubleshooting: {
+    "toc.nothing": "لا يحدث شيء", "toc.prefetch": "جلب مسبق غير متوقع", "toc.custom": "ref لمكوّن مخصص", "toc.mobile": "الاختبار على الهاتف", "toc.development": "وضع التطوير", nothingHeading: "لا يعمل onIntent", "nothing.provider": "هل يوجد `IntentProvider` أعلى هذه الروابط؟", "nothing.callback": "هل لدى الهدف رد نداء `onIntent`؟ لا تُسجّل الأهداف التي لا تملك رد نداء.", "nothing.input": "حرّك المؤشر على سطح المكتب أو مرّر على الهاتف. يبقى المحرك ساكناً حتى أول تفاعل.", "nothing.size": "تأكد أن الهدف ظاهر وله عرض وارتفاع حقيقيان.", "nothing.wiring": "جرّب مؤقتاً `importance=\"high\"` و`cost=\"low\"` للتحقق من الربط، ثم أعد القيم الافتراضية.", prefetchHeading: "يُجلب مسار من دون onIntent", prefetchBody: "ابحث عن `Link` آخر من Next.js يشير إلى المسار نفسه، بما في ذلك الروابط المخفية في التخطيطات المتجاوبة. وابحث أيضاً عن استدعاءات مباشرة لـ `router.prefetch()`.", customHeading: "المكوّن المخصص لا يعمل", customBody: "يجب أن يمرر المكوّن ref إلى عنصر HTML حقيقي. إن لم يفعل، فاربط ref الخاص بالنية بعنصر أصلي محيط مثل `div`.", mobileHeading: "الاختبار على الهاتف", mobileBody: "استخدم جهاز لمس حقيقياً، أو فعّل محاكاة اللمس في أدوات المطور ثم مرّر. قد لا يؤدي مجرد تضييق نافذة سطح المكتب إلى تشغيل سلوك الهاتف.", developmentHeading: "التطوير والإنتاج", developmentBody: "تحقق من السلوك المهم في بناء الإنتاج أيضاً. قد تجعل فحوصات React في التطوير وأدوات إطار العمل ردود النداء أو طلبات الشبكة تبدو مختلفة عن الإنتاج.",
+  },
+  changelog: {
+    "toc.v1013": "1.0.13", v1013Heading: "1.0.13 (الحالي)", "v1013.api": "إضافة `useIntentTarget` للأزرار والبطاقات ومكوّنات الطرف الثالث.", "v1013.visibility": "لا تشارك في التنبؤ إلا الأهداف الظاهرة.", "v1013.behavior": "أصبح `onIntent` رد نداء void بسيطاً، ولم تعد حالة التنبؤ الداخلية جزءاً من API العامة.", "v1013.performance": "تحسين التسجيل والعرض والأداء في الصفحات التي تحتوي على أهداف كثيرة.", history: "شاهد [سجل الإصدارات الكامل](https://www.npmjs.com/package/intent-link?activeTab=versions) على npm.",
+  },
 };
 
 export { ar };

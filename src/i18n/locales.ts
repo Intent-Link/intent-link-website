@@ -3,7 +3,7 @@
  * source of truth for the language picker and for validating a stored locale.
  */
 
-const locales = ["en", "es", "fr", "de", "ja", "zh", "ko", "pt", "ru", "ar"] as const;
+const locales = ["en", "es", "fr", "de", "it", "pt", "tr", "ru", "ar", "zh", "ja", "ko"] as const;
 
 type Locale = (typeof locales)[number];
 
@@ -15,6 +15,8 @@ const localeNames: Record<Locale, string> = {
   es: "Español",
   fr: "Français",
   de: "Deutsch",
+  it: "Italiano",
+  tr: "Türkçe",
   ja: "日本語",
   zh: "中文",
   ko: "한국어",
@@ -22,6 +24,9 @@ const localeNames: Record<Locale, string> = {
   ru: "Русский",
   ar: "العربية",
 };
+
+/** Stores an explicit language choice made in the language picker. */
+const localeCookieName = "intent-link-locale";
 
 /** Locales that render right-to-left. */
 const rtlLocales: readonly Locale[] = ["ar"];
@@ -36,5 +41,5 @@ const isLocale = (value: unknown): value is Locale => {
   return typeof value === "string" && (locales as readonly string[]).includes(value);
 };
 
-export { locales, defaultLocale, localeNames, getTextDirection, isLocale };
+export { locales, defaultLocale, localeNames, localeCookieName, getTextDirection, isLocale };
 export type { Locale };

@@ -1,7 +1,6 @@
 import { LanguageDropdown } from "@/components/ui/language-dropdown";
 import { PrefetchLink } from "@/components/ui/prefetch-link";
-import { CopyButton } from "@/components/ui/copy-button";
-import { footerGroups, llmCopyText, site } from "@/constants/site";
+import { footerGroups, site } from "@/constants/site";
 import { isLocaleFreePath, localePath } from "@/constants/routes";
 import type { Locale } from "@/i18n/locales";
 import { getCommonText } from "@/i18n/messages/common";
@@ -51,13 +50,6 @@ const Footer = ({ locale }: FooterProps) => {
                   </LinkComponent>
                 );
               })}
-              {group.id === "forAi" && (
-                <CopyButton
-                  value={llmCopyText}
-                  label={text.footer.copyForLlm}
-                  className="text-left font-sans text-[13.5px] font-normal text-ink-2"
-                />
-              )}
             </div>
           </div>
         ))}

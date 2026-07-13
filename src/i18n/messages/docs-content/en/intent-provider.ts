@@ -3,11 +3,12 @@ import type { DocText } from "@/content/docs/types";
 const intentProvider: DocText = {
   "toc.usage": "Usage",
   "toc.notes": "Notes",
-  "intro": "Context provider that runs the prediction engine. Mount it **once** in your `app/layout.jsx`. Everything inside can use `IntentLink` or read `IntentContext` directly. It takes **no props**.",
+  "intro": "Mount `IntentProvider` once near the root of your application. It runs the shared intent engine for `IntentLink` and `useIntentTarget`.",
   "usageHeading": "Usage",
   "notesHeading": "Notes",
-  "notes.client": "It ships its own `\"use client\"` directive, so it works directly inside a server layout — you don't need to wrap it.",
-  "notes.provides": "It provides `probabilities`, `registerLink`, and `unregisterLink` to descendants via `IntentContext`.",
+  "notes.once": "Use one provider for the application. Do not nest providers.",
+  "notes.props": "It only needs `children`; there is nothing else to configure.",
+  "notes.client": "It already includes its client boundary, so it can be imported by a Next.js server layout.",
 };
 
 export { intentProvider };

@@ -8,17 +8,12 @@ import { appRoutes } from "./routes";
 /** Every doc slug, as a tuple so the union is exhaustively typed. */
 const docSlugTuple = [
   "quickstart",
-  "installation",
   "how-it-works",
-  "importance-and-cost",
   "intent-provider",
   "intent-link",
-  "intent-context",
-  "applications",
-  "custom-components",
-  "beyond-prefetch",
-  "mobile-behavior",
-  "typescript",
+  "use-intent-target",
+  "custom-intent-components",
+  "examples",
   "troubleshooting",
   "changelog",
 ] as const;
@@ -31,14 +26,13 @@ interface DocGroup {
 }
 
 const docsNav: DocGroup[] = [
-  { id: "gettingStarted", slugs: ["quickstart", "installation"] },
-  { id: "coreConcepts", slugs: ["how-it-works", "importance-and-cost"] },
-  { id: "apiReference", slugs: ["intent-provider", "intent-link", "intent-context"] },
+  { id: "gettingStarted", slugs: ["quickstart", "how-it-works"] },
   {
-    id: "guides",
-    slugs: ["applications", "custom-components", "beyond-prefetch", "mobile-behavior"],
+    id: "apiReference",
+    slugs: ["intent-provider", "intent-link", "use-intent-target", "custom-intent-components"],
   },
-  { id: "more", slugs: ["typescript", "troubleshooting", "changelog"] },
+  { id: "guides", slugs: ["examples", "troubleshooting"] },
+  { id: "more", slugs: ["changelog"] },
 ];
 
 /** Flat, ordered list of every doc slug — derived once. */

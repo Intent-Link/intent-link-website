@@ -4,6 +4,8 @@ import type { PartialText } from "@/i18n/create-text-query";
 import { es } from "./es";
 import { fr } from "./fr";
 import { de } from "./de";
+import { it } from "./it";
+import { tr } from "./tr";
 import { ja } from "./ja";
 import { zh } from "./zh";
 import { ko } from "./ko";
@@ -16,6 +18,8 @@ const docsContentLocales: Partial<Record<Locale, PartialText<DocsContentText>>> 
   es,
   fr,
   de,
+  it,
+  tr,
   ja,
   zh,
   ko,

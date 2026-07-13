@@ -1,35 +1,34 @@
 import type { DocsContentText } from "@/content/docs/types";
-import { quickstart } from "./quickstart";
-import { installation } from "./installation";
-import { howItWorks } from "./how-it-works";
-import { importanceAndCost } from "./importance-and-cost";
-import { intentProvider } from "./intent-provider";
-import { intentLink } from "./intent-link";
-import { intentContext } from "./intent-context";
-import { applications } from "./applications";
-import { customComponents } from "./custom-components";
-import { beyondPrefetch } from "./beyond-prefetch";
-import { mobileBehavior } from "./mobile-behavior";
-import { typescript } from "./typescript";
-import { troubleshooting } from "./troubleshooting";
-import { changelog } from "./changelog";
+import type { PartialText } from "@/i18n/create-text-query";
 
-/** Russian docs prose, keyed by slug. */
-const ru: DocsContentText = {
-  quickstart,
-  installation,
-  "how-it-works": howItWorks,
-  "importance-and-cost": importanceAndCost,
-  "intent-provider": intentProvider,
-  "intent-link": intentLink,
-  "intent-context": intentContext,
-  "applications": applications,
-  "custom-components": customComponents,
-  "beyond-prefetch": beyondPrefetch,
-  "mobile-behavior": mobileBehavior,
-  typescript,
-  troubleshooting,
-  changelog,
+const ru: PartialText<DocsContentText> = {
+  quickstart: {
+    "toc.1-install": "Установка", "toc.2-wrap": "Оберните приложение", "toc.3-links": "Используйте IntentLink", intro: "Добавьте распознавание намерения в приложение Next.js за три шага.", installHeading: "1 · Установка", wrapHeading: "2 · Оберните приложение один раз", wrapBody: "Один раз добавьте `IntentProvider` в корневой макет. Он запускает единый общий механизм намерения для всего содержимого.", linksHeading: "3 · Используйте IntentLink", linksBody: "Используйте `IntentLink` как обычную ссылку Next.js, а работу, которую нужно начать заранее, поместите в `onIntent`.", closing: "Для большинства приложений этого достаточно. Библиотека ничего не загружает сама — вы решаете, что делает `onIntent`.",
+  },
+  "how-it-works": {
+    "toc.observe": "Наблюдение", "toc.decide": "Выбор", "toc.fire": "Запуск работы", "toc.devices": "Компьютер и телефон", "toc.physics": "Идея из физики", intro: "intent-link наблюдает за движением пользователя по странице и оценивает, к какой видимой цели он приближается. Когда сигнал становится достаточно сильным, библиотека вызывает функцию `onIntent` этой цели.", observeHeading: "1 · Наблюдение за движением", observeBody: "На компьютере библиотека читает движение указателя, а на сенсорных устройствах — прокрутку. Она просыпается только при взаимодействии и снова отдыхает, когда движение прекращается.", decideHeading: "2 · Выбор цели", decideBody: "Механизм сравнивает движение пользователя с видимыми целями. Цели за пределами области просмотра не участвуют в расчётах.", fireHeading: "3 · Запуск работы", fireBody: "Когда выбор цели становится достаточно вероятным, её callback `onIntent` выполняется один раз. Он может сработать снова, если пользователь отдалится и позднее вернётся.", devicesHeading: "Компьютер и телефон", "devices.desktop": "На компьютере механизм отслеживает двумерное движение указателя.", "devices.mobile": "На телефоне он отслеживает вертикальную прокрутку и включается при первой прокрутке.", "devices.visible": "Скрытые и находящиеся за пределами экрана цели игнорируются, включая элементы, скрытые адаптивным CSS.", physicsHeading: "Идея из физики", physicsEnergy: "Представьте каждую цель как небольшую гравитационную впадину. Движение создаёт **кинетическую энергию**, а расстояние до цели — **потенциальную энергию**. Быстрый указатель или прокрутка ещё сохраняют импульс, а медленное движение рядом с целью похоже на остановку у неё. По правилу, похожему на термодинамику, механизм считает такие точки с низкой энергией более вероятным выбором.", physicsKalman: "В данных о движении браузера есть небольшие скачки и ошибки. **Фильтр Калмана** сглаживает этот шум перед физическим расчётом. Проще говоря, он помогает отличить намеренное движение от нестабильных измерений. Всё это происходит внутри библиотеки; приложение получает только `onIntent`.", paperNote: "[Прочитать исследовательскую работу](https://intentlink.dev/paper). Пока статья не опубликована в ACM, это временная ссылка.",
+  },
+  "intent-provider": {
+    "toc.usage": "Использование", "toc.notes": "Примечания", intro: "Один раз добавьте `IntentProvider` рядом с корнем приложения. Он запускает общий механизм намерения для `IntentLink` и `useIntentTarget`.", usageHeading: "Использование", notesHeading: "Примечания", "notes.once": "Используйте один provider на приложение и не вкладывайте их друг в друга.", "notes.props": "Ему нужен только `children`; других настроек нет.", "notes.client": "Он содержит собственную клиентскую границу, поэтому его можно импортировать прямо из серверного макета Next.js.",
+  },
+  "intent-link": {
+    "toc.props": "Props", "toc.onintent": "onIntent", "toc.tuning": "importance и cost", "toc.example": "Пример", intro: "Используйте `IntentLink` там, где обычно используется `Link` из Next.js. Добавьте в `onIntent` работу, которую нужно начать до клика.", propsHeading: "Props", "col.prop": "Prop", "col.type": "Тип", "col.default": "По умолчанию", "col.description": "Описание", "prop.href": "Обязательный. Такой же, как у Link из Next.js.", "prop.importance": "Насколько легко должна запускаться работа.", "prop.cost": "Насколько осторожным должен быть прогноз.", "prop.onIntent": "Вызывается один раз, когда пользователь, вероятно, выберет эту ссылку.", "prop.rest": "Любой prop ссылки Next.js или HTML-ссылки, включая className, style и ref.", prefetchNote: "`IntentLink` отключает автоматический prefetch Next.js. Для прогнозного prefetch вызовите `router.prefetch()` внутри `onIntent`.", onIntentHeading: "onIntent", onIntentBody: "Callback не принимает аргументы и не возвращает значение. Он выполняется один раз за каждое приближение и снова готов к запуску, когда пользователь отдаляется.", tuningHeading: "importance и cost", tuningBody: "Эти настройки необязательны. Большинству приложений стоит сохранить значения по умолчанию.", "tuning.importance": "`importance` определяет, насколько легко запускается работа. По умолчанию: `medium`.", "tuning.cost": "`cost` определяет осторожность прогноза. По умолчанию: `low`.", "tuning.defaults": "Меняйте значения только после проверки настоящей работы на компьютере и телефоне.", exampleHeading: "Пример",
+  },
+  "use-intent-target": {
+    "toc.button": "Основное использование", "toc.options": "Параметры", "toc.third-party": "Сторонние компоненты", intro: "`useIntentTarget` добавляет распознавание намерения к кнопке, карточке или любому HTML-элементу. Прикрепите возвращённый ref к элементу, за которым нужно наблюдать.", buttonHeading: "Основное использование", buttonBody: "Вызовите hook в клиентском компоненте и прикрепите возвращённый ref к одному HTML-элементу.", optionsHeading: "Параметры", "options.onIntent": "`onIntent`: работа, запускаемая, когда элемент становится вероятной целью.", "options.importance": "`importance`: необязательное значение `high`, `medium` или `low`. По умолчанию: `medium`.", "options.cost": "`cost`: необязательное значение `high`, `medium` или `low`. По умолчанию: `low`.", thirdPartyHeading: "Сторонние компоненты", thirdPartyBody: "Если компонент передаёт ref настоящему HTML-элементу, прикрепите его напрямую.", wrapperBody: "Если компонент не передаёт ref, оберните его нативным элементом и прикрепите ref к оболочке.",
+  },
+  "custom-intent-components": {
+    "toc.intent-button": "IntentButton", "toc.intent-button-usage": "Использование", "toc.intent-article": "IntentArticle", "toc.intent-article-usage": "Использование", intro: "Если у вас много однотипных целей, один раз оберните `useIntentTarget` и повторно используйте получившийся компонент.", buttonHeading: "Многократно используемый IntentButton", buttonBody: "Он принимает обычные props кнопки, а также `onIntent`, `importance` и `cost`.", articleHeading: "Многократно используемый IntentArticle", articleBody: "Тот же подход подходит карточкам товаров и другим смысловым контейнерам.", usageHeading: "Использование",
+  },
+  examples: {
+    "toc.route": "Предзагрузка маршрута", "toc.data": "Подготовка данных", "toc.asset": "Предзагрузка изображения", "toc.action": "Подготовка компонента", intro: "Используйте `onIntent` для безопасной и повторяемой подготовки. Необратимые действия — покупка, отправка сообщения или формы — должны ждать настоящего клика.", routeHeading: "Предзагрузка маршрута", routeBody: "Самый распространённый сценарий Next.js.", dataHeading: "Подготовка данных", dataBody: "Поместите информацию для следующего экрана в кэш библиотеки данных.", assetHeading: "Предзагрузка изображения", assetBody: "Начните загружать большой ресурс до перехода.", actionHeading: "Подготовка компонента", actionBody: "Если цель не является ссылкой, используйте `useIntentTarget`.",
+  },
+  troubleshooting: {
+    "toc.nothing": "Ничего не происходит", "toc.prefetch": "Неожиданная предзагрузка", "toc.custom": "Ref своего компонента", "toc.mobile": "Проверка на телефоне", "toc.development": "Режим разработки", nothingHeading: "onIntent не запускается", "nothing.provider": "Есть ли `IntentProvider` выше этих ссылок?", "nothing.callback": "Есть ли у цели callback `onIntent`? Цели без callback не регистрируются.", "nothing.input": "Двигайте указатель на компьютере или прокрутите страницу на телефоне. До первого взаимодействия механизм отдыхает.", "nothing.size": "Убедитесь, что цель видима и имеет настоящую ширину и высоту.", "nothing.wiring": "Временно задайте `importance=\"high\"` и `cost=\"low\"`, чтобы проверить подключение, а затем верните значения по умолчанию.", prefetchHeading: "Маршрут загружается без onIntent", prefetchBody: "Проверьте другие `Link` из Next.js, ведущие на тот же маршрут, включая скрытые ссылки в адаптивных макетах. Также найдите прямые вызовы `router.prefetch()`.", customHeading: "Свой компонент не работает", customBody: "Компонент должен передавать ref настоящему HTML-элементу. Иначе прикрепите ref намерения к нативной оболочке, например `div`.", mobileHeading: "Проверка на телефоне", mobileBody: "Используйте настоящее сенсорное устройство или включите эмуляцию касаний в инструментах браузера, а затем прокрутите страницу. Простое сужение окна на компьютере может не включить мобильное поведение.", developmentHeading: "Разработка и production", developmentBody: "Проверяйте важное поведение и в production-сборке. Проверки React в режиме разработки и инструменты фреймворка могут показывать callbacks или сетевые запросы иначе, чем в production.",
+  },
+  changelog: {
+    "toc.v1013": "1.0.13", v1013Heading: "1.0.13 (текущая)", "v1013.api": "Добавлен `useIntentTarget` для кнопок, карточек и сторонних компонентов.", "v1013.visibility": "В прогнозе участвуют только видимые цели.", "v1013.behavior": "`onIntent` теперь является простым void-callback, а внутреннее состояние прогноза больше не входит в публичный API.", "v1013.performance": "Улучшены регистрация, рендеринг и производительность страниц с большим числом целей.", history: "[Полная история версий](https://www.npmjs.com/package/intent-link?activeTab=versions) доступна на npm.",
+  },
 };
 
 export { ru };

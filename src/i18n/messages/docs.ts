@@ -6,57 +6,37 @@ import { pickNamespace } from "@/i18n/translations";
 const en = {
   groupTitles: {
     gettingStarted: "Getting Started",
-    coreConcepts: "Core Concepts",
     apiReference: "API Reference",
     guides: "Guides",
     more: "More",
   },
   pageTitles: {
     quickstart: "Quickstart",
-    installation: "Installation",
     "how-it-works": "How it works",
-    "importance-and-cost": "Importance & cost",
     "intent-provider": "IntentProvider",
     "intent-link": "IntentLink",
-    "intent-context": "IntentContext",
-    "applications": "Applications",
-    "custom-components": "Custom components",
-    "beyond-prefetch": "Beyond prefetch",
-    "mobile-behavior": "Mobile behavior",
-    typescript: "TypeScript",
+    "use-intent-target": "useIntentTarget",
+    "custom-intent-components": "Custom Intent Components",
+    examples: "Examples",
     troubleshooting: "Troubleshooting",
     changelog: "Changelog",
-  },
-  /** On-page H1s that are fuller than the sidebar label; other slugs use the page title. */
-  headings: {
-    "importance-and-cost": "Tuning: importance & cost",
-    "custom-components": "Custom target-aware components",
   },
   /** Per-page <meta description> copy, one concise sentence per doc slug. */
   descriptions: {
     quickstart:
       "Install intent-link, mount IntentProvider, and swap in IntentLink to get predictive prefetch working in a few minutes.",
-    installation:
-      "Install intent-link with npm, pnpm, or yarn, and mount IntentProvider in your App Router layout.",
     "how-it-works":
-      "How intent-link models pointer motion as a physical system and scores every registered target into a live probability.",
-    "importance-and-cost":
-      "Tune the importance and cost props to control how early and how confidently onIntent fires for each target.",
+      "How intent-link observes movement, considers visible targets, and calls onIntent before a click.",
     "intent-provider":
       "IntentProvider API reference: the context provider that runs intent-link's prediction engine at the root of your app.",
     "intent-link":
       "IntentLink API reference: a prediction-aware drop-in replacement for next/link with importance, cost, and onIntent props.",
-    "intent-context":
-      "IntentContext API reference: read the raw probability stream and register custom elements for target prediction.",
-    "applications":
-      "Use intent-link's onIntent signal to prefetch routes, warm data, and preload assets before a user clicks, not after.",
-    "custom-components":
-      "Register buttons, cards, or any non-link element with IntentContext to add target prediction beyond links.",
-    "beyond-prefetch":
-      "Beyond prefetching: use intent-link's prediction signal for progressive disclosure, intent analytics, and adaptive UI.",
-    "mobile-behavior":
-      "How intent-link predicts intent on touch devices using scroll velocity instead of cursor trajectory.",
-    typescript: "intent-link is fully typed. Reference for IntentLinkProps, PhysicsState, and IntentContextType.",
+    "use-intent-target":
+      "Add intent detection to buttons, cards, and third-party components with a single ref.",
+    "custom-intent-components":
+      "Build reusable intent-aware buttons, articles, cards, and other application components.",
+    examples:
+      "Practical examples for route prefetching, data warming, asset preloading, and custom targets.",
     troubleshooting:
       "Fixes for common intent-link issues: onIntent not firing and SSR / \"use client\" errors.",
     changelog: "Release notes and version history for the intent-link package.",
@@ -80,14 +60,8 @@ const getDocGroupTitle = (groupId: string, locale: Locale = defaultLocale): stri
   return groupTitles[groupId as keyof typeof groupTitles] ?? groupId;
 };
 
-/**
- * Resolve a doc's on-page H1 heading. A few slugs carry a fuller heading than
- * their sidebar label; everything else falls back to the localized page title.
- */
-const getDocHeading = (slug: string, locale: Locale = defaultLocale): string => {
-  const headings: Record<string, string> = getDocsText(locale).headings;
-  return headings[slug] ?? getDocTitle(slug, locale);
-};
+/** Resolve a doc's on-page H1 heading. */
+const getDocHeading = getDocTitle;
 
 /** Resolve a doc page's <meta description>, falling back to the page title. */
 const getDocDescription = (slug: string, locale: Locale = defaultLocale): string => {

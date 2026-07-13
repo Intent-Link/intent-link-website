@@ -6,7 +6,6 @@ import { ProductTile } from "./product-tile";
 const { demoTile } = testConstants;
 
 const text = {
-  tileStates: { watching: "watching", arming: "arming", prefetched: "prefetched" },
   tileImageLabel: "product shot",
   tileBadge: "prefetched",
 };
@@ -17,10 +16,10 @@ describe("ProductTile", () => {
     expect(screen.getByText("Trail runners")).toBeInTheDocument();
   });
 
-  it("draws a probability ring (backing disc + track + progress arc)", () => {
-    const { container } = renderWithProviders(
-      <ProductTile id={demoTile.id} label={demoTile.label} text={text} />,
+  it("shows the real onIntent result after prefetching", () => {
+    renderWithProviders(
+      <ProductTile id={demoTile.id} label={demoTile.label} text={text} prefetched />,
     );
-    expect(container.querySelectorAll("circle")).toHaveLength(3);
+    expect(screen.getByText("prefetched")).toBeInTheDocument();
   });
 });
