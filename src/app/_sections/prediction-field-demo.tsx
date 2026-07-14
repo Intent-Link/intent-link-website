@@ -4,7 +4,6 @@ import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ProductTile } from "@/components/ui/product-tile";
 import { SegmentedControl } from "@/components/ui/segmented-control";
-import { Toast } from "@/components/ui/toast";
 import { cn } from "@/utils/class-names";
 import { usePredictionConsole } from "@/hooks/use-prediction-console";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
@@ -44,7 +43,7 @@ const tabletTileCount = 12;
 
 /**
  * Prediction Field demo (01) — a storefront grid whose tiles register with the
- * real intent-link engine, beside a console that records its onIntent calls.
+ * real intent-link engine, inside a console that records its onIntent calls.
  */
 const PredictionFieldDemo = () => {
   const text = useSectionsText().predictionFieldDemo;
@@ -68,11 +67,9 @@ const PredictionFieldDemo = () => {
     { value: "medium", label: text.levels.medium },
     { value: "high", label: text.levels.high },
   ];
-
   const addressSlash = text.addressBar.indexOf("/");
   const addressHost = addressSlash === -1 ? text.addressBar : text.addressBar.slice(0, addressSlash);
   const addressPath = addressSlash === -1 ? "" : text.addressBar.slice(addressSlash);
-
   return (
     <Section
       id={sectionIds.predictionFieldDemo}
@@ -94,25 +91,33 @@ const PredictionFieldDemo = () => {
           reveal={false}
         />
 
-        <div className="mt-8 flex flex-col gap-5 [overflow-anchor:none]">
-          {/* Console */}
+        <div className="mt-8 [overflow-anchor:none]">
           <div
-            className="flex flex-col overflow-hidden rounded-2xl border border-black/25 bg-term-bg text-term-ink shadow-[0_30px_60px_-30px_rgba(11,18,32,0.55)]"
+            className="flex flex-col overflow-hidden rounded-2xl border border-line bg-surface text-ink"
           >
-            <div className="flex items-center justify-between gap-2.5 border-b border-white/[0.08] px-4 py-3">
-              <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-3 border-b border-line-soft bg-sidebar px-4 py-3">
+              <div className="flex shrink-0 items-center gap-2.5">
                 <span className="flex gap-[7px]">
                   <span className="h-[11px] w-[11px] rounded-full bg-[#ff5f57]" />
                   <span className="h-[11px] w-[11px] rounded-full bg-[#febc2e]" />
                   <span className="h-[11px] w-[11px] rounded-full bg-[#28c840]" />
                 </span>
-                <span className="font-mono text-xs font-medium text-term-ink">{text.consoleTitle}</span>
               </div>
-              <div className="flex items-center gap-3.5">
+              <div className="flex min-w-0 flex-1 items-center gap-[7px] rounded-md border border-line bg-white px-[11px] py-[7px] font-mono text-[11.5px] text-ink-3 shadow-[inset_0_1px_2px_rgba(15,23,42,0.03)]">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
+                  <rect x="4" y="10" width="16" height="11" rx="2" />
+                  <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                </svg>
+                <span className="truncate">
+                  {addressHost}
+                  <span className="text-ink">{addressPath}</span>
+                </span>
+              </div>
+              <div className="flex shrink-0 items-center">
                 <button
                   type="button"
                   onClick={panel.reset}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-white/20 px-[11px] py-1.5 font-mono text-[11px] font-semibold text-term-ink transition-colors hover:bg-white/10"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-line bg-white px-[11px] py-[7px] font-mono text-[11px] font-semibold text-ink-2 transition-colors hover:bg-sidebar"
                 >
                   <svg
                     width="11"
@@ -135,10 +140,10 @@ const PredictionFieldDemo = () => {
 
             <div className="flex flex-col md:flex-row md:items-stretch">
               <div
-                className="flex w-full shrink-0 flex-col justify-center gap-2 border-b border-white/[0.08] px-[18px] py-3 md:w-[372px] md:border-b-0 md:border-r"
+                className="flex w-full shrink-0 flex-col justify-center gap-2 border-b border-line-soft px-[18px] py-3 md:w-[372px] md:border-b-0 md:border-r md:border-line-soft"
               >
-                <div className="flex min-h-[44px] items-center justify-between gap-3 border-b border-white/[0.07] pb-2">
-                  <p className="min-w-0 font-mono text-[11px] font-semibold text-term-ink">
+                <div className="flex min-h-[44px] items-center justify-between gap-3 border-b border-line-soft pb-2">
+                  <p className="min-w-0 font-mono text-[11px] font-semibold text-ink-2">
                     {text.importanceLabel}
                   </p>
                   <div className="w-[174px] shrink-0">
@@ -146,12 +151,11 @@ const PredictionFieldDemo = () => {
                       segments={levelSegments}
                       value={panel.importance}
                       onChange={(value) => panel.setImportance(value as IntentLevel)}
-                      className="border-white/15"
                     />
                   </div>
                 </div>
                 <div className="flex min-h-[44px] items-center justify-between gap-3 pt-1">
-                  <p className="min-w-0 font-mono text-[11px] font-semibold text-term-ink">
+                  <p className="min-w-0 font-mono text-[11px] font-semibold text-ink-2">
                     {text.costLabel}
                   </p>
                   <div className="w-[174px] shrink-0">
@@ -159,14 +163,13 @@ const PredictionFieldDemo = () => {
                       segments={levelSegments}
                       value={panel.cost}
                       onChange={(value) => panel.setCost(value as IntentLevel)}
-                      className="border-white/15"
                     />
                   </div>
                 </div>
               </div>
 
               <div className="flex min-w-0 flex-1 flex-col">
-                <div className="flex items-center justify-between px-4 py-3 font-mono text-[10.5px] text-term-dim">
+                <div className="flex items-center justify-between px-4 py-3 font-mono text-[10.5px] text-ink-3">
                   <span className="uppercase tracking-[0.04em]">{text.streamTitle}</span>
                   <span>{text.firedCount(panel.fired)}</span>
                 </div>
@@ -174,15 +177,15 @@ const PredictionFieldDemo = () => {
                   className="h-[88px] flex-none overflow-y-auto px-4 pb-2 font-mono text-[11.5px] leading-relaxed"
                 >
                   {panel.log.length === 0 ? (
-                    <span className="block py-3 text-[#4d5768]">{text.streamEmpty}</span>
+                    <span className="block py-3 text-ink-3">{text.streamEmpty}</span>
                   ) : (
                     panel.log.map((entry) => (
                       <div
                         key={entry.key}
-                        className="flex items-baseline gap-[9px] border-b border-white/[0.04] py-[3.5px] text-term-ink"
+                        className="flex items-baseline gap-[9px] border-b border-line-soft py-[3.5px] text-ink-2"
                       >
-                        <span className="text-[#4d5768]">{entry.time}</span>
-                        <span className="text-[#82aaff]">→ prefetch</span>
+                        <span className="text-ink-3">{entry.time}</span>
+                        <span className="text-accent">→ prefetch</span>
                         <span className="min-w-0 flex-1 truncate">{entry.path}</span>
                       </div>
                     ))
@@ -190,75 +193,28 @@ const PredictionFieldDemo = () => {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Storefront */}
-          <div
-            className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_1px_3px_rgba(0,0,0,.05)]"
-          >
-            <div className="flex items-center gap-2 border-b border-line-soft bg-sidebar px-[14px] py-[11px]">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-              <div className="ml-2 flex flex-1 items-center gap-[7px] rounded-md border border-line bg-white px-[11px] py-[5px] font-mono text-[11.5px] text-ink-3">
-                <svg
-                  width="11"
-                  height="11"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  aria-hidden
-                >
-                  <rect x="4" y="10" width="16" height="11" rx="2" />
-                  <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-                </svg>
-                <span>
-                  {addressHost}
-                  <span className="text-ink">{addressPath}</span>
-                </span>
+            <div className="border-t border-line-soft bg-white p-3 sm:p-4">
+              <div className="grid grid-cols-2 gap-2.5 [touch-action:pan-y] min-[500px]:grid-cols-3 min-[700px]:grid-cols-4 lg:grid-cols-6">
+                {visibleTiles.map((tile) => (
+                  <ProductTile
+                    key={`${panel.generation}-${tile.id}`}
+                    id={tile.id}
+                    label={text.tiles[tile.id]}
+                    tint={tile.tint}
+                    importance={panel.importance}
+                    cost={panel.cost}
+                    prefetched={panel.prefetched[tile.id]}
+                    onIntent={panel.recordIntent}
+                    text={{
+                      tileImageLabel: text.tileImageLabel,
+                      tileBadge: text.tileBadge,
+                    }}
+                  />
+                ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3 p-[18px] [touch-action:pan-y] min-[500px]:grid-cols-3 min-[700px]:grid-cols-4 lg:grid-cols-6">
-              {visibleTiles.map((tile) => (
-                <ProductTile
-                  key={`${panel.generation}-${tile.id}`}
-                  id={tile.id}
-                  label={text.tiles[tile.id]}
-                  tint={tile.tint}
-                  importance={panel.importance}
-                  cost={panel.cost}
-                  prefetched={panel.prefetched[tile.id]}
-                  onIntent={panel.recordIntent}
-                  text={{
-                    tileImageLabel: text.tileImageLabel,
-                    tileBadge: text.tileBadge,
-                  }}
-                />
-              ))}
-            </div>
-            <div className="flex h-[54px] items-center justify-between gap-3 overflow-hidden border-t border-line-soft bg-sidebar px-4 py-2.5">
-              {panel.toast ? (
-                <Toast className="inline-flex min-w-0 max-w-full flex-1 items-center gap-[9px] overflow-hidden whitespace-nowrap rounded-lg border border-white/[0.14] bg-term-bg px-3 py-[7px] font-mono text-xs text-term-ink shadow-[0_8px_20px_-8px_rgba(11,18,32,.45)]">
-                  <span className="h-[7px] w-[7px] shrink-0 rounded-full bg-[#28c840] shadow-[0_0_8px_#28c840]" />
-                  <span className="min-w-0 truncate whitespace-nowrap">
-                    <span className="min-[700px]:hidden">
-                      <span className="text-[#82aaff]">prefetch(</span>
-                      <span className="text-[#c3e88d]">&quot;{panel.toast.path}&quot;</span>
-                      <span className="text-[#82aaff]">)</span>
-                    </span>
-                    <span className="hidden min-[700px]:inline">
-                      <span className="text-term-dim">onIntent → </span>
-                      <span className="text-[#82aaff]">router.prefetch(</span>
-                      <span className="text-[#c3e88d]">&apos;{panel.toast.path}&apos;</span>
-                      <span className="text-[#82aaff]">)</span>
-                    </span>
-                  </span>
-                </Toast>
-              ) : (
-                <span className="min-w-0 truncate font-mono text-xs text-ink-3">{text.storefrontIdle}</span>
-              )}
-              <span className="shrink-0 font-mono text-[11px] text-ink-3">{text.categories(visibleTiles.length)}</span>
+            <div className="flex h-[46px] items-center justify-end border-t border-line-soft bg-sidebar px-4">
+              <span className="font-mono text-[11px] text-ink-3">{text.categories(visibleTiles.length)}</span>
             </div>
           </div>
         </div>

@@ -9,14 +9,9 @@ interface StreamEntry {
   path: string;
 }
 
-interface ToastState {
-  path: string;
-}
-
 interface UsePredictionConsoleInfo {
   fired: number;
   log: StreamEntry[];
-  toast: ToastState | null;
   prefetched: Record<string, boolean>;
   importance: IntentLevel;
   cost: IntentLevel;
@@ -28,7 +23,6 @@ interface UsePredictionConsoleInfo {
 }
 
 const logCap = 9;
-const toastMilliseconds = 1000;
 const prefetchedMilliseconds = 1000;
 
 /** Records the real onIntent callbacks emitted by the current public API. */
@@ -37,11 +31,9 @@ const usePredictionConsole = (): UsePredictionConsoleInfo => {
   const [cost, setCost] = useState<IntentLevel>("low");
   const [fired, setFired] = useState(0);
   const [log, setLog] = useState<StreamEntry[]>([]);
-  const [toast, setToast] = useState<ToastState | null>(null);
   const [prefetched, setPrefetched] = useState<Record<string, boolean>>({});
   const [generation, setGeneration] = useState(0);
   const logId = useRef(0);
-  const toastTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const prefetchedTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
 
   const recordIntent = useCallback((id: string) => {
@@ -65,24 +57,18 @@ const usePredictionConsole = (): UsePredictionConsoleInfo => {
       });
       prefetchedTimers.current.delete(id);
     }, prefetchedMilliseconds));
-    setToast({ path: entry.path });
-    clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast(null), toastMilliseconds);
   }, []);
 
   useEffect(() => () => {
-    clearTimeout(toastTimer.current);
     for (const timer of prefetchedTimers.current.values()) clearTimeout(timer);
     prefetchedTimers.current.clear();
   }, []);
 
   const reset = () => {
-    clearTimeout(toastTimer.current);
     for (const timer of prefetchedTimers.current.values()) clearTimeout(timer);
     prefetchedTimers.current.clear();
     setFired(0);
     setLog([]);
-    setToast(null);
     setPrefetched({});
     // Remounting the targets also clears the engine's per-target trigger lock.
     setGeneration((current) => current + 1);
@@ -91,7 +77,6 @@ const usePredictionConsole = (): UsePredictionConsoleInfo => {
   return {
     fired,
     log,
-    toast,
     prefetched,
     importance,
     cost,

@@ -14,43 +14,39 @@ const tr: TranslationBundle = {
   },
   sections: {
     hero: {
-      ariaLabel: "Giriş", eyebrow: "React ve Next.js için hedef tahmini", titleLead: "Hedefi bil", titleEmphasis: "tıklamadan önce.", subcopy: "Kullanıcının hedefini %98 doğrulukla tahmin edin. Intent-link, hareket hızı ve mesafeden kaynaklanan kinetik ve potansiyel enerjiyi kullanarak olasılığı hesaplar.", getStarted: "Başlayın", liveDemo: "Canlı demo",
+      ariaLabel: "Giriş", eyebrow: "React ve Next.js için hedef tahmini", titleLead: "Hedefi bil", titleEmphasis: "tıklamadan önce.", subcopy: "1.39 fetch:click oranına ulaşın. Intent-link, hareket hızı ve mesafeden kaynaklanan kinetik ve potansiyel enerjiyi kullanarak olasılığı hesaplar.", getStarted: "Başlayın", liveDemo: "Canlı demo",
     },
     predictionFieldDemo: {
-      eyebrow: "02 / canlı demo", ariaLabel: "Canlı tahmin demosu", heading: "Bir karta yönelin ve önceden yüklenmesini izleyin.", addressBar: "shop.example/new-in", categories: (count: number) => `${count} kategori`, storefrontIdle: "// ön yüklemeyi başlatmak için bir karta yönelin", consoleTitle: "intent-link", reset: "sıfırla", importanceLabel: "importance", costLabel: "cost", streamTitle: "onIntent akışı", firedCount: (count: number) => `${count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count} tetikleme`, streamEmpty: "// bir sinyal başlatmak için bir karta yönelin…", levels: { low: "düşük", medium: "orta", high: "yüksek" }, tiles: { women: "Kadın", men: "Erkek", kids: "Çocuk", shoes: "Ayakkabı", bags: "Çanta", accessories: "Aksesuar", sport: "Spor", denim: "Denim", outerwear: "Dış giyim", beauty: "Güzellik", home: "Ev", sale: "İndirim", electronics: "Elektronik", watches: "Saat", jewelry: "Mücevher", furniture: "Mobilya", gifts: "Hediye", travel: "Seyahat" },
+      eyebrow: "02 / canlı demo", ariaLabel: "Canlı tahmin demosu", heading: "Bir karta yönelin ve önceden yüklenmesini izleyin.", addressBar: "shop.example/new-in", categories: (count: number) => `${count} kategori`, reset: "sıfırla", importanceLabel: "importance", costLabel: "cost", streamTitle: "onIntent akışı", firedCount: (count: number) => `${count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count} tetikleme`, streamEmpty: "// bir sinyal başlatmak için bir karta yönelin…", levels: { low: "düşük", medium: "orta", high: "yüksek" }, tiles: { women: "Kadın", men: "Erkek", kids: "Çocuk", shoes: "Ayakkabı", bags: "Çanta", accessories: "Aksesuar", sport: "Spor", denim: "Denim", outerwear: "Dış giyim", beauty: "Güzellik", home: "Ev", sale: "İndirim", electronics: "Elektronik", watches: "Saat", jewelry: "Mücevher", furniture: "Mobilya", gifts: "Hediye", travel: "Seyahat" },
     },
     latencyRace: {
       eyebrow: "03 / farkı hissedin", ariaLabel: "Gecikme karşılaştırması", heading: "Aynı tıklama. Beklemeyi atlayın.", body: "Bir sayfa ağ isteğini beklerken diğeri kullanıcının hareket yörüngesi sırasında getirilir.", timeSavedLabel: "bu oturumda kazanılan süre", milliseconds: (value: number) => `${value} ms`, instant: (value: number) => `${value} ms · anında`, withoutTitle: "intent-link olmadan", withTitle: "intent-link ile", notLoaded: "yüklenmedi", idle: "boşta", prefetching: "önceden yükleniyor…", ready: "önceden yüklendi ✓ hazır", fetching: "yükleniyor…", productName: "Kapitone ceket", productPrice: "₺5.900", productPath: "/product/quilted-jacket", addToCart: "Sepete ekle", open: "Ürünü aç →", opening: "açılıyor…", replay: "↻ Tekrarla",
     },
-    codeExample: {
-      eyebrow: "04 / entegre edin", ariaLabel: "Kod örneği", heading: "Yaygın kullanım için iki satır.", body: "Uygulamayı bir kez sarın ve bağlantıları değiştirin. Diğer öğeler için intent referansını kullanın.", tabs: { simple: "basit", custom: "özel" }, copyForLlm: "LLM için kopyala", fullApiLead: "Tam API ", fullApiLink: "belgelerde →", quickstartLabel: "hızlı başlangıç",
-    },
     whyDifferent: {
-      eyebrow: "05 / farklı", ariaLabel: "Neden farklı", heading: "Görünürlük değil. Hover değil. Niyet.", body: "Diğer yaklaşımlar kaba bir sinyalle tahmin yürütür. intent-link hedefi öngörür.", columns: { approach: "Yaklaşım", timing: "Zamanlama", selective: "Seçicilik", perUser: "Kullanıcıya özel", confidence: "Güven", setup: "Kurulum" }, highlightName: "intent-link",
+      eyebrow: "04 / farklı", ariaLabel: "Neden farklı", heading: "Görünürlük değil. Hover değil. Niyet.", body: "Diğer tüm yaklaşımlar ya geç kalır ya da kaynak israf eder.", columns: { approach: "Yaklaşım", timing: "Zamanlama", selective: "Seçicilik" }, highlightName: "intent-link",
       rows: [
-        { name: "rel=prefetch", timing: "manuel, sabit", selective: "önceden siz seçersiniz", perUser: "—", confidence: "—", setup: "elle tanımlanır" },
-        { name: "ForesightJS", timing: "rota üzerinde", selective: "hedef", perUser: "✓", confidence: "—", setup: "kayıt + callback" },
-        { name: "instant.page", timing: "hover sırasında", selective: "bir, geç", perUser: "✓", confidence: "—", setup: "eklenebilir" },
-        { name: "Next.js prefetch", timing: "görününce", selective: "görünen her şey", perUser: "—", confidence: "—", setup: "yerleşik" },
-        { name: "Guess.js", timing: "önceden hesaplanmış", selective: "en iyi tahminler", perUser: "toplu", confidence: "—", setup: "derleme + veri" },
-        { name: "intent-link", timing: "ulaşmadan önce", selective: "hedef", perUser: "✓", confidence: "✓", setup: "eklenebilir" },
+        { name: "ForesightJS", timing: "rota üzerinde", selective: "hedef" },
+        { name: "instant.page", timing: "hover sırasında", selective: "bir" },
+        { name: "Next.js prefetch", timing: "görününce", selective: "görünen her şey" },
+        { name: "Guess.js", timing: "önceden hesaplanmış", selective: "en iyi tahminler" },
+        { name: "intent-link", timing: "ulaşmadan önce", selective: "hedef" },
       ],
       benefits: [
-        { stat: "~anında", title: "Anında gezinme", body: "Sonraki sayfa tıklamadan önce yüklenir." },
-        { stat: "~%98", title: "Yüksek doğruluk", body: "Rota ve güven doğru hedefi belirler." },
-        { stat: "2 ayar", title: "Ayarlanabilir", body: "importance ve cost ne kadar erken davranılacağını kontrol eder." },
-        { stat: "hazır / özel", title: "İki kullanım", body: "Bağlantılar için IntentLink, diğer öğeler için useIntentTarget." },
-        { stat: "React · Next", title: "Çatıya özgü", body: "Next.js App Router’da next/link yerine doğrudan kullanılabilir." },
-        { stat: "MIT", title: "Küçük ve açık", body: "Veri toplanmaz; hareket cihazdan çıkmaz." },
+        { stat: "Anında gezinme", title: "Sonraki sayfayı tıklamadan önce getirin" },
+        { stat: "1.39", title: "Fetch:Click oranı" },
+        { stat: "Ayarlanabilir", title: "importance ve cost ağırlıklarını yapılandırın" },
+        { stat: "useIntentTarget", title: "Özel niyet tahmini bileşenleri oluşturun" },
+        { stat: "React · Next", title: "En popüler çatı için optimize edilmiştir" },
+        { stat: "MIT", title: "Açık kaynak, veri toplama yok" },
       ],
     },
     beyondPrefetch: {
-      eyebrow: "01 / ön yüklemenin ötesi", ariaLabel: "Ön yüklemenin ötesi", heading: "Tek sinyal. Birçok kullanım.", body: "Ön yükleme temel kullanımdır; onIntent verileri, görselleri ve bileşenleri de hazırlayabilir.", uses: [
-        { tag: "// veri", title: "Verileri hazırlayın", body: "Sonraki ekran açılmadan veri önbelleğini doldurun." },
-        { tag: "// önizleme", title: "Önizleme hazırlayın", body: "Kullanıcı bir öğeye yönelirken önizlemeyi hazırlayın." },
-        { tag: "// kaynak", title: "Kaynakları yükleyin", body: "Büyük görselleri veya dosyaları erken yüklemeye başlayın." },
-        { tag: "// bileşen", title: "Arayüzü hazırlayın", body: "Son etkileşimden önce güvenli ve tekrarlanabilir işleri başlatın." },
-      ], pattern: [{ step: "01", title: "Gözlemle", body: "hareketi" }, { step: "02", title: "Tahmin et", body: "olası hedefi" }, { step: "03", title: "Hazırla", body: "ulaşmadan önce" }], patternLabel: "genel model", patternClose: "Hareket, olası hedef hakkında bilgi taşır. intent-link bu sinyali basit bir onIntent çağrısına dönüştürür.",
+      eyebrow: "01 / uygulamalar", ariaLabel: "Ön yüklemenin ötesi", heading: "Tek sinyal. Birçok kullanım.", uses: [
+        { tag: "// analiz", title: "Yalnızca tıklamalar değil, niyet", body: "Yalnızca eylemleri değil, yarıda bırakılan yaklaşımları ve tereddütleri kaydedin." },
+        { tag: "// gösterim", title: "Aşamalı gösterim", body: "Kullanıcı yöneldiği anda bir önizleme veya araç ipucu açın." },
+        { tag: "// performans", title: "Bağlantıları önceden getirin", body: "Kullanıcı tıklamadan önce gezinme bağlantılarını önceden getirin." },
+        { tag: "// uyarlanabilir UI", title: "Destekli hedefleme", body: "Kullanıcı yaklaştıkça hedefleri büyütün veya yakınlaştırın." },
+      ], pattern: [{ step: "01", title: "Gözlemle", body: "hareketi" }, { step: "02", title: "Tahmin et", body: "olası hedefi" }, { step: "03", title: "Hazırla", body: "ulaşmadan önce" }]
     },
     ctaBand: { ariaLabel: "Başlayın", heading: "Anında hissedilen gezinme sunun.", getStarted: "Başlayın", github: "GitHub", install: "$ npm install intent-link" },
   },

@@ -7,6 +7,7 @@ const site = {
   name: "intent-link",
   version: "1.0.13",
   tagline: "Target prediction for React / Next.js",
+  maintainers: ["Uzafir Ahmad", "Muaz Hassan", "Ali Muzaffar"],
 } as const;
 
 interface NavLink {

@@ -7,7 +7,6 @@ const sectionIds = {
   hero: "hero",
   predictionFieldDemo: "prediction-field-demo",
   latencyRace: "latency-race",
-  codeExample: "code-example",
   whyDifferent: "why-different",
   beyondPrefetch: "beyond-prefetch",
   ctaBand: "cta-band",

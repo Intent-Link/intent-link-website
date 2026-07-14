@@ -40,7 +40,8 @@ const switchLocalePath = (pathname: string, locale: Locale): string => {
 };
 
 /** hreflang alternates (plus x-default) for a canonical app path. */
-const localeAlternates = (path: string) => ({
+const localeAlternates = (locale: Locale, path: string) => ({
+  canonical: localePath(locale, path),
   languages: {
     ...Object.fromEntries(locales.map((locale) => [locale, localePath(locale, path)])),
     "x-default": localePath(defaultLocale, path),

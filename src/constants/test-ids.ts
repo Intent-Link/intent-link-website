@@ -8,7 +8,6 @@ const testIds = {
     hero: "section-hero",
     predictionFieldDemo: "section-prediction-field-demo",
     latencyRace: "section-latency-race",
-    codeExample: "section-code-example",
     whyDifferent: "section-why-different",
     beyondPrefetch: "section-beyond-prefetch",
     ctaBand: "section-cta-band",

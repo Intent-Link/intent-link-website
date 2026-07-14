@@ -15,9 +15,6 @@ const WhyDifferent = ({ text }: WhyDifferentProps) => {
   const attributes = [
     { label: text.columns.timing, key: "timing", center: false },
     { label: text.columns.selective, key: "selective", center: false },
-    { label: text.columns.perUser, key: "perUser", center: true },
-    { label: text.columns.confidence, key: "confidence", center: true },
-    { label: text.columns.setup, key: "setup", center: false },
   ] as const;
 
   return (
@@ -77,11 +74,7 @@ const WhyDifferent = ({ text }: WhyDifferentProps) => {
                             "px-[14px] py-[13px]",
                             attribute.center ? "text-center text-[14px]" : "text-left text-[12.5px]",
                             highlighted ? "bg-accent/[0.06] font-semibold" : "font-normal",
-                            value === "✓"
-                              ? "text-[#15803d]"
-                              : highlighted
-                                ? "text-ink"
-                                : "text-ink-2",
+                            highlighted ? "text-ink" : "text-ink-2",
                           )}
                         >
                           {value}
@@ -98,9 +91,10 @@ const WhyDifferent = ({ text }: WhyDifferentProps) => {
         <div className="mt-[22px] grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {text.benefits.map((benefit) => (
             <Card key={benefit.title} className="px-[18px] py-4">
-              <p className="font-mono text-[13px] font-bold text-accent">{benefit.stat}</p>
-              <h3 className="mt-[5px] text-[14px] font-bold tracking-[-0.01em]">{benefit.title}</h3>
-              <p className="mt-[3px] text-[12.5px] leading-[1.45] text-ink-2">{benefit.body}</p>
+              <p className="font-mono text-[18px] font-extrabold text-accent">{benefit.stat}</p>
+              <h3 className="mt-2 text-[14px] font-medium leading-[1.35] tracking-[-0.01em] text-ink-2">
+                {benefit.title}
+              </h3>
             </Card>
           ))}
         </div>

@@ -8,6 +8,9 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { locales, isLocale, defaultLocale, getTextDirection } from "@/i18n/locales";
 import { getMetadataText } from "@/i18n/messages/metadata";
+import { externalUrls } from "@/constants/routes";
+import { site } from "@/constants/site";
+import { siteOrigin, socialImage } from "@/constants/seo";
 import "../globals.css";
 
 const schibsted = Schibsted_Grotesk({
@@ -36,14 +39,6 @@ interface RootLayoutProps {
   params: Promise<{ locale: string }>;
 }
 
-// Absolute base for relative metadata URLs (hreflang alternates). Without it,
-// non-Vercel builds resolve alternates against Next's localhost fallback.
-const siteOrigin =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000");
-
 const generateMetadata = async ({ params }: RootLayoutProps): Promise<Metadata> => {
   const { locale } = await params;
   const metadataText = getMetadataText(isLocale(locale) ? locale : defaultLocale);
@@ -51,6 +46,47 @@ const generateMetadata = async ({ params }: RootLayoutProps): Promise<Metadata> 
     metadataBase: new URL(siteOrigin),
     title: metadataText.title,
     description: metadataText.description,
+    applicationName: site.name,
+    authors: site.maintainers.map((name) => ({ name })),
+    creator: site.maintainers[0],
+    publisher: site.name,
+    category: "technology",
+    keywords: [
+      "intent-link",
+      "React prefetch",
+      "Next.js prefetch",
+      "predictive navigation",
+      "user intent prediction",
+    ],
+    manifest: "/manifest.webmanifest",
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
+    openGraph: {
+      type: "website",
+      siteName: site.name,
+      title: metadataText.title,
+      description: metadataText.description,
+      images: [{ url: socialImage.path, width: socialImage.width, height: socialImage.height, alt: socialImage.alt }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metadataText.title,
+      description: metadataText.description,
+      images: [socialImage.path],
+    },
+    other: {
+      "npm-package": externalUrls.npm,
+      "code-repository": externalUrls.github,
+    },
   };
 };
 

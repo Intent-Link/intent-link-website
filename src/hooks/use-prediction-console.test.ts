@@ -13,7 +13,6 @@ describe("usePredictionConsole", () => {
     expect(result.current.fired).toBe(1);
     expect(result.current.log[0].path).toBe("/women");
     expect(result.current.prefetched.women).toBe(true);
-    expect(result.current.toast?.path).toBe("/women");
 
     const previousGeneration = result.current.generation;
     act(() => result.current.reset());
@@ -21,7 +20,6 @@ describe("usePredictionConsole", () => {
     expect(result.current.fired).toBe(0);
     expect(result.current.log).toEqual([]);
     expect(result.current.prefetched).toEqual({});
-    expect(result.current.toast).toBeNull();
     expect(result.current.generation).toBe(previousGeneration + 1);
   });
 
