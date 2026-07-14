@@ -51,15 +51,16 @@ const plateExtent = 1.08;
 /** Cell spacing for the larger, section-wide diagonal field. */
 const fullFieldGridStep = 0.16;
 /** Spring-damper that chases the pointer; gravity is layered on top. */
-const springStiffness = 13;
-const springDamping = 6.5;
-/** Marker trail: max points, and how far the well's floor a settled marker rests. */
-const trailMaxPoints = 110;
-/** Idle after this long without input → the marker resumes its slow spiral. */
-const idleAfterMs = 4000;
-/** How much of the idle field the resting spiral sweeps, and how long one loop takes. */
+const springStiffness = 28;
+const springDamping = 9.5;
+/** Marker trail lifetime is time-based so it behaves consistently at every refresh rate. */
+const trailLifetimeMs = 700;
+/** Enough native-refresh samples for the trail even on very high-refresh displays. */
+const trailCapacity = 512;
+/** Idle motion keeps the scene alive while it remains visible. */
 const idleSpiralRadius = 1.05;
-const idleSpiralPeriodMs = 13000;
+const idleAfterMs = 4000;
+const idleSpiralPeriodMs = 9000;
 /**
  * Intent detection is keyed off the marker's grid radius, with hysteresis so
  * the label does not flicker on the boundary.
@@ -93,12 +94,34 @@ interface Vec {
   v: number;
 }
 
+interface TrailBuffer {
+  x: Float32Array;
+  y: Float32Array;
+  time: Float64Array;
+  start: number;
+  length: number;
+}
+
+interface Bounds {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
+interface OrbitGeometry {
+  centerX: number;
+  centerY: number;
+  radiusX: number;
+  radiusY: number;
+}
+
 interface SimulationState {
   position: Vec;
   velocity: Vec;
   pointer: { x: number; y: number } | null;
   lastInputTime: number;
-  trail: { x: number; y: number }[];
+  trail: TrailBuffer;
   phase: DetectionPhase;
   scale: number;
   centerX: number;
@@ -129,7 +152,8 @@ const GravityWell = ({
   className,
 }: GravityWellProps) => {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const staticCanvasRef = useRef<HTMLCanvasElement>(null);
+  const dynamicCanvasRef = useRef<HTMLCanvasElement>(null);
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   // Keep the latest labels in a ref so the canvas loop reads current copy
   // without re-subscribing the effect on every render.
@@ -140,19 +164,23 @@ const GravityWell = ({
 
   useEffect(() => {
     const wrap = wrapRef.current;
-    const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
-    if (!wrap || !canvas || !context) return;
-    const surfaceCanvas = document.createElement("canvas");
-    const surfaceContext = surfaceCanvas.getContext("2d");
-    if (!surfaceContext) return;
-
+    const staticCanvas = staticCanvasRef.current;
+    const dynamicCanvas = dynamicCanvasRef.current;
+    const staticContext = staticCanvas?.getContext("2d");
+    const context = dynamicCanvas?.getContext("2d");
+    if (!wrap || !staticCanvas || !dynamicCanvas || !staticContext || !context) return;
     const state: SimulationState = {
       position: { u: -0.95, v: -0.95 },
       velocity: { u: 0, v: 0 },
       pointer: null,
       lastInputTime: 0,
-      trail: [],
+      trail: {
+        x: new Float32Array(trailCapacity),
+        y: new Float32Array(trailCapacity),
+        time: new Float64Array(trailCapacity),
+        start: 0,
+        length: 0,
+      },
       phase: "watching",
       scale: 0,
       centerX: 0,
@@ -161,22 +189,77 @@ const GravityWell = ({
       height: 0,
       fieldExtent: plateExtent,
     };
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    let isVisible = false;
+    let pageVisible = !document.hidden;
+    let lastFrameTime = 0;
+    let canvasRect = dynamicCanvas.getBoundingClientRect();
+    let canvasRectDirty = false;
+    let dynamicDpr = 1;
+    let cursorSprite: HTMLCanvasElement | null = null;
+    let orbitSprite: HTMLCanvasElement | null = null;
+    let orbitGeometries: OrbitGeometry[] = [];
+    let targetPoint = { x: 0, y: 0 };
+    let previousCursorBounds: Bounds | null = null;
+    let previousTargetBounds: Bounds | null = null;
+    let previousOrbitBounds: Bounds[] = [];
+    const textWidthCache = new Map<string, number>();
+
+    const createMarkerSprite = (
+      radius: number,
+      dotRadius: number,
+      haloAlpha: number,
+      outlineWidth: number,
+    ) => {
+      const sprite = document.createElement("canvas");
+      const size = radius * 2;
+      sprite.width = Math.ceil(size * dynamicDpr);
+      sprite.height = Math.ceil(size * dynamicDpr);
+      const spriteContext = sprite.getContext("2d");
+      if (!spriteContext) return sprite;
+      spriteContext.setTransform(dynamicDpr, 0, 0, dynamicDpr, 0, 0);
+      const halo = spriteContext.createRadialGradient(radius, radius, 0, radius, radius, radius);
+      halo.addColorStop(0, `rgba(${accent},${haloAlpha})`);
+      halo.addColorStop(1, `rgba(${accent},0)`);
+      spriteContext.fillStyle = halo;
+      spriteContext.beginPath();
+      spriteContext.arc(radius, radius, radius, 0, Math.PI * 2);
+      spriteContext.fill();
+      spriteContext.fillStyle = "#0066FF";
+      spriteContext.beginPath();
+      spriteContext.arc(radius, radius, dotRadius, 0, Math.PI * 2);
+      spriteContext.fill();
+      spriteContext.strokeStyle = "#ffffff";
+      spriteContext.lineWidth = outlineWidth;
+      spriteContext.stroke();
+      return sprite;
+    };
 
     const layout = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      state.width = wrap.clientWidth;
-      state.height = wrap.clientHeight;
-      canvas.width = state.width * dpr;
-      canvas.height = state.height * dpr;
-      surfaceCanvas.width = state.width * dpr;
-      surfaceCanvas.height = state.height * dpr;
-      context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      surfaceContext.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const width = wrap.clientWidth;
+      const height = wrap.clientHeight;
+      if (width === state.width && height === state.height) return false;
+      state.width = width;
+      state.height = height;
+      const mobile = state.width <= 800;
+      const staticDpr = Math.min(window.devicePixelRatio || 1, 2);
+      dynamicDpr = Math.min(window.devicePixelRatio || 1, 2);
+      staticCanvas.width = Math.round(state.width * staticDpr);
+      staticCanvas.height = Math.round(state.height * staticDpr);
+      dynamicCanvas.width = Math.round(state.width * dynamicDpr);
+      dynamicCanvas.height = Math.round(state.height * dynamicDpr);
+      staticContext.setTransform(staticDpr, 0, 0, staticDpr, 0, 0);
+      context.setTransform(dynamicDpr, 0, 0, dynamicDpr, 0, 0);
+      cursorSprite = createMarkerSprite(16, 4.5, 0.45, 1.5);
+      orbitSprite = createMarkerSprite(12, 3.8, 0.35, 1.35);
+      canvasRectDirty = true;
+      previousCursorBounds = null;
+      previousTargetBounds = null;
+      previousOrbitBounds = [];
       if (fullField) {
         // Keep a consistent visual cell size and anchor the well in the right-hand
         // side of the hero. The field extent is derived from the furthest corner,
         // so diagonal lines always continue beyond the section bounds.
-        const mobile = state.width <= 800;
         const tablet = state.width > 800 && state.width <= 1024;
         state.scale = mobile
           ? Math.max(90, Math.min(120, state.width * 0.18))
@@ -235,6 +318,7 @@ const GravityWell = ({
         state.centerY = state.height * 0.4;
         state.fieldExtent = plateExtent;
       }
+      return true;
     };
 
     const project = (u: number, v: number, z: number) => ({
@@ -248,15 +332,16 @@ const GravityWell = ({
      * directly against paper, making saturation linear and avoiding translucent
      * overlap buildup, flat cell patches, or a generic radial blur.
      */
-    const buildSurface = () => {
-      surfaceContext.clearRect(0, 0, state.width, state.height);
+    const buildStaticField = () => {
+      staticContext.clearRect(0, 0, state.width, state.height);
       const gradientRadius = Math.min(
         singularityGradientExtent * 4,
         fullField ? state.fieldExtent : plateExtent,
       );
       const depthPx = state.scale * depth;
-      const ringCount = fullField ? 480 : 280;
-      const ringSegments = fullField ? 128 : 96;
+      const mobile = state.width <= 800;
+      const ringCount = fullField ? (mobile ? 360 : 480) : 280;
+      const ringSegments = fullField ? (mobile ? 112 : 128) : 96;
 
       for (let ring = ringCount; ring >= 1; ring--) {
         const radius = (gradientRadius * ring) / ringCount;
@@ -271,17 +356,114 @@ const GravityWell = ({
         const green = 255 - 200 * intensity;
 
         const height = wellHeight(radius, depthPx);
-        surfaceContext.fillStyle = `rgb(${red.toFixed(2)},${green.toFixed(2)},255)`;
-        surfaceContext.beginPath();
+        staticContext.fillStyle = `rgb(${red.toFixed(2)},${green.toFixed(2)},255)`;
+        staticContext.beginPath();
         for (let segment = 0; segment <= ringSegments; segment++) {
           const angle = (segment / ringSegments) * Math.PI * 2;
           const point = project(radius * Math.cos(angle), radius * Math.sin(angle), height);
-          if (segment === 0) surfaceContext.moveTo(point.x, point.y);
-          else surfaceContext.lineTo(point.x, point.y);
+          if (segment === 0) staticContext.moveTo(point.x, point.y);
+          else staticContext.lineTo(point.x, point.y);
         }
-        surfaceContext.closePath();
-        surfaceContext.fill();
+        staticContext.closePath();
+        staticContext.fill();
       }
+
+      // The target manifold never changes while the pointer moves. Drawing its
+      // complete grid here removes thousands of path calculations per frame.
+      const lineIndex: number[] = [];
+      if (fullField) {
+        const lineCount = Math.ceil((state.fieldExtent * 2) / fullFieldGridStep);
+        const start = -(lineCount * fullFieldGridStep) / 2;
+        for (let i = 0; i <= lineCount; i++) lineIndex.push(start + i * fullFieldGridStep);
+      } else {
+        for (let i = 0; i <= gridDivisions; i++) {
+          lineIndex.push(-plateExtent + (2 * plateExtent * i) / gridDivisions);
+        }
+      }
+
+      staticContext.lineWidth = 1;
+      staticContext.strokeStyle = fullField ? "rgba(0,102,255,0.13)" : "rgba(11,18,32,0.13)";
+      for (let pass = 0; pass < 2; pass++) {
+        for (const fixedCoordinate of lineIndex) {
+          const pointOnLine = (variableCoordinate: number) => {
+            const u = pass === 0 ? variableCoordinate : fixedCoordinate;
+            const v = pass === 0 ? fixedCoordinate : variableCoordinate;
+            return project(u, v, wellHeight(Math.hypot(u, v), depthPx));
+          };
+
+          staticContext.beginPath();
+          const firstPoint = pointOnLine(lineIndex[0]);
+          staticContext.moveTo(firstPoint.x, firstPoint.y);
+          for (let j = 0; j < lineIndex.length - 1; j++) {
+            const start = lineIndex[j];
+            const end = lineIndex[j + 1];
+            const midpoint = (start + end) / 2;
+            const midpointU = pass === 0 ? midpoint : fixedCoordinate;
+            const midpointV = pass === 0 ? fixedCoordinate : midpoint;
+            const subdivisions = Math.hypot(midpointU, midpointV) < 1.35 ? 5 : 1;
+            for (let subdivision = 1; subdivision <= subdivisions; subdivision++) {
+              const coordinate = start + ((end - start) * subdivision) / subdivisions;
+              const point = pointOnLine(coordinate);
+              staticContext.lineTo(point.x, point.y);
+            }
+          }
+          staticContext.stroke();
+        }
+      }
+
+      if (!fullField) {
+        staticContext.strokeStyle = "rgba(11,18,32,0.22)";
+        staticContext.beginPath();
+        const corners = [
+          [-plateExtent, -plateExtent],
+          [plateExtent, -plateExtent],
+          [plateExtent, plateExtent],
+          [-plateExtent, plateExtent],
+        ];
+        corners.forEach((corner, index) => {
+          const point = project(
+            corner[0],
+            corner[1],
+            wellHeight(Math.hypot(corner[0], corner[1]), depthPx),
+          );
+          if (index === 0) staticContext.moveTo(point.x, point.y);
+          else staticContext.lineTo(point.x, point.y);
+        });
+        staticContext.closePath();
+        staticContext.stroke();
+      }
+
+      // Orbit tracks and the target beacon are fixed until layout changes.
+      // Keeping them on the static layer avoids redrawing identical geometry.
+      orbitGeometries = targetOrbits.map((orbit) => {
+        const center = project(0, 0, wellHeight(orbit.fieldRadius, depthPx));
+        const geometry = {
+          centerX: center.x,
+          centerY: center.y,
+          radiusX: state.scale * orbit.fieldRadius * isoX * Math.SQRT2,
+          radiusY: state.scale * orbit.fieldRadius * isoY * Math.SQRT2,
+        };
+        staticContext.strokeStyle = `rgba(${accent},0.2)`;
+        staticContext.lineWidth = 1;
+        staticContext.beginPath();
+        staticContext.ellipse(
+          geometry.centerX,
+          geometry.centerY,
+          geometry.radiusX,
+          geometry.radiusY,
+          0,
+          0,
+          Math.PI * 2,
+        );
+        staticContext.stroke();
+        return geometry;
+      });
+
+      targetPoint = project(0, 0, depthPx * targetMarkerFloorRatio);
+      staticContext.fillStyle = "#000000";
+      staticContext.beginPath();
+      staticContext.arc(targetPoint.x, targetPoint.y, 3.5, 0, Math.PI * 2);
+      staticContext.fill();
     };
 
     const unproject = (x: number, y: number): Vec => {
@@ -295,16 +477,23 @@ const GravityWell = ({
     };
 
     const onPointer = (event: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
+      if (canvasRectDirty) {
+        canvasRect = dynamicCanvas.getBoundingClientRect();
+        canvasRectDirty = false;
+      }
       if (
         fullField
-        && (event.clientX < rect.left
-          || event.clientX > rect.right
-          || event.clientY < rect.top
-          || event.clientY > rect.bottom)
+        && (event.clientX < canvasRect.left
+          || event.clientX > canvasRect.right
+          || event.clientY < canvasRect.top
+          || event.clientY > canvasRect.bottom)
       ) return;
-      state.pointer = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      state.pointer = {
+        x: event.clientX - canvasRect.left,
+        y: event.clientY - canvasRect.top,
+      };
       state.lastInputTime = performance.now();
+      wake();
     };
 
     /** Toggle the single detected state from marker radius, with hysteresis. */
@@ -316,11 +505,40 @@ const GravityWell = ({
       }
     };
 
-    const step = (now: number) => {
-      const dt = 1 / 60;
+    const appendTrailPoint = (x: number, y: number, time: number) => {
+      const trailBuffer = state.trail;
+      let index: number;
+      if (trailBuffer.length === trailCapacity) {
+        index = trailBuffer.start;
+        trailBuffer.start = (trailBuffer.start + 1) % trailCapacity;
+      } else {
+        index = (trailBuffer.start + trailBuffer.length) % trailCapacity;
+        trailBuffer.length += 1;
+      }
+      trailBuffer.x[index] = x;
+      trailBuffer.y[index] = y;
+      trailBuffer.time[index] = time;
+    };
+
+    const pruneTrail = (cutoff: number) => {
+      const trailBuffer = state.trail;
+      while (
+        trailBuffer.length
+        && trailBuffer.time[trailBuffer.start] < cutoff
+      ) {
+        trailBuffer.start = (trailBuffer.start + 1) % trailCapacity;
+        trailBuffer.length -= 1;
+      }
+    };
+
+    const trailIndex = (offset: number) => (
+      (state.trail.start + offset) % trailCapacity
+    );
+
+    const step = (now: number, dt: number) => {
       const depthPx = state.scale * depth;
 
-      // Target: the live pointer, or a slow inward spiral when idle.
+      // Follow the pointer while it is active, then return to the ambient orbit.
       let target: Vec;
       const idle = !state.pointer || now - state.lastInputTime > idleAfterMs;
       if (idle) {
@@ -358,12 +576,14 @@ const GravityWell = ({
       updatePhase(markerRadius);
 
       if (trail) {
-        state.trail.push({
-          x: markerPoint.x + (Math.random() - 0.5) * 2.4,
-          y: markerPoint.y + (Math.random() - 0.5) * 2.4,
-        });
-        if (state.trail.length > trailMaxPoints) state.trail.shift();
+        appendTrailPoint(
+          markerPoint.x + (Math.random() - 0.5) * 2.4,
+          markerPoint.y + (Math.random() - 0.5) * 2.4,
+          now,
+        );
+        pruneTrail(now - trailLifetimeMs);
       } else if (state.trail.length) {
+        state.trail.start = 0;
         state.trail.length = 0;
       }
 
@@ -372,194 +592,138 @@ const GravityWell = ({
 
     /** A small pill-backed monospace tag centred on (x, y). */
     const drawTag = (x: number, y: number, text: string, alpha: number, bold: boolean) => {
-      context.font = `${bold ? 600 : 500} 11px "IBM Plex Mono", ui-monospace, monospace`;
+      const font = `${bold ? 600 : 500} 11px "IBM Plex Mono", ui-monospace, monospace`;
+      context.font = font;
       context.textAlign = "center";
       context.textBaseline = "middle";
-      const width = context.measureText(text).width;
+      const cacheKey = `${font}\n${text}`;
+      let width = textWidthCache.get(cacheKey);
+      if (width === undefined) {
+        width = context.measureText(text).width;
+        textWidthCache.set(cacheKey, width);
+      }
       context.fillStyle = `rgba(255,255,255,${0.72 * alpha})`;
       context.beginPath();
       context.roundRect(x - width / 2 - 7, y - 9.5, width + 14, 19, 6);
       context.fill();
       context.fillStyle = `rgba(${accent},${alpha})`;
       context.fillText(text, x, y + 0.5);
+      return {
+        left: x - width / 2 - 9,
+        top: y - 11.5,
+        right: x + width / 2 + 9,
+        bottom: y + 11.5,
+      };
     };
 
-    const render = (markerPoint: { x: number; y: number }) => {
-      const depthPx = state.scale * depth;
+    const clearBounds = (bounds: Bounds | null) => {
+      if (!bounds) return;
+      context.clearRect(
+        bounds.left,
+        bounds.top,
+        bounds.right - bounds.left,
+        bounds.bottom - bounds.top,
+      );
+    };
+
+    const render = (markerPoint: { x: number; y: number }, timestamp: number) => {
       const label = labelsRef.current;
       const detected = state.phase === "detected";
-      context.clearRect(0, 0, state.width, state.height);
-      context.drawImage(surfaceCanvas, 0, 0, state.width, state.height);
+      clearBounds(previousCursorBounds);
+      clearBounds(previousTargetBounds);
+      for (const bounds of previousOrbitBounds) clearBounds(bounds);
 
-      const lineIndex: number[] = [];
-      if (fullField) {
-        const lineCount = Math.ceil((state.fieldExtent * 2) / fullFieldGridStep);
-        const start = -(lineCount * fullFieldGridStep) / 2;
-        for (let i = 0; i <= lineCount; i++) lineIndex.push(start + i * fullFieldGridStep);
-      } else {
-        for (let i = 0; i <= gridDivisions; i++) {
-          lineIndex.push(-plateExtent + (2 * plateExtent * i) / gridDivisions);
-        }
-      }
-
-      context.lineWidth = 1;
-      context.strokeStyle = fullField ? "rgba(0,102,255,0.13)" : "rgba(11,18,32,0.13)";
-      for (let pass = 0; pass < 2; pass++) {
-        for (let i = 0; i < lineIndex.length; i++) {
-          const fixedCoordinate = lineIndex[i];
-          const pointOnLine = (variableCoordinate: number) => {
-            const u = pass === 0 ? variableCoordinate : fixedCoordinate;
-            const v = pass === 0 ? fixedCoordinate : variableCoordinate;
-            let z = wellHeight(Math.hypot(u, v), depthPx);
-            const dentDistance = Math.hypot(u - state.position.u, v - state.position.v);
-            const dentDepth = fullField ? 0.1 : 0.05;
-            const dentSpread = fullField ? 0.045 : 0.018;
-            z += state.scale * dentDepth * Math.exp(-(dentDistance * dentDistance) / dentSpread);
-            return project(u, v, z);
-          };
-
-          context.beginPath();
-          const firstPoint = pointOnLine(lineIndex[0]);
-          context.moveTo(firstPoint.x, firstPoint.y);
-          for (let j = 0; j < lineIndex.length - 1; j++) {
-            const start = lineIndex[j];
-            const end = lineIndex[j + 1];
-            const midpoint = (start + end) / 2;
-            const midpointU = pass === 0 ? midpoint : fixedCoordinate;
-            const midpointV = pass === 0 ? fixedCoordinate : midpoint;
-            const nearWell = Math.hypot(midpointU, midpointV) < 1.35;
-            const nearCursor = Math.hypot(
-              midpointU - state.position.u,
-              midpointV - state.position.v,
-            ) < 0.65;
-            const subdivisions = nearWell || nearCursor ? 5 : 1;
-
-            for (let subdivision = 1; subdivision <= subdivisions; subdivision++) {
-              const coordinate = start + ((end - start) * subdivision) / subdivisions;
-              const point = pointOnLine(coordinate);
-              context.lineTo(point.x, point.y);
-            }
-          }
-          context.stroke();
-        }
-      }
-
-      if (!fullField) {
-        // Plate edge for the standalone finite-field presentation.
-        context.strokeStyle = "rgba(11,18,32,0.22)";
-        context.beginPath();
-        const corners = [
-          [-plateExtent, -plateExtent],
-          [plateExtent, -plateExtent],
-          [plateExtent, plateExtent],
-          [-plateExtent, plateExtent],
-        ];
-        corners.forEach((corner, i) => {
-          const point = project(corner[0], corner[1], wellHeight(Math.hypot(corner[0], corner[1]), depthPx));
-          if (i === 0) context.moveTo(point.x, point.y);
-          else context.lineTo(point.x, point.y);
+      // Only the two dots move; their tracks live on the static canvas.
+      const orbitBounds: Bounds[] = [];
+      for (let index = 0; index < targetOrbits.length; index++) {
+        const orbit = targetOrbits[index];
+        const geometry = orbitGeometries[index];
+        if (!geometry) continue;
+        const angle = ((timestamp / orbit.periodMs) + orbit.phase) * Math.PI * 2;
+        const dotX = geometry.centerX + geometry.radiusX * Math.cos(angle);
+        const dotY = geometry.centerY + geometry.radiusY * Math.sin(angle);
+        if (orbitSprite) context.drawImage(orbitSprite, dotX - 12, dotY - 12, 24, 24);
+        orbitBounds.push({
+          left: dotX - 14,
+          top: dotY - 14,
+          right: dotX + 14,
+          bottom: dotY + 14,
         });
-        context.closePath();
-        context.stroke();
       }
 
-      // Two decorative target orbits. They share no state with the live cursor.
-      const orbitTime = performance.now();
-      for (const orbit of targetOrbits) {
-        // A constant-radius circle in field coordinates projects to this
-        // horizontal ellipse. Its vertical centre follows the well surface,
-        // keeping each track aligned with the distortion and colour contours.
-        const orbitCenter = project(
-          0,
-          0,
-          wellHeight(orbit.fieldRadius, depthPx),
-        );
-        const radiusX = state.scale * orbit.fieldRadius * isoX * Math.SQRT2;
-        const radiusY = state.scale * orbit.fieldRadius * isoY * Math.SQRT2;
-        context.strokeStyle = `rgba(${accent},0.2)`;
-        context.lineWidth = 1;
-        context.beginPath();
-        context.ellipse(
-          orbitCenter.x,
-          orbitCenter.y,
-          radiusX,
-          radiusY,
-          0,
-          0,
-          Math.PI * 2,
-        );
-        context.stroke();
-
-        const angle = ((orbitTime / orbit.periodMs) + orbit.phase) * Math.PI * 2;
-        const dotX = orbitCenter.x + radiusX * Math.cos(angle);
-        const dotY = orbitCenter.y + radiusY * Math.sin(angle);
-        const orbitHalo = context.createRadialGradient(dotX, dotY, 0, dotX, dotY, 12);
-        orbitHalo.addColorStop(0, `rgba(${accent},0.35)`);
-        orbitHalo.addColorStop(1, `rgba(${accent},0)`);
-        context.fillStyle = orbitHalo;
-        context.beginPath();
-        context.arc(dotX, dotY, 12, 0, Math.PI * 2);
-        context.fill();
-        context.fillStyle = "#0066FF";
-        context.beginPath();
-        context.arc(dotX, dotY, 3.8, 0, Math.PI * 2);
-        context.fill();
-        context.strokeStyle = "#ffffff";
-        context.lineWidth = 1.35;
-        context.stroke();
-      }
-
-      // Lift the beacon slightly onto the visible floor so the side-on
-      // projection reads as an embedded singularity rather than a detached dot.
-      const targetPoint = project(0, 0, depthPx * targetMarkerFloorRatio);
-      context.fillStyle = "#000000";
-      context.beginPath();
-      context.arc(targetPoint.x, targetPoint.y, 3.5, 0, Math.PI * 2);
-      context.fill();
       const targetText = detected ? label.detected : label.target;
-      drawTag(targetPoint.x, targetPoint.y + 20, targetText, detected ? 0.95 : 0.62, detected);
+      const targetBounds = drawTag(
+        targetPoint.x,
+        targetPoint.y + 20,
+        targetText,
+        detected ? 0.95 : 0.62,
+        detected,
+      );
 
       // Fading marker trail.
       for (let i = 1; i < state.trail.length; i++) {
-        const fraction = i / state.trail.length;
-        context.strokeStyle = `rgba(${accent},${(fraction * 0.75).toFixed(3)})`;
-        context.lineWidth = 1 + fraction * 1.4;
+        const previousIndex = trailIndex(i - 1);
+        const currentIndex = trailIndex(i);
+        const remainingLife = Math.max(
+          0,
+          1 - (timestamp - state.trail.time[currentIndex]) / trailLifetimeMs,
+        );
+        context.strokeStyle = `rgba(${accent},${(remainingLife * 0.75).toFixed(3)})`;
+        context.lineWidth = 1 + remainingLife * 1.4;
         context.beginPath();
-        context.moveTo(state.trail[i - 1].x, state.trail[i - 1].y);
-        context.lineTo(state.trail[i].x, state.trail[i].y);
+        context.moveTo(state.trail.x[previousIndex], state.trail.y[previousIndex]);
+        context.lineTo(state.trail.x[currentIndex], state.trail.y[currentIndex]);
         context.stroke();
       }
 
-      // Marker halo + dot.
-      const halo = context.createRadialGradient(markerPoint.x, markerPoint.y, 0, markerPoint.x, markerPoint.y, 16);
-      halo.addColorStop(0, `rgba(${accent},0.45)`);
-      halo.addColorStop(1, `rgba(${accent},0)`);
-      context.fillStyle = halo;
-      context.beginPath();
-      context.arc(markerPoint.x, markerPoint.y, 16, 0, Math.PI * 2);
-      context.fill();
-
-      context.fillStyle = "#0066FF";
-      context.beginPath();
-      context.arc(markerPoint.x, markerPoint.y, 4.5, 0, Math.PI * 2);
-      context.fill();
-      context.strokeStyle = "#ffffff";
-      context.lineWidth = 1.5;
-      context.beginPath();
-      context.arc(markerPoint.x, markerPoint.y, 4.5, 0, Math.PI * 2);
-      context.stroke();
+      if (cursorSprite) {
+        context.drawImage(cursorSprite, markerPoint.x - 16, markerPoint.y - 16, 32, 32);
+      }
 
       // The marker carries a quiet "cursor" tag — that dot is the user's motion.
-      drawTag(markerPoint.x, markerPoint.y - 18, label.cursor, 0.72, false);
+      const cursorTagBounds = drawTag(
+        markerPoint.x,
+        markerPoint.y - 18,
+        label.cursor,
+        0.72,
+        false,
+      );
+      const cursorBounds: Bounds = {
+        left: Math.min(markerPoint.x - 18, cursorTagBounds.left),
+        top: Math.min(markerPoint.y - 18, cursorTagBounds.top),
+        right: Math.max(markerPoint.x + 18, cursorTagBounds.right),
+        bottom: Math.max(markerPoint.y + 18, cursorTagBounds.bottom),
+      };
+      for (let i = 0; i < state.trail.length; i++) {
+        const index = trailIndex(i);
+        cursorBounds.left = Math.min(cursorBounds.left, state.trail.x[index] - 4);
+        cursorBounds.top = Math.min(cursorBounds.top, state.trail.y[index] - 4);
+        cursorBounds.right = Math.max(cursorBounds.right, state.trail.x[index] + 4);
+        cursorBounds.bottom = Math.max(cursorBounds.bottom, state.trail.y[index] + 4);
+      }
+      previousCursorBounds = cursorBounds;
+      previousTargetBounds = targetBounds;
+      previousOrbitBounds = orbitBounds;
     };
 
     let raf = 0;
-    const frame = () => {
-      if (state.scale) {
-        render(step(performance.now()));
-      }
+    function wake() {
+      if (reducedMotion || !isVisible || !pageVisible || raf) return;
+      lastFrameTime = 0;
       raf = requestAnimationFrame(frame);
-    };
+    }
+
+    function frame(timestamp: number) {
+      raf = 0;
+      if (!state.scale || !isVisible || !pageVisible) return;
+      const dt = lastFrameTime
+        ? Math.min((timestamp - lastFrameTime) / 1000, 1 / 20)
+        : 1 / 60;
+      lastFrameTime = timestamp;
+      render(step(timestamp, dt), timestamp);
+
+      raf = requestAnimationFrame(frame);
+    }
 
     const renderStill = () => {
       if (!state.scale) return;
@@ -567,32 +731,73 @@ const GravityWell = ({
       state.position = { u: 0.12, v: 0.08 };
       state.phase = "detected";
       const markerZ = wellHeight(Math.hypot(state.position.u, state.position.v), state.scale * depth);
-      render(project(state.position.u, state.position.v, markerZ));
+      render(
+        project(state.position.u, state.position.v, markerZ),
+        performance.now(),
+      );
     };
 
-    const observer = new ResizeObserver(() => {
-      layout();
-      buildSurface();
+    const resizeObserver = new ResizeObserver(() => {
+      canvasRectDirty = true;
+      if (!layout()) return;
+      buildStaticField();
       if (reducedMotion) renderStill();
+      else {
+        const markerZ = wellHeight(Math.hypot(state.position.u, state.position.v), state.scale * depth);
+        render(
+          project(state.position.u, state.position.v, markerZ),
+          performance.now(),
+        );
+        wake();
+      }
     });
-    observer.observe(wrap);
+    resizeObserver.observe(wrap);
     layout();
-    buildSurface();
+    buildStaticField();
+
+    const visibilityObserver = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) wake();
+      else if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    });
+    visibilityObserver.observe(wrap);
+
+    const onVisibilityChange = () => {
+      pageVisible = !document.hidden;
+      if (pageVisible) wake();
+      else if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    const markCanvasRectDirty = () => {
+      canvasRectDirty = true;
+    };
+    window.addEventListener("scroll", markCanvasRectDirty, { passive: true });
+    window.addEventListener("resize", markCanvasRectDirty, { passive: true });
 
     if (reducedMotion) {
       renderStill();
     } else {
-      const pointerSurface: Window | HTMLCanvasElement = fullField ? window : canvas;
-      pointerSurface.addEventListener("pointermove", onPointer as EventListener);
+      const pointerSurface: Window | HTMLCanvasElement = fullField ? window : dynamicCanvas;
+      if (!coarsePointer) pointerSurface.addEventListener("pointermove", onPointer as EventListener);
       pointerSurface.addEventListener("pointerdown", onPointer as EventListener);
-      raf = requestAnimationFrame(frame);
     }
 
     return () => {
-      observer.disconnect();
+      resizeObserver.disconnect();
+      visibilityObserver.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("scroll", markCanvasRectDirty);
+      window.removeEventListener("resize", markCanvasRectDirty);
       cancelAnimationFrame(raf);
-      const pointerSurface: Window | HTMLCanvasElement = fullField ? window : canvas;
-      pointerSurface.removeEventListener("pointermove", onPointer as EventListener);
+      const pointerSurface: Window | HTMLCanvasElement = fullField ? window : dynamicCanvas;
+      if (!coarsePointer) pointerSurface.removeEventListener("pointermove", onPointer as EventListener);
       pointerSurface.removeEventListener("pointerdown", onPointer as EventListener);
     };
   }, [depth, gravity, trail, reducedMotion, fullField]);
@@ -601,9 +806,10 @@ const GravityWell = ({
     return (
       <div
         ref={wrapRef}
-        className={cn("pointer-events-none absolute inset-0 h-full w-full overflow-hidden", className)}
+        className={cn("pointer-events-none absolute inset-0 h-full w-full overflow-hidden [contain:layout_paint]", className)}
       >
-        <canvas ref={canvasRef} aria-hidden className="absolute inset-0 block h-full w-full" />
+        <canvas ref={staticCanvasRef} aria-hidden className="absolute inset-0 block h-full w-full" />
+        <canvas ref={dynamicCanvasRef} aria-hidden className="absolute inset-0 block h-full w-full" />
         <p className="absolute left-[var(--gravity-caption-x)] top-[var(--gravity-caption-y)] -translate-x-1/2 whitespace-nowrap px-4 text-center font-mono text-[12px] font-semibold leading-[1.5] text-ink-2">
           {caption}
         </p>
@@ -613,8 +819,9 @@ const GravityWell = ({
 
   return (
     <div className={cn("flex w-full flex-col h-[400px] sm:h-[460px] lg:h-[500px]", className)}>
-      <div ref={wrapRef} aria-hidden className="relative min-h-0 w-full flex-1 overflow-hidden">
-        <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full [touch-action:none]" />
+      <div ref={wrapRef} aria-hidden className="relative min-h-0 w-full flex-1 overflow-hidden [contain:layout_paint]">
+        <canvas ref={staticCanvasRef} className="absolute inset-0 block h-full w-full" />
+        <canvas ref={dynamicCanvasRef} className="absolute inset-0 block h-full w-full [touch-action:none]" />
       </div>
       <p className="mt-2 px-4 text-center font-mono text-[12px] leading-[1.5] text-ink-3">
         {caption}
