@@ -94,9 +94,9 @@ const ar: TranslationBundle = {
     latencyRace: {
       eyebrow: "03 / اشعر بالفرق",
       ariaLabel: "سباق زمن الاستجابة",
-      heading: "النقرة نفسها. نصف الانتظار.",
+      heading: "النقرة نفسها. تجاوز الانتظار.",
       body:
-        "صفحة تنتظر الشبكة. والأخرى تهيأت مع اقترابك وهي جاهزة بالفعل. افتحها وراقب.",
+        "تنتظر إحدى الصفحات طلب الشبكة، بينما يتم جلب الأخرى أثناء مسار حركة المستخدم.",
       timeSavedLabel: "الوقت الموفَّر في هذه الجلسة",
       milliseconds: (value: number) => `${value} م.ث`,
       instant: (value: number) => `${value} م.ث · فوري`,
@@ -114,8 +114,6 @@ const ar: TranslationBundle = {
       open: "افتح المنتج →",
       opening: "جارٍ الفتح…",
       replay: "↻ إعادة",
-      hintBefore: "تلميح: تحرّك أولاً نحو اللوحة اليمنى — يحمّلها intent-link مسبقاً.",
-      hintAfter: "افتحها الآن — الصفحة المُحمَّلة مسبقاً جاهزة بالفعل.",
     },
     codeExample: {
       eyebrow: "04 / ادمجه",
@@ -182,7 +180,6 @@ const ar: TranslationBundle = {
     ctaBand: {
       ariaLabel: "ابدأ الآن",
       heading: "قدّم تنقّلًا يبدو فوريًا.",
-      body: "سطران للحالة الشائعة. واحتمالات خام عندما تريد المزيد.",
       getStarted: "ابدأ الآن",
       github: "GitHub",
       install: "$ npm install intent-link",

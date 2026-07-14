@@ -94,9 +94,9 @@ const ru: TranslationBundle = {
     latencyRace: {
       eyebrow: "03 / почувствуйте разницу",
       ariaLabel: "Гонка задержек",
-      heading: "Тот же клик. Вдвое меньше ожидания.",
+      heading: "Тот же клик. Без ожидания.",
       body:
-        "Одна страница ждёт сеть. Другая подготовилась, пока вы приближались, и уже готова. Откройте и посмотрите.",
+        "Одна страница ждёт сетевого запроса, а другая загружается во время движения пользователя по траектории.",
       timeSavedLabel: "сэкономлено времени за эту сессию",
       milliseconds: (value: number) => `${value} мс`,
       instant: (value: number) => `${value} мс · мгновенно`,
@@ -114,8 +114,6 @@ const ru: TranslationBundle = {
       open: "Открыть товар →",
       opening: "открытие…",
       replay: "↻ Повторить",
-      hintBefore: "Совет: сначала двигайтесь к правой панели — intent-link её предзагрузит.",
-      hintAfter: "Теперь откройте — предзагруженная страница уже здесь.",
     },
     codeExample: {
       eyebrow: "04 / подключите",
@@ -182,7 +180,6 @@ const ru: TranslationBundle = {
     ctaBand: {
       ariaLabel: "Начать",
       heading: "Навигация, которая ощущается мгновенной.",
-      body: "Две строки для типового случая. Сырые вероятности, когда нужно больше.",
       getStarted: "Начать",
       github: "GitHub",
       install: "$ npm install intent-link",

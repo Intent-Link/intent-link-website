@@ -94,9 +94,9 @@ const ja: TranslationBundle = {
     latencyRace: {
       eyebrow: "03 / 違いを体感",
       ariaLabel: "レイテンシー比較",
-      heading: "同じクリック。待ち時間は半分。",
+      heading: "同じクリック。待ち時間をスキップ。",
       body:
-        "一方のページはネットワークを待ちます。もう一方は近づいた時点で準備され、すでにそこにあります。開いて確かめてください。",
+        "一方のページはネットワークリクエストを待ち、もう一方はユーザーの移動軌跡の途中で取得されます。",
       timeSavedLabel: "このセッションで節約した時間",
       milliseconds: (value: number) => `${value} ms`,
       instant: (value: number) => `${value} ms · 瞬時`,
@@ -114,8 +114,6 @@ const ja: TranslationBundle = {
       open: "商品を開く →",
       opening: "開いています…",
       replay: "↻ もう一度",
-      hintBefore: "ヒント: まず右のパネルに向かって動かしてください — intent-link がプリフェッチします。",
-      hintAfter: "では開いてみてください — プリフェッチ済みのページがすでにそこにあります。",
     },
     codeExample: {
       eyebrow: "04 / 組み込む",
@@ -182,7 +180,6 @@ const ja: TranslationBundle = {
     ctaBand: {
       ariaLabel: "はじめる",
       heading: "一瞬に感じるナビゲーションを届けよう。",
-      body: "よくあるケースは 2 行で。さらに踏み込むなら生の確率を。",
       getStarted: "はじめる",
       github: "GitHub",
       install: "$ npm install intent-link",

@@ -76,7 +76,6 @@ const LatencyRace = () => {
   const withoutDone = race.without === racePhase.done;
   const withReady = race.withStatus === armStatus.ready;
   const withDone = race.withIntent === racePhase.done;
-  const armedReady = withReady;
 
   const withoutBadge =
     race.without === racePhase.idle
@@ -193,7 +192,7 @@ const LatencyRace = () => {
           </div>
         </div>
 
-        <div className="mt-[26px] flex flex-col items-center gap-2.5">
+        <div className="mt-[26px] flex justify-center">
           <button
             type="button"
             onClick={race.run}
@@ -201,9 +200,6 @@ const LatencyRace = () => {
           >
             {controlLabel}
           </button>
-          <span className="font-mono text-[11px] text-ink-3">
-            {armedReady ? text.hintAfter : text.hintBefore}
-          </span>
         </div>
       </div>
     </Section>

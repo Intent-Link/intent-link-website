@@ -61,9 +61,9 @@ const en = {
   latencyRace: {
     eyebrow: "03 / feel the difference",
     ariaLabel: "Latency race",
-    heading: "Same click. Half the wait.",
+    heading: "Same click. Skip the wait.",
     body:
-      "One page waits for the network. The other armed on approach and is already there. Open it and watch.",
+      "One page waits for the network request while the other is fetched during user trajectory.",
     timeSavedLabel: "time saved this session",
     milliseconds: (value: number) => `${value} ms`,
     instant: (value: number) => `${value} ms · instant`,
@@ -81,8 +81,6 @@ const en = {
     open: "Open the product →",
     opening: "opening…",
     replay: "↻ Replay",
-    hintBefore: "Tip: move toward the right panel first so intent-link can prefetch it.",
-    hintAfter: "Now open it. The prefetched page is already there.",
   },
   codeExample: {
     eyebrow: "04 / drop it in",
@@ -150,7 +148,6 @@ const en = {
   ctaBand: {
     ariaLabel: "Get started",
     heading: "Ship navigation that feels instant.",
-    body: "Two lines for links. One ref for everything else.",
     getStarted: "Get started",
     github: "GitHub",
     install: "$ npm install intent-link",

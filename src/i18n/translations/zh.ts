@@ -94,9 +94,9 @@ const zh: TranslationBundle = {
     latencyRace: {
       eyebrow: "03 / 感受差异",
       ariaLabel: "延迟竞速",
-      heading: "同样的点击。一半的等待。",
+      heading: "同样的点击。无需等待。",
       body:
-        "一个页面在等待网络。另一个在你靠近时就已备好，就在那里。打开它看看。",
+        "一个页面等待网络请求，另一个则在用户移动轨迹期间被获取。",
       timeSavedLabel: "本次会话节省的时间",
       milliseconds: (value: number) => `${value} ms`,
       instant: (value: number) => `${value} ms · 瞬时`,
@@ -114,8 +114,6 @@ const zh: TranslationBundle = {
       open: "打开商品 →",
       opening: "打开中…",
       replay: "↻ 重放",
-      hintBefore: "提示：先移向右侧面板——intent-link 会预取它。",
-      hintAfter: "现在打开它——预取好的页面已经就在那里。",
     },
     codeExample: {
       eyebrow: "04 / 接入它",
@@ -182,7 +180,6 @@ const zh: TranslationBundle = {
     ctaBand: {
       ariaLabel: "开始使用",
       heading: "交付感觉瞬时的导航。",
-      body: "常见场景只需两行代码。需要更多时可直接使用原始概率。",
       getStarted: "开始使用",
       github: "GitHub",
       install: "$ npm install intent-link",

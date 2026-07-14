@@ -31,7 +31,6 @@ const CtaBand = ({ text, locale }: CtaBandProps) => {
         <h2 className="text-[clamp(30px,4vw,44px)] font-extrabold leading-[1.05] tracking-[-0.04em] text-balance">
           {text.heading}
         </h2>
-        <p className="mt-3 text-[16.5px] leading-[1.55] text-ink-2">{text.body}</p>
 
         <InstallCommand className="mt-8" />
 

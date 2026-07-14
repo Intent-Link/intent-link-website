@@ -94,9 +94,9 @@ const ko: TranslationBundle = {
     latencyRace: {
       eyebrow: "03 / 차이를 느껴 보세요",
       ariaLabel: "지연 시간 경쟁",
-      heading: "같은 클릭. 절반의 기다림.",
+      heading: "같은 클릭. 기다림은 건너뛰세요.",
       body:
-        "한 페이지는 네트워크를 기다립니다. 다른 페이지는 당신이 다가올 때 준비되어 이미 거기 있습니다. 열어서 확인해 보세요.",
+        "한 페이지는 네트워크 요청을 기다리고, 다른 페이지는 사용자의 이동 궤적 중에 가져옵니다.",
       timeSavedLabel: "이번 세션에서 절약한 시간",
       milliseconds: (value: number) => `${value} ms`,
       instant: (value: number) => `${value} ms · 즉시`,
@@ -114,8 +114,6 @@ const ko: TranslationBundle = {
       open: "제품 열기 →",
       opening: "여는 중…",
       replay: "↻ 다시 재생",
-      hintBefore: "팁: 먼저 오른쪽 패널 쪽으로 움직여 보세요 — intent-link가 미리 가져옵니다.",
-      hintAfter: "이제 열어 보세요 — 미리 가져온 페이지가 이미 거기 있습니다.",
     },
     codeExample: {
       eyebrow: "04 / 적용하기",
@@ -182,7 +180,6 @@ const ko: TranslationBundle = {
     ctaBand: {
       ariaLabel: "시작하기",
       heading: "즉각적으로 느껴지는 내비게이션을 제공하세요.",
-      body: "일반적인 경우는 두 줄이면 됩니다. 더 필요하면 원시 확률을 사용하세요.",
       getStarted: "시작하기",
       github: "GitHub",
       install: "$ npm install intent-link",

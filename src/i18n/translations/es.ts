@@ -94,9 +94,9 @@ const es: TranslationBundle = {
     latencyRace: {
       eyebrow: "03 / siente la diferencia",
       ariaLabel: "Carrera de latencia",
-      heading: "El mismo clic. La mitad de la espera.",
+      heading: "El mismo clic. Sáltate la espera.",
       body:
-        "Una página espera a la red. La otra se armó al acercarte y ya está ahí. Ábrela y observa.",
+        "Una página espera la solicitud de red, mientras la otra se obtiene durante la trayectoria del usuario.",
       timeSavedLabel: "tiempo ahorrado en esta sesión",
       milliseconds: (value: number) => `${value} ms`,
       instant: (value: number) => `${value} ms · instantáneo`,
@@ -114,8 +114,6 @@ const es: TranslationBundle = {
       open: "Abrir el producto →",
       opening: "abriendo…",
       replay: "↻ Repetir",
-      hintBefore: "Consejo: muévete primero hacia el panel derecho — intent-link lo precarga.",
-      hintAfter: "Ahora ábrelo — la página precargada ya está ahí.",
     },
     codeExample: {
       eyebrow: "04 / intégralo",
@@ -182,7 +180,6 @@ const es: TranslationBundle = {
     ctaBand: {
       ariaLabel: "Empezar",
       heading: "Publica una navegación que se siente instantánea.",
-      body: "Dos líneas para el caso común. Probabilidades en bruto cuando quieres más.",
       getStarted: "Empezar",
       github: "GitHub",
       install: "$ npm install intent-link",
