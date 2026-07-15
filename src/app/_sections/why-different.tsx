@@ -16,6 +16,10 @@ const WhyDifferent = ({ text }: WhyDifferentProps) => {
     { label: text.columns.timing, key: "timing", center: false },
     { label: text.columns.selective, key: "selective", center: false },
   ] as const;
+  const highlightedApproach = text.rows.find((approach) => approach.name === text.highlightName);
+  const approaches = highlightedApproach
+    ? [highlightedApproach, ...text.rows.filter((approach) => approach.name !== text.highlightName)]
+    : text.rows;
 
   return (
     <Section
@@ -40,7 +44,7 @@ const WhyDifferent = ({ text }: WhyDifferentProps) => {
                   <th className="border-b border-line bg-sidebar px-4 py-[13px] text-[11px] font-semibold uppercase tracking-[0.03em] text-ink-3">
                     {text.columns.approach}
                   </th>
-                  {text.rows.map((approach) => {
+                  {approaches.map((approach) => {
                     const highlighted = approach.name === text.highlightName;
                     return (
                       <th
@@ -64,7 +68,7 @@ const WhyDifferent = ({ text }: WhyDifferentProps) => {
                     <td className="bg-sidebar px-4 py-[13px] text-[11px] font-semibold uppercase tracking-[0.03em] whitespace-nowrap text-ink-3">
                       {attribute.label}
                     </td>
-                    {text.rows.map((approach) => {
+                    {approaches.map((approach) => {
                       const highlighted = approach.name === text.highlightName;
                       const value = approach[attribute.key];
                       return (

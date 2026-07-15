@@ -35,8 +35,8 @@ const tiles = [
   { id: tileCategory.travel, tint: "#edf0f2" },
 ] as const;
 
-/** Phones through 499px use 2×2; 500–699px screens use a 3×3 grid. */
-const narrowMobileTileCount = 4;
+/** Phones through 499px use 2 columns × 3 rows; 500–699px screens use a 3×3 grid. */
+const narrowMobileTileCount = 6;
 const mobileTileCount = 9;
 /** Mid-sized screens use three rows of four tiles. */
 const tabletTileCount = 12;
