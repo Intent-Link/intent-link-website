@@ -72,6 +72,7 @@ const zh: TranslationBundle = {
         "实现 1.39 的 fetch:click 比率。Intent-link 利用运动速度和距离产生的动能与势能来计算概率。",
       getStarted: "开始使用",
       liveDemo: "在线演示",
+      well: { caption: "像素具有引力" },
     },
     predictionFieldDemo: {
       eyebrow: "02 / 在线演示",
@@ -136,8 +137,8 @@ const zh: TranslationBundle = {
         { stat: "即时导航", title: "在点击前预取下一页" },
         { stat: "1.39", title: "Fetch:Click 比率" },
         { stat: "可调节", title: "配置 importance 和 cost 权重" },
-        { stat: "useIntentTarget", title: "构建自定义意图预测组件" },
-        { stat: "React · Next", title: "针对最流行的框架优化" },
+        { stat: "useIntentTarget", title: "构建自定义组件" },
+        { stat: "React · Next", title: "适用于最流行的框架" },
         { stat: "MIT", title: "开源，不收集数据" },
       ],
     },

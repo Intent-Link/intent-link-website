@@ -72,6 +72,7 @@ const ru: TranslationBundle = {
         "Достигайте соотношения fetch:click 1.39. Intent-link вычисляет вероятность с помощью кинетической и потенциальной энергии, обусловленной скоростью движения и расстоянием.",
       getStarted: "Начать",
       liveDemo: "Живое демо",
+      well: { caption: "у пикселей есть гравитация" },
     },
     predictionFieldDemo: {
       eyebrow: "02 / живое демо",
@@ -136,8 +137,8 @@ const ru: TranslationBundle = {
         { stat: "Мгновенная навигация", title: "Загружайте следующую страницу до клика" },
         { stat: "1.39", title: "Соотношение Fetch:Click" },
         { stat: "Настраиваемо", title: "Настройте веса importance и cost" },
-        { stat: "useIntentTarget", title: "Создавайте собственные компоненты прогнозирования намерения" },
-        { stat: "React · Next", title: "Оптимизировано для самого популярного фреймворка" },
+        { stat: "useIntentTarget", title: "Создавайте собственные компоненты" },
+        { stat: "React · Next", title: "Для самого популярного фреймворка" },
         { stat: "MIT", title: "Открытый исходный код, без сбора данных" },
       ],
     },

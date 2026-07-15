@@ -15,6 +15,7 @@ const tr: TranslationBundle = {
   sections: {
     hero: {
       ariaLabel: "Giriş", eyebrow: "React ve Next.js için hedef tahmini", titleLead: "Hedefi bil", titleEmphasis: "tıklamadan önce.", subcopy: "1.39 fetch:click oranına ulaşın. Intent-link, hareket hızı ve mesafeden kaynaklanan kinetik ve potansiyel enerjiyi kullanarak olasılığı hesaplar.", getStarted: "Başlayın", liveDemo: "Canlı demo",
+      well: { caption: "piksellerin yerçekimi var" },
     },
     predictionFieldDemo: {
       eyebrow: "02 / canlı demo", ariaLabel: "Canlı tahmin demosu", heading: "Bir karta yönelin ve önceden yüklenmesini izleyin.", addressBar: "shop.example/new-in", categories: (count: number) => `${count} kategori`, reset: "sıfırla", importanceLabel: "importance", costLabel: "cost", streamTitle: "onIntent akışı", firedCount: (count: number) => `${count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count} tetikleme`, streamEmpty: "// bir sinyal başlatmak için bir karta yönelin…", levels: { low: "düşük", medium: "orta", high: "yüksek" }, tiles: { women: "Kadın", men: "Erkek", kids: "Çocuk", shoes: "Ayakkabı", bags: "Çanta", accessories: "Aksesuar", sport: "Spor", denim: "Denim", outerwear: "Dış giyim", beauty: "Güzellik", home: "Ev", sale: "İndirim", electronics: "Elektronik", watches: "Saat", jewelry: "Mücevher", furniture: "Mobilya", gifts: "Hediye", travel: "Seyahat" },
@@ -35,8 +36,8 @@ const tr: TranslationBundle = {
         { stat: "Anında gezinme", title: "Sonraki sayfayı tıklamadan önce getirin" },
         { stat: "1.39", title: "Fetch:Click oranı" },
         { stat: "Ayarlanabilir", title: "importance ve cost ağırlıklarını yapılandırın" },
-        { stat: "useIntentTarget", title: "Özel niyet tahmini bileşenleri oluşturun" },
-        { stat: "React · Next", title: "En popüler çatı için optimize edilmiştir" },
+        { stat: "useIntentTarget", title: "Özel bileşenler oluşturun" },
+        { stat: "React · Next", title: "En popüler çatı için" },
         { stat: "MIT", title: "Açık kaynak, veri toplama yok" },
       ],
     },

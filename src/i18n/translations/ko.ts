@@ -72,6 +72,7 @@ const ko: TranslationBundle = {
         "1.39의 fetch:click 비율을 달성하세요. Intent-link는 움직임의 속도와 거리에서 발생하는 운동 에너지와 위치 에너지를 사용해 확률을 계산합니다.",
       getStarted: "시작하기",
       liveDemo: "라이브 데모",
+      well: { caption: "픽셀에는 중력이 있다" },
     },
     predictionFieldDemo: {
       eyebrow: "02 / 라이브 데모",
@@ -136,8 +137,8 @@ const ko: TranslationBundle = {
         { stat: "즉각적인 이동", title: "클릭 전에 다음 페이지를 미리 가져옵니다" },
         { stat: "1.39", title: "Fetch:Click 비율" },
         { stat: "조정 가능", title: "importance와 cost 가중치를 설정합니다" },
-        { stat: "useIntentTarget", title: "사용자 정의 의도 예측 컴포넌트를 만듭니다" },
-        { stat: "React · Next", title: "가장 인기 있는 프레임워크에 최적화" },
+        { stat: "useIntentTarget", title: "사용자 정의 컴포넌트를 만듭니다" },
+        { stat: "React · Next", title: "가장 인기 있는 프레임워크용" },
         { stat: "MIT", title: "오픈 소스, 데이터 수집 없음" },
       ],
     },

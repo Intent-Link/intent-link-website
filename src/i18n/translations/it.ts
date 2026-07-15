@@ -27,6 +27,7 @@ const it: TranslationBundle = {
       ariaLabel: "Introduzione", eyebrow: "Previsione della destinazione per React e Next.js", titleLead: "Conosci la destinazione", titleEmphasis: "prima del clic.",
       subcopy: "Ottieni un rapporto fetch:click di 1.39. Intent-link calcola la probabilità usando l’energia cinetica e potenziale derivata dalla velocità del movimento e dalla distanza.",
       getStarted: "Inizia", liveDemo: "Demo dal vivo",
+      well: { caption: "i pixel hanno gravità" },
     },
     predictionFieldDemo: {
       eyebrow: "02 / demo dal vivo", ariaLabel: "Demo della previsione dal vivo", heading: "Muoviti verso una scheda e osserva il prefetch.",addressBar: "shop.example/new-in", categories: (count: number) => `${count} categorie`,
@@ -50,8 +51,8 @@ const it: TranslationBundle = {
         { stat: "Navigazione istantanea", title: "Precarica la pagina successiva prima del clic" },
         { stat: "1.39", title: "Rapporto Fetch:Click" },
         { stat: "Regolabile", title: "Configura i pesi importance e cost" },
-        { stat: "useIntentTarget", title: "Crea componenti personalizzati di previsione dell’intento" },
-        { stat: "React · Next", title: "Ottimizzato per il framework più popolare" },
+        { stat: "useIntentTarget", title: "Crea componenti personalizzati" },
+        { stat: "React · Next", title: "Per il framework più popolare" },
         { stat: "MIT", title: "Open source, nessuna raccolta dati" },
       ],
     },

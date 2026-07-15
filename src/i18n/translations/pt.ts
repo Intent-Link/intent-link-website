@@ -72,6 +72,7 @@ const pt: TranslationBundle = {
         "Alcance uma proporção fetch:click de 1.39. O Intent-link calcula a probabilidade usando a energia cinética e potencial resultante da velocidade do movimento e da distância.",
       getStarted: "Começar",
       liveDemo: "Demo ao vivo",
+      well: { caption: "pixels têm gravidade" },
     },
     predictionFieldDemo: {
       eyebrow: "02 / demo ao vivo",
@@ -136,8 +137,8 @@ const pt: TranslationBundle = {
         { stat: "Navegação instantânea", title: "Pré-carregue a próxima página antes do clique" },
         { stat: "1.39", title: "Proporção Fetch:Click" },
         { stat: "Ajustável", title: "Configure os pesos de importance e cost" },
-        { stat: "useIntentTarget", title: "Crie componentes personalizados de previsão de intenção" },
-        { stat: "React · Next", title: "Otimizado para o framework mais popular" },
+        { stat: "useIntentTarget", title: "Crie componentes personalizados" },
+        { stat: "React · Next", title: "Para o framework mais popular" },
         { stat: "MIT", title: "Código aberto, sem coleta de dados" },
       ],
     },
