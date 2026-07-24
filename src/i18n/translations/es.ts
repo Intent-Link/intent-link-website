@@ -69,7 +69,7 @@ const es: TranslationBundle = {
       titleLead: "Conoce el destino",
       titleEmphasis: "antes del clic.",
       subcopy:
-        "Consigue una relación fetch:click de 1.39. Intent-link calcula la probabilidad usando la energía cinética y potencial derivada de la velocidad del movimiento y la distancia.",
+        "Consigue una relación fetch:click de 1.37. Intent-link calcula la probabilidad usando la energía cinética y potencial derivada de la velocidad del movimiento y la distancia.",
       getStarted: "Empezar",
       liveDemo: "Demo en vivo",
       well: { caption: "los píxeles tienen gravedad" },
@@ -135,7 +135,7 @@ const es: TranslationBundle = {
       ],
       benefits: [
         { stat: "Navegación instantánea", title: "Precarga la página siguiente antes del clic" },
-        { stat: "1.39", title: "Relación Fetch:Click" },
+        { stat: "1.37", title: "Relación Fetch:Click" },
         { stat: "Ajustable", title: "Configura los pesos de importance y cost" },
         { stat: "useIntentTarget", title: "Crea componentes personalizados" },
         { stat: "React · Next", title: "Para el framework más popular" },

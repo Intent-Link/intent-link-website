@@ -25,12 +25,12 @@ const it: TranslationBundle = {
   sections: {
     hero: {
       ariaLabel: "Introduzione", eyebrow: "Previsione della destinazione per React e Next.js", titleLead: "Conosci la destinazione", titleEmphasis: "prima del clic.",
-      subcopy: "Ottieni un rapporto fetch:click di 1.39. Intent-link calcola la probabilità usando l’energia cinetica e potenziale derivata dalla velocità del movimento e dalla distanza.",
+      subcopy: "Ottieni un rapporto fetch:click di 1.37. Intent-link calcola la probabilità usando l’energia cinetica e potenziale derivata dalla velocità del movimento e dalla distanza.",
       getStarted: "Inizia", liveDemo: "Demo dal vivo",
       well: { caption: "i pixel hanno gravità" },
     },
     predictionFieldDemo: {
-      eyebrow: "02 / demo dal vivo", ariaLabel: "Demo della previsione dal vivo", heading: "Muoviti verso una scheda e osserva il prefetch.",addressBar: "shop.example/new-in", categories: (count: number) => `${count} categorie`,
+      eyebrow: "02 / demo dal vivo", ariaLabel: "Demo della previsione dal vivo", heading: "Muoviti verso una scheda e osserva il prefetch.", addressBar: "shop.example/new-in", categories: (count: number) => `${count} categorie`,
       reset: "reimposta", importanceLabel: "importance", costLabel: "cost", streamTitle: "flusso onIntent", firedCount: (count: number) => `${count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count} attivazioni`, streamEmpty: "// muoviti verso una scheda per attivare un segnale…", levels: { low: "basso", medium: "medio", high: "alto" },
       tiles: { women: "Donna", men: "Uomo", kids: "Bambini", shoes: "Scarpe", bags: "Borse", accessories: "Accessori", sport: "Sport", denim: "Denim", outerwear: "Capispalla", beauty: "Bellezza", home: "Casa", sale: "Saldi", electronics: "Elettronica", watches: "Orologi", jewelry: "Gioielli", furniture: "Mobili", gifts: "Regali", travel: "Viaggi" },
     },
@@ -49,7 +49,7 @@ const it: TranslationBundle = {
       ],
       benefits: [
         { stat: "Navigazione istantanea", title: "Precarica la pagina successiva prima del clic" },
-        { stat: "1.39", title: "Rapporto Fetch:Click" },
+        { stat: "1.37", title: "Rapporto Fetch:Click" },
         { stat: "Regolabile", title: "Configura i pesi importance e cost" },
         { stat: "useIntentTarget", title: "Crea componenti personalizzati" },
         { stat: "React · Next", title: "Per il framework più popolare" },

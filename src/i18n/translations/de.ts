@@ -69,7 +69,7 @@ const de: TranslationBundle = {
       titleLead: "Kenne das Ziel",
       titleEmphasis: "vor dem Klick.",
       subcopy:
-        "Erreiche ein fetch:click-Verhältnis von 1.39. Intent-link berechnet die Wahrscheinlichkeit anhand der kinetischen und potenziellen Energie, die sich aus Bewegungsgeschwindigkeit und Entfernung ergeben.",
+        "Erreiche ein fetch:click-Verhältnis von 1.37. Intent-link berechnet die Wahrscheinlichkeit anhand der kinetischen und potenziellen Energie, die sich aus Bewegungsgeschwindigkeit und Entfernung ergeben.",
       getStarted: "Loslegen",
       liveDemo: "Live-Demo",
       well: { caption: "Pixel haben Schwerkraft" },
@@ -135,7 +135,7 @@ const de: TranslationBundle = {
       ],
       benefits: [
         { stat: "Sofortige Navigation", title: "Lade die nächste Seite vor dem Klick vor" },
-        { stat: "1.39", title: "Fetch:Click-Verhältnis" },
+        { stat: "1.37", title: "Fetch:Click-Verhältnis" },
         { stat: "Anpassbar", title: "Konfiguriere die Gewichtung von importance und cost" },
         { stat: "useIntentTarget", title: "Erstelle eigene Komponenten" },
         { stat: "React · Next", title: "Für das beliebteste Framework" },

@@ -14,7 +14,7 @@ const tr: TranslationBundle = {
   },
   sections: {
     hero: {
-      ariaLabel: "Giriş", eyebrow: "React ve Next.js için hedef tahmini", titleLead: "Hedefi bil", titleEmphasis: "tıklamadan önce.", subcopy: "1.39 fetch:click oranına ulaşın. Intent-link, hareket hızı ve mesafeden kaynaklanan kinetik ve potansiyel enerjiyi kullanarak olasılığı hesaplar.", getStarted: "Başlayın", liveDemo: "Canlı demo",
+      ariaLabel: "Giriş", eyebrow: "React ve Next.js için hedef tahmini", titleLead: "Hedefi bil", titleEmphasis: "tıklamadan önce.", subcopy: "1.37 fetch:click oranına ulaşın. Intent-link, hareket hızı ve mesafeden kaynaklanan kinetik ve potansiyel enerjiyi kullanarak olasılığı hesaplar.", getStarted: "Başlayın", liveDemo: "Canlı demo",
       well: { caption: "piksellerin yerçekimi var" },
     },
     predictionFieldDemo: {
@@ -34,7 +34,7 @@ const tr: TranslationBundle = {
       ],
       benefits: [
         { stat: "Anında gezinme", title: "Sonraki sayfayı tıklamadan önce getirin" },
-        { stat: "1.39", title: "Fetch:Click oranı" },
+        { stat: "1.37", title: "Fetch:Click oranı" },
         { stat: "Ayarlanabilir", title: "importance ve cost ağırlıklarını yapılandırın" },
         { stat: "useIntentTarget", title: "Özel bileşenler oluşturun" },
         { stat: "React · Next", title: "En popüler çatı için" },

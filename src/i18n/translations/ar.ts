@@ -69,7 +69,7 @@ const ar: TranslationBundle = {
       titleLead: "اعرف الوجهة",
       titleEmphasis: "قبل النقرة.",
       subcopy:
-        "حقق نسبة fetch:click تبلغ 1.39. يحسب Intent-link الاحتمال باستخدام الطاقة الحركية وطاقة الوضع الناتجتين عن سرعة الحركة والمسافة.",
+        "حقق نسبة fetch:click تبلغ 1.37. يحسب Intent-link الاحتمال باستخدام الطاقة الحركية وطاقة الوضع الناتجتين عن سرعة الحركة والمسافة.",
       getStarted: "ابدأ الآن",
       liveDemo: "عرض حي",
       well: { caption: "للبكسلات جاذبية" },
@@ -135,7 +135,7 @@ const ar: TranslationBundle = {
       ],
       benefits: [
         { stat: "تنقل فوري", title: "حمّل الصفحة التالية مسبقاً قبل النقر" },
-        { stat: "1.39", title: "نسبة Fetch:Click" },
+        { stat: "1.37", title: "نسبة Fetch:Click" },
         { stat: "قابل للضبط", title: "اضبط أوزان importance وcost" },
         { stat: "useIntentTarget", title: "أنشئ مكونات مخصصة" },
         { stat: "React · Next", title: "لإطار العمل الأكثر شيوعاً" },

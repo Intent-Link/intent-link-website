@@ -69,7 +69,7 @@ const ja: TranslationBundle = {
       titleLead: "クリックの前に、",
       titleEmphasis: "遷移先がわかる。",
       subcopy:
-        "1.39 の fetch:click 比率を実現します。Intent-link は、動きの速度と距離によって生じる運動エネルギーと位置エネルギーを使って確率を計算します。",
+        "1.37 の fetch:click 比率を実現します。Intent-link は、動きの速度と距離によって生じる運動エネルギーと位置エネルギーを使って確率を計算します。",
       getStarted: "はじめる",
       liveDemo: "ライブデモ",
       well: { caption: "ピクセルには重力がある" },
@@ -135,7 +135,7 @@ const ja: TranslationBundle = {
       ],
       benefits: [
         { stat: "瞬時ナビゲーション", title: "クリック前に次のページをプリフェッチ" },
-        { stat: "1.39", title: "Fetch:Click 比率" },
+        { stat: "1.37", title: "Fetch:Click 比率" },
         { stat: "調整可能", title: "importance と cost の重みを設定" },
         { stat: "useIntentTarget", title: "独自のコンポーネントを構築" },
         { stat: "React · Next", title: "最も人気のあるフレームワーク向け" },

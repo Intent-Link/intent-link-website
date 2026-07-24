@@ -9,7 +9,7 @@ const en = {
     titleLead: "Know the target",
     titleEmphasis: "before the click.",
     subcopy:
-      "Achieve a 1.39 fetch:click ratio. Intent-link computes probability using kinetic and potential energy from motion velocity and distance.",
+      "Achieve a 1.37 fetch:click ratio. Intent-link computes probability using kinetic and potential energy from motion velocity and distance.",
     getStarted: "Get started",
     liveDemo: "Live demo",
     well: {
@@ -100,7 +100,7 @@ const en = {
     ],
     benefits: [
       { stat: "Instant Navigation", title: "Prefetch the next page before the click" },
-      { stat: "1.39", title: "Fetch:Click ratio" },
+      { stat: "1.37", title: "Fetch:Click ratio" },
       { stat: "Tunable", title: "Configure importance and cost weights" },
       { stat: "useIntentTarget", title: "Build custom components" },
       { stat: "React · Next", title: "For the most popular framework" },

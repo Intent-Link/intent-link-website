@@ -69,7 +69,7 @@ const ko: TranslationBundle = {
       titleLead: "목적지를 알아냅니다",
       titleEmphasis: "클릭하기 전에.",
       subcopy:
-        "1.39의 fetch:click 비율을 달성하세요. Intent-link는 움직임의 속도와 거리에서 발생하는 운동 에너지와 위치 에너지를 사용해 확률을 계산합니다.",
+        "1.37의 fetch:click 비율을 달성하세요. Intent-link는 움직임의 속도와 거리에서 발생하는 운동 에너지와 위치 에너지를 사용해 확률을 계산합니다.",
       getStarted: "시작하기",
       liveDemo: "라이브 데모",
       well: { caption: "픽셀에는 중력이 있다" },
@@ -135,7 +135,7 @@ const ko: TranslationBundle = {
       ],
       benefits: [
         { stat: "즉각적인 이동", title: "클릭 전에 다음 페이지를 미리 가져옵니다" },
-        { stat: "1.39", title: "Fetch:Click 비율" },
+        { stat: "1.37", title: "Fetch:Click 비율" },
         { stat: "조정 가능", title: "importance와 cost 가중치를 설정합니다" },
         { stat: "useIntentTarget", title: "사용자 정의 컴포넌트를 만듭니다" },
         { stat: "React · Next", title: "가장 인기 있는 프레임워크용" },

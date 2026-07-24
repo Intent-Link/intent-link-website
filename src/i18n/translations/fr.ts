@@ -69,7 +69,7 @@ const fr: TranslationBundle = {
       titleLead: "Devinez la destination",
       titleEmphasis: "avant le clic.",
       subcopy:
-        "Atteignez un ratio fetch:click de 1.39. Intent-link calcule la probabilité à partir de l’énergie cinétique et potentielle produite par la vitesse du mouvement et la distance.",
+        "Atteignez un ratio fetch:click de 1.37. Intent-link calcule la probabilité à partir de l’énergie cinétique et potentielle produite par la vitesse du mouvement et la distance.",
       getStarted: "Commencer",
       liveDemo: "Démo en direct",
       well: { caption: "les pixels ont de la gravité" },
@@ -135,7 +135,7 @@ const fr: TranslationBundle = {
       ],
       benefits: [
         { stat: "Navigation instantanée", title: "Préchargez la page suivante avant le clic" },
-        { stat: "1.39", title: "Ratio Fetch:Click" },
+        { stat: "1.37", title: "Ratio Fetch:Click" },
         { stat: "Réglable", title: "Configurez les poids importance et cost" },
         { stat: "useIntentTarget", title: "Créez des composants personnalisés" },
         { stat: "React · Next", title: "Pour le framework le plus populaire" },

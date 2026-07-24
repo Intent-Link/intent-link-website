@@ -69,7 +69,7 @@ const zh: TranslationBundle = {
       titleLead: "点击之前，就知道",
       titleEmphasis: "目的地。",
       subcopy:
-        "实现 1.39 的 fetch:click 比率。Intent-link 利用运动速度和距离产生的动能与势能来计算概率。",
+        "实现 1.37 的 fetch:click 比率。Intent-link 利用运动速度和距离产生的动能与势能来计算概率。",
       getStarted: "开始使用",
       liveDemo: "在线演示",
       well: { caption: "像素具有引力" },
@@ -135,7 +135,7 @@ const zh: TranslationBundle = {
       ],
       benefits: [
         { stat: "即时导航", title: "在点击前预取下一页" },
-        { stat: "1.39", title: "Fetch:Click 比率" },
+        { stat: "1.37", title: "Fetch:Click 比率" },
         { stat: "可调节", title: "配置 importance 和 cost 权重" },
         { stat: "useIntentTarget", title: "构建自定义组件" },
         { stat: "React · Next", title: "适用于最流行的框架" },
